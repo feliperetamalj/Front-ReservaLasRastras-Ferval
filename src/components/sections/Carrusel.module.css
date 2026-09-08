@@ -1,0 +1,273 @@
+.carrusel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/*
+  La pista es un contenedor de desplazamiento real. El navegador aporta el
+  seguimiento del dedo, la inercia y el anclaje; aquí solo se declara la
+  geometría.
+
+  El relleno lateral deja asomar la diapositiva vecina: sin ese avance visual
+  nada indica que haya más fotos que la que se ve.
+*/
+.pista {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-block: var(--space-1);
+  padding-inline: max(var(--space-4), calc((100% - 92%) / 2));
+  /* La barra estorba en una tira de fotos; el anclaje ya comunica la posición. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* En iOS, sin esto el gesto se pasa al desplazamiento vertical de la página. */
+  overscroll-behavior-x: contain;
+}
+
+.pista::-webkit-scrollbar {
+  display: none;
+}
+
+.pista:focus-visible {
+  border-radius: var(--radius-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pista {
+    scroll-behavior: auto;
+  }
+}
+
+.diapositiva {
+  flex: 0 0 92%;
+  scroll-snap-align: center;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 720px) {
+  .pista {
+    padding-inline: max(var(--space-5), calc((100% - 78%) / 2));
+  }
+
+  .diapositiva {
+    flex-basis: 78%;
+  }
+}
+
+@media (min-width: 1020px) {
+  .pista {
+    padding-inline: calc((100% - 68%) / 2);
+  }
+
+  .diapositiva {
+    flex-basis: 68%;
+  }
+}
+
+.marco {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--fondo-alterno);
+  transition:
+    transform var(--dur-instante) var(--ease-salida),
+    box-shadow var(--dur-medio) var(--ease-salida);
+}
+
+.marco:active {
+  transform: scale(0.99);
+}
+
+.foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*
+  La diapositiva que no está al centro se atenúa y retrocede un poco. Da
+  profundidad y, sobre todo, dice cuál es la activa sin necesidad de leer el
+  contador.
+*/
+.diapositiva:not(:has(.marco[tabindex='0'])) .marco {
+  opacity: 0.5;
+  transform: scale(0.965);
+  transition:
+    opacity var(--dur-lento) var(--ease-salida),
+    transform var(--dur-lento) var(--ease-salida);
+}
+
+.diapositiva:has(.marco[tabindex='0']) .marco {
+  box-shadow: var(--shadow-md);
+  transition:
+    opacity var(--dur-lento) var(--ease-salida),
+    transform var(--dur-lento) var(--ease-salida),
+    box-shadow var(--dur-medio) var(--ease-salida);
+}
+
+.diapositiva:not(:has(.marco[tabindex='0'])) .pie {
+  opacity: 0.45;
+}
+
+.lupa {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background-color: rgba(20, 12, 8, 0.55);
+  color: var(--texto-inverso);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--dur-medio) var(--ease-salida),
+    transform var(--dur-medio) var(--ease-salida);
+}
+
+.marco:hover .lupa,
+.marco:focus-visible .lupa {
+  opacity: 1;
+  transform: none;
+}
+
+.pie {
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  text-wrap: pretty;
+  transition: opacity var(--dur-lento) var(--ease-salida);
+}
+
+/* --- Controles --- */
+.controles {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding-inline: var(--space-1);
+}
+
+.flechas {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.flecha {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border: var(--borde-fino) solid var(--borde-fuerte);
+  border-radius: var(--radius-full);
+  background-color: var(--fondo-elevado);
+  color: var(--texto);
+  transition:
+    border-color var(--dur-rapido) var(--ease-salida),
+    background-color var(--dur-rapido) var(--ease-salida),
+    opacity var(--dur-rapido) var(--ease-salida),
+    transform var(--dur-instante) var(--ease-salida);
+}
+
+.flecha:hover:not(:disabled) {
+  border-color: var(--texto);
+}
+
+.flecha:active:not(:disabled) {
+  transform: scale(0.93);
+}
+
+/*
+  Deshabilitada en los extremos, pero visible: quitarla movería los controles
+  de sitio, y un botón que aparece y desaparece se pierde. Atenuada dice "aquí
+  se acabó" sin cambiar la disposición.
+*/
+.flecha:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.puntos {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-inline-end: auto;
+}
+
+/* La marca visible mide 8px, pero el objetivo táctil que la rodea llega a
+   44px de alto y 32 de ancho: muy por encima del mínimo de 24 de WCAG 2.5.8. */
+.punto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.marca {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--borde-fuerte);
+  transition:
+    width var(--dur-medio) var(--ease-salida),
+    background-color var(--dur-medio) var(--ease-salida);
+}
+
+.punto:hover .marca {
+  background-color: var(--texto-tenue);
+}
+
+.puntoActivo .marca {
+  width: 22px;
+  border-radius: var(--radius-full);
+  background-color: var(--accion);
+}
+
+.contador {
+  flex-shrink: 0;
+  color: var(--texto-tenue);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* En pantallas muy angostas el contador sobra: los puntos ya dicen dónde
+   estamos y el espacio lo necesitan los controles. */
+@media (max-width: 420px) {
+  .contador {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marco:active,
+  .flecha:active:not(:disabled) {
+    transform: none;
+  }
+
+  .diapositiva:not(:has(.marco[tabindex='0'])) .marco {
+    transform: none;
+  }
+}

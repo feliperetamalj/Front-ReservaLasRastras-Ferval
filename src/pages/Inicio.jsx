@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Boton, Contenedor, Reveal, Seccion } from '../components/ui';
-import { Atributos, BloqueContacto, Galeria, Hero, ModeloCard } from '../components/sections';
+import { Atributos, BloqueContacto, Carrusel, Hero, ModeloCard } from '../components/sections';
 import { modelos, RANGOS } from '../data/modelos';
 import { FOTOS, GALERIA_BARRIO, ENTORNO, PROYECTO } from '../data/proyecto';
 import { RESUMEN } from '../data/sitios';
@@ -84,7 +84,7 @@ export function Inicio() {
           </Boton>
         }
       >
-        <Galeria imagenes={GALERIA_BARRIO} />
+        <Carrusel imagenes={GALERIA_BARRIO} etiqueta="El barrio de Reserva Las Rastras" />
       </Seccion>
 
       {/* Entorno */}
