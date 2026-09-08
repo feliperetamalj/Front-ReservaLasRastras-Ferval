@@ -1,0 +1,152 @@
+.tarjeta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--fondo-elevado);
+  border: var(--borde-fino) solid var(--borde);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition:
+    transform var(--dur-medio) var(--ease-salida),
+    box-shadow var(--dur-medio) var(--ease-salida),
+    border-color var(--dur-medio) var(--ease-salida);
+}
+
+.tarjeta:hover {
+  transform: translateY(-4px);
+  border-color: var(--borde-fuerte);
+  box-shadow: var(--shadow-md);
+}
+
+/* Respuesta al presionar: la tarjeta cede. */
+.tarjeta:active {
+  transform: translateY(-1px) scale(0.995);
+  transition-duration: var(--dur-instante);
+}
+
+.marco {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background-color: var(--fondo-alterno);
+}
+
+.foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-lento) var(--ease-salida);
+}
+
+.tarjeta:hover .foto {
+  transform: scale(1.035);
+}
+
+.estilo {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+}
+
+.cuerpo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.nombre {
+  font-size: var(--text-xl);
+  font-weight: var(--peso-semi);
+}
+
+.enlace {
+  color: var(--texto);
+  text-decoration: none;
+}
+
+/* Toda la tarjeta es clicable, pero solo hay un enlace en el árbol. */
+.enlace::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.resumen {
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin-top: auto;
+  padding-top: var(--space-3);
+}
+
+.spec {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-medio);
+  color: var(--texto);
+}
+
+.iconoSpec {
+  color: var(--texto-marca);
+  margin-inline-end: 2px;
+}
+
+.rotuloSpec {
+  color: var(--texto-tenue);
+  font-weight: var(--peso-normal);
+}
+
+.pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: var(--borde-fino) solid var(--borde);
+}
+
+.precio {
+  font-family: var(--fuente-display);
+  font-size: var(--text-lg);
+  color: var(--texto);
+}
+
+.ver {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--texto-marca);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-semi);
+}
+
+.ver svg {
+  transition: transform var(--dur-medio) var(--ease-salida);
+}
+
+.tarjeta:hover .ver svg {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta,
+  .tarjeta:hover,
+  .tarjeta:active {
+    transform: none;
+  }
+
+  .tarjeta:hover .foto,
+  .tarjeta:hover .ver svg {
+    transform: none;
+  }
+}

@@ -1,0 +1,281 @@
+/* --- Portada --- */
+.portada {
+  position: relative;
+  display: flex;
+  align-items: end;
+  min-height: min(88svh, 820px);
+  padding-block: calc(var(--alto-header) + var(--space-8)) var(--space-9);
+  overflow: hidden;
+  background-color: var(--fondo-oscuro);
+  color: var(--texto-inverso);
+}
+
+.portadaFoto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.velo {
+  position: absolute;
+  inset: 0;
+  /*
+    Un solo velo, vertical, y con peso suficiente arriba.
+    La fotografía del portal tiene el cielo casi blanco en su mitad superior:
+    con un velo suave, el titular blanco quedaba en 1.9:1 sobre ese cielo. Las
+    paradas de abajo mantienen el texto sobre 6:1 en toda la franja donde vive
+    el contenido, sin que la foto se convierta en un rectángulo negro.
+
+    Dos capas superpuestas (una vertical y otra lateral) no son alternativa: en
+    columnas angostas cubren la misma zona y la opacidad combinada llega a
+    1 − (1−0.78)(1−0.80) = 0.956, y la fotografía desaparece.
+  */
+  background: linear-gradient(
+    to top,
+    rgba(20, 12, 8, 0.9) 0%,
+    rgba(20, 12, 8, 0.84) 30%,
+    rgba(20, 12, 8, 0.78) 55%,
+    rgba(20, 12, 8, 0.72) 78%,
+    rgba(20, 12, 8, 0.66) 100%
+  );
+}
+
+.portadaContenido {
+  position: relative;
+}
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  margin-bottom: var(--space-4);
+  color: var(--texto-inverso-suave);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-medio);
+  text-decoration: none;
+  transition: color var(--dur-rapido) var(--ease-salida);
+}
+
+.volver:hover {
+  color: var(--texto-marca-oscuro);
+}
+
+.estilo {
+  margin-bottom: var(--space-4);
+}
+
+.titulo {
+  font-size: var(--text-4xl);
+  font-weight: var(--peso-normal);
+  color: var(--texto-inverso);
+}
+
+.resumen {
+  max-width: 52ch;
+  margin-top: var(--space-4);
+  color: var(--texto-inverso-suave);
+  font-size: var(--text-lg);
+  line-height: 1.6;
+}
+
+.ficha {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
+  gap: var(--space-5);
+  max-width: 760px;
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: var(--borde-fino) solid rgba(255, 255, 255, 0.22);
+}
+
+.fichaRotulo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--texto-inverso-suave);
+  font-size: var(--text-xs);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--track-versalita);
+  text-transform: uppercase;
+}
+
+.fichaValor {
+  margin-top: var(--space-2);
+  font-family: var(--fuente-display);
+  font-size: var(--text-xl);
+  color: var(--texto-inverso);
+  line-height: 1.2;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+/* --- Detalle --- */
+.detalle {
+  display: grid;
+  gap: var(--space-9);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .detalle {
+    grid-template-columns: 1.35fr 1fr;
+    gap: var(--space-11);
+  }
+}
+
+.versalita {
+  color: var(--texto-marca);
+  margin-bottom: var(--space-4);
+}
+
+.versalitaExtra {
+  margin-top: var(--space-7);
+}
+
+.texto {
+  font-size: var(--text-md);
+  line-height: 1.75;
+  color: var(--texto-suave);
+}
+
+.destacados {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.destacado {
+  display: flex;
+  align-items: start;
+  gap: var(--space-3);
+  font-size: var(--text-md);
+  font-weight: var(--peso-medio);
+}
+
+.check {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--texto-marca);
+}
+
+.material {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: var(--borde-fino) solid var(--borde);
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+}
+
+/* Nota sobre datos contradictorios del sitio original. */
+.nota {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  border-left: 2px solid var(--borde-marca);
+  background-color: var(--fondo-alterno);
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.iconoNota {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--texto-marca);
+}
+
+.terminaciones {
+  align-self: start;
+  padding: var(--space-6);
+  background-color: var(--fondo-elevado);
+  border: var(--borde-fino) solid var(--borde);
+  border-radius: var(--radius-md);
+}
+
+.listaTerminaciones {
+  display: flex;
+  flex-direction: column;
+}
+
+.terminacion {
+  padding-block: var(--space-3);
+  border-bottom: var(--borde-fino) solid var(--borde);
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.terminacion:last-child {
+  border-bottom: none;
+}
+
+/* --- Plantas --- */
+.plantas {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .plantas[data-cantidad='2'] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.planta {
+  padding: var(--space-5);
+  background-color: var(--fondo-elevado);
+  border: var(--borde-fino) solid var(--borde);
+  border-radius: var(--radius-md);
+}
+
+.planta img {
+  width: 100%;
+}
+
+.emplazamiento {
+  margin-top: var(--space-8);
+  padding: var(--space-5);
+  background-color: var(--fondo-elevado);
+  border: var(--borde-fino) solid var(--borde);
+  border-radius: var(--radius-md);
+}
+
+.emplazamientoTitulo {
+  margin-bottom: var(--space-4);
+  font-size: var(--text-lg);
+}
+
+.emplazamientoImg {
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+/* --- Otros modelos --- */
+.otros {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .otros {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1020px) {
+  .otros {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

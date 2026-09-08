@@ -1,0 +1,23 @@
+.contenedor {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+@media (min-width: 720px) {
+  .contenedor {
+    padding-inline: var(--space-7);
+  }
+}
+
+.normal {
+  max-width: var(--ancho-contenido);
+}
+
+.ancho {
+  max-width: 1560px;
+}
+
+.texto {
+  max-width: var(--ancho-texto);
+}

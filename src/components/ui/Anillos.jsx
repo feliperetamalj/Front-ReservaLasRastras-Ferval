@@ -1,0 +1,36 @@
+/**
+ * Los tres anillos del isotipo, como recurso gráfico recurrente.
+ *
+ * Los `d` no son una aproximación: están copiados literalmente del SVG del
+ * logotipo (cls-3, cls-4 y cls-5), así que las tres elipses trazadas a mano
+ * conservan sus irregularidades y su rotación exacta. Es lo que hace que una
+ * marca de agua se lea como de esta empresa y no como un círculo cualquiera.
+ */
+import s from './Anillos.module.css';
+
+const ANILLO_ORO_A =
+  'M124.94,240.17c-59.47,0-107.87-53.86-107.87-120.09S65.47,0,124.94,0,232.79,53.87,232.79,120.08,184.41,240.17,124.94,240.17Zm0-237.73C66.8,2.44,19.52,55.22,19.52,120.08S66.8,237.74,124.94,237.74,230.34,185,230.34,120.08,183.06,2.44,124.94,2.44Z';
+
+const ANILLO_ORO_B =
+  'M104.94,233.9c-40.35,0-75-18.24-92.62-48.8-14.42-25-16.25-55.24-5.12-85.21S41,44,71,26.68c23.12-13.36,48.67-20.42,73.9-20.42,40.37,0,75,18.25,92.64,48.81,14.42,25,16.23,55.25,5.1,85.2s-33.76,55.89-63.8,73.22C155.72,226.85,130.17,233.9,104.94,233.9Zm40-225.2c-24.79,0-49.92,7-72.69,20.08C42.68,45.85,20.4,71.4,9.48,100.75s-9.12,58.78,4.94,83.13c17.22,29.81,51.05,47.59,90.52,47.59,24.81,0,49.94-7,72.71-20.08,29.53-17.08,51.83-42.63,62.72-72s9.12-58.78-4.93-83.13C218.24,26.5,184.39,8.7,144.92,8.7Z';
+
+const ANILLO_TINTA =
+  'M139.19,231.27a143.7,143.7,0,0,1-58.88-13c-30.6-13.91-54.74-37.2-68-65.53S-1.68,94.22,10.25,68c16.56-36.44,55-59.07,100.43-59.07a143.61,143.61,0,0,1,58.89,13c30.6,13.9,54.74,37.18,68,65.53s14,58.52,2.09,84.79C223.07,208.64,184.58,231.27,139.19,231.27ZM110.68,11.33c-44.41,0-82,22.08-98.2,57.64C.84,94.57,1.57,124,14.55,151.71s36.7,50.68,66.76,64.35a141.15,141.15,0,0,0,57.88,12.78c44.42,0,82.05-22.08,98.21-57.63,11.64-25.6,10.91-55-2.07-82.75s-36.7-50.67-66.77-64.35A141.24,141.24,0,0,0,110.68,11.33Z';
+
+export function Anillos({ variante = 'claro', className = '', ...resto }) {
+  return (
+    <svg
+      className={`${s.anillos} ${s[variante]} ${className}`}
+      viewBox="0 0 240 241"
+      aria-hidden="true"
+      focusable="false"
+      {...resto}
+    >
+      <g fillRule="evenodd">
+        <path className={s.oroA} d={ANILLO_ORO_A} />
+        <path className={s.oroB} d={ANILLO_ORO_B} />
+        <path className={s.tinta} d={ANILLO_TINTA} />
+      </g>
+    </svg>
+  );
+}

@@ -1,0 +1,231 @@
+/* ============================================================================
+   Reserva Las Rastras · Sistema de diseño
+
+   Tres capas: primitivo -> semántico -> componente.
+   Los componentes consumen SOLO la capa semántica. Ningún hexadecimal suelto
+   en un .module.css.
+
+   Los colores no son estimados: salen literalmente del SVG del logotipo
+   (wp-content/uploads/2021/04/logo-reserva.svg), donde el degradado dorado
+   declara sus paradas exactas y el texto su gris.
+   ========================================================================= */
+
+:root {
+  /* ==========================================================================
+     CAPA 1 · PRIMITIVOS
+     ====================================================================== */
+
+  /* --- Oro. Las cinco paradas del degradado del isotipo. -----------------
+     El 500 es el oro medio del logo. Ojo: sobre blanco da 2.36:1 y NO sirve
+     para texto; su lugar es el fondo de botón y las superficies oscuras.
+     El 700 (#82680A, parada real del degradado) es el que sí lee sobre claro
+     con 5.34:1, así que es el que lleva texto dorado en fondo papel.        */
+  --oro-200: #f6d85d; /* parada clara  · texto sobre tinta: 12.98:1          */
+  --oro-400: #c7a626; /* parada media  · relleno de botón, filetes           */
+  --oro-500: #a78f2d; /* "Barrio Residencial" del logo                       */
+  --oro-700: #82680a; /* parada oscura · texto sobre claro: 5.34:1           */
+  --oro-900: #5c4a02; /* parada profunda · texto sobre claro: 8.62:1         */
+
+  /* --- Grafito y tinta. Los dos grises literales del logotipo. ----------- */
+  --tinta-900: #1e120d; /* casi negro cálido del isotipo                     */
+  --tinta-800: #241a15; /* superficie oscura secundaria                      */
+  --tinta-700: #3a3130;
+  --grafito-600: #434040; /* el gris del texto "RESERVA LAS RASTRAS"         */
+  --grafito-500: #5f5a58;
+  --grafito-400: #837d7a;
+
+  /* --- Neutros de superficie. Cálidos, para acompañar al oro. ------------ */
+  --papel-000: #ffffff;
+  --papel-050: #faf7f2; /* fondo por defecto del sitio                       */
+  --papel-100: #f2ede4; /* bandas alternas                                   */
+  --papel-200: #e6dfd3; /* bordes y separadores                              */
+  --papel-300: #d5cbba;
+
+  /* --- Estado. Uso restringido: disponibilidad de sitios y avisos. ------- */
+  --verde-600: #2f6b4f; /* disponible · 5.89:1 sobre papel                   */
+  --verde-050: #e8f1ec;
+  --rojo-600: #9a3232; /* vendido    · 6.83:1 sobre papel                    */
+  --rojo-050: #f6eaea;
+
+  /* --- Tipografía --------------------------------------------------------
+     Cinzel es la capital romana inscripcional: rima con el serif del
+     logotipo, que también está en mayúsculas de asta modulada.
+     Inter carga el cuerpo y, sobre todo, las cifras (m², UF, dormitorios),
+     donde hace falta numeración tabular.                                    */
+  --fuente-display: 'Cinzel', 'Times New Roman', Georgia, serif;
+  --fuente-texto: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Escala fluida: interpola entre 375px y 1440px de ancho de ventana. */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: clamp(1.0625rem, 1rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --text-xl: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem);
+  --text-2xl: clamp(1.625rem, 1.35rem + 1.15vw, 2.375rem);
+  --text-3xl: clamp(2rem, 1.55rem + 1.9vw, 3.25rem);
+  --text-4xl: clamp(2.375rem, 1.6rem + 3.3vw, 4.5rem);
+  --text-5xl: clamp(2.75rem, 1.5rem + 5.3vw, 6rem);
+
+  /* Interletrado por tamaño. Un solo valor para todo estaría mal en alguno:
+     los titulares grandes necesitan cerrarse y las versalitas abrirse.      */
+  --track-display: -0.02em;
+  --track-titulo: -0.01em;
+  --track-texto: 0;
+  --track-versalita: 0.16em;
+
+  /* Interlínea inversa al tamaño. */
+  --alto-display: 1.04;
+  --alto-titulo: 1.16;
+  --alto-texto: 1.65;
+
+  --peso-normal: 400;
+  --peso-medio: 500;
+  --peso-semi: 600;
+  --peso-fuerte: 700;
+
+  /* --- Espaciado · escala de 8px ---------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 3rem;
+  --space-9: 4rem;
+  --space-10: 5rem;
+  --space-11: 6.5rem;
+  --space-12: 8rem;
+
+  /* Ritmo vertical de sección: generoso, se comprime en móvil. */
+  --ritmo-seccion: clamp(4rem, 3rem + 6vw, 8.5rem);
+  --ritmo-seccion-corto: clamp(2.5rem, 2rem + 3.5vw, 5rem);
+
+  /* --- Radios. La marca es de círculos trazados a mano: nada de esquinas
+     duras, pero tampoco cápsulas infladas. -------------------------------- */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 22px;
+  --radius-full: 999px;
+
+  /* --- Elevación. Sombras cálidas, teñidas de tinta, no de negro puro. --- */
+  --shadow-xs: 0 1px 2px rgba(30, 18, 13, 0.05);
+  --shadow-sm: 0 2px 10px rgba(30, 18, 13, 0.07);
+  --shadow-md: 0 10px 28px rgba(30, 18, 13, 0.1);
+  --shadow-lg: 0 20px 52px rgba(30, 18, 13, 0.14);
+  --shadow-xl: 0 34px 84px rgba(30, 18, 13, 0.2);
+
+  /* --- Movimiento. Curvas con física; ninguna lineal. --------------------
+     --ease-salida es la crítica amortiguada de Apple (sin rebote) y
+     --ease-resorte lleva un sobrepaso mínimo, reservado a lo que el usuario
+     empuja con un gesto.                                                    */
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-entrada: cubic-bezier(0.55, 0, 0.45, 1);
+  --ease-resorte: cubic-bezier(0.34, 1.42, 0.64, 1);
+
+  --dur-instante: 100ms; /* respuesta al presionar */
+  --dur-rapido: 180ms;
+  --dur-medio: 320ms;
+  --dur-lento: 560ms;
+  --dur-revelado: 760ms;
+
+  /* --- Trazos y contenedor ---------------------------------------------- */
+  --borde-fino: 1px;
+  --ancho-contenido: 1240px;
+  --ancho-texto: 68ch;
+  --alto-header: 76px;
+
+  /* ==========================================================================
+     CAPA 2 · SEMÁNTICOS
+     Lo único que un componente tiene permitido usar.
+     ====================================================================== */
+
+  /* --- Superficies ------------------------------------------------------- */
+  --fondo: var(--papel-050);
+  --fondo-elevado: var(--papel-000);
+  --fondo-alterno: var(--papel-100);
+  --fondo-oscuro: var(--tinta-900);
+  --fondo-oscuro-suave: var(--tinta-800);
+
+  /* --- Texto sobre superficie clara -------------------------------------- */
+  --texto: var(--tinta-900); /* 17.12:1 sobre papel */
+  --texto-suave: var(--grafito-600); /*  9.60:1 */
+  --texto-tenue: var(--grafito-500); /*  6.36:1 · mínimo admitido */
+  --texto-marca: var(--oro-700); /*  5.00:1 · el oro que sí lee en claro */
+
+  /* --- Texto sobre superficie oscura ------------------------------------- */
+  --texto-inverso: var(--papel-000); /* 18.30:1 sobre tinta */
+  --texto-inverso-suave: #cdc4bd; /* 10.65:1 */
+  --texto-inverso-tenue: #a89f98; /*  7.04:1 · letra chica legal */
+  --texto-marca-oscuro: var(--oro-400); /*  7.77:1 · aquí el oro puro brilla */
+  /* Sobre fotografía velada el oro medio baja a ~2.8:1 porque el fondo no es
+     tinta pura sino la foto atenuada. El oro claro se mantiene sobre 5:1. */
+  --texto-marca-foto: var(--oro-200);
+
+  /* --- Bordes ------------------------------------------------------------ */
+  --borde: var(--papel-200);
+  --borde-fuerte: var(--papel-300);
+  --borde-oscuro: rgba(255, 255, 255, 0.14);
+  --borde-marca: var(--oro-400);
+
+  /* --- Acción primaria: oro de relleno, tinta encima. --------------------
+     Nunca blanco sobre oro (2.36:1). La tinta sobre oro da 7.77:1.          */
+  --accion: var(--oro-400);
+  --accion-hover: var(--oro-200);
+  --sobre-accion: var(--tinta-900);
+
+  /* --- Acción secundaria: tinta de relleno, oro encima. ------------------ */
+  --accion-oscura: var(--tinta-900);
+  --accion-oscura-hover: var(--tinta-700);
+  --sobre-accion-oscura: var(--papel-000);
+  --borde-accion-hover: var(--tinta-900);
+  --control-activo: var(--oro-700); /* accent-color de casillas y radios */
+
+  /* --- Los tres anillos del isotipo, cuando se usan como recurso gráfico. */
+  --anillo-a: var(--oro-400);
+  --anillo-b: var(--oro-500);
+  --anillo-b-claro: var(--oro-200);
+  --anillo-c: var(--grafito-600);
+  --anillo-c-oscuro: var(--tinta-900);
+
+  /* --- Foco. Siempre visible, nunca `outline: none` sin reemplazo. ------- */
+  --anillo-foco: 0 0 0 3px var(--fondo), 0 0 0 5px var(--oro-700);
+  --anillo-foco-oscuro: 0 0 0 3px var(--tinta-900), 0 0 0 5px var(--oro-200);
+
+  /* --- Estado de disponibilidad ------------------------------------------ */
+  --disponible: var(--verde-600);
+  --disponible-fondo: var(--verde-050);
+  --vendido: var(--rojo-600);
+  --vendido-fondo: var(--rojo-050);
+
+  /* --- Cromo translúcido. El contenido pasa por debajo del header. ------- */
+  --vidrio: rgba(250, 247, 242, 0.72);
+  --vidrio-borde: rgba(255, 255, 255, 0.5);
+  --vidrio-desenfoque: blur(20px) saturate(180%);
+}
+
+/* --------------------------------------------------------------------------
+   Transparencia reducida: el material se vuelve sólido en vez de esmerilado.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --vidrio: var(--papel-050);
+    --vidrio-desenfoque: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Contraste alto: bordes definidos y superficies sin traslucidez.
+   ----------------------------------------------------------------------- */
+@media (prefers-contrast: more) {
+  :root {
+    --texto-tenue: var(--grafito-600);
+    --texto-inverso-suave: var(--papel-000);
+    --borde: var(--grafito-400);
+    --vidrio: var(--papel-000);
+    --vidrio-desenfoque: none;
+  }
+}

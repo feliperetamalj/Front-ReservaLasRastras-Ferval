@@ -1,0 +1,42 @@
+.grilla {
+  display: grid;
+  gap: var(--space-6) var(--space-7);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grilla {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1020px) {
+  .grilla {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.item {
+  padding-top: var(--space-5);
+  border-top: 2px solid var(--borde-marca);
+}
+
+.marco {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--texto-marca);
+  margin-bottom: var(--space-4);
+}
+
+.titulo {
+  font-size: var(--text-lg);
+  font-weight: var(--peso-semi);
+}
+
+.detalle {
+  margin-top: var(--space-3);
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}

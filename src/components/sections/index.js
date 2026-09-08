@@ -1,0 +1,7 @@
+export { Atributos } from './Atributos';
+export { BloqueContacto } from './BloqueContacto';
+export { BuscadorSitios } from './BuscadorSitios';
+export { Formulario } from './Formulario';
+export { Galeria } from './Galeria';
+export { Hero } from './Hero';
+export { ModeloCard } from './ModeloCard';

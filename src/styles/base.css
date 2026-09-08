@@ -1,0 +1,183 @@
+/* ============================================================================
+   BASE
+   Reset y estilos globales. Consume únicamente la capa semántica de tokens.
+   ========================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Compensa el header fijo al saltar a un ancla. */
+  scroll-padding-top: calc(var(--alto-header) + var(--space-5));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--fondo);
+  color: var(--texto);
+  font-family: var(--fuente-texto);
+  font-size: var(--text-base);
+  line-height: var(--alto-texto);
+  letter-spacing: var(--track-texto);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Evita el desplazamiento lateral por elementos que sobresalen. */
+  overflow-x: hidden;
+}
+
+/* Titulares en Cinzel. El interletrado se cierra a medida que crecen, así que
+   cada nivel lleva el suyo: un valor único estaría mal en los extremos. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--fuente-display);
+  font-weight: var(--peso-semi);
+  line-height: var(--alto-titulo);
+  letter-spacing: var(--track-titulo);
+  text-wrap: balance;
+  color: inherit;
+}
+
+h1 {
+  line-height: var(--alto-display);
+  letter-spacing: var(--track-display);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Los medios nunca desbordan su contenedor. */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--texto-marca);
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  text-underline-offset: 0.2em;
+  transition: color var(--dur-rapido) var(--ease-salida);
+}
+
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+}
+
+/*
+  El atributo `hidden` vale `display: none` en la hoja del navegador, que tiene
+  menos especificidad que cualquier clase. Sin este refuerzo, un panel con
+  `display: flex` en una media query sigue visible aunque React lo marque como
+  oculto, y empuja el contenido hacia abajo.
+*/
+[hidden] {
+  display: none !important;
+}
+
+/* --- Foco visible en todo elemento interactivo --------------------------- */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--anillo-foco);
+  border-radius: var(--radius-sm);
+}
+
+/* Sobre superficies oscuras el anillo invierte su base. */
+.enOscuro :focus-visible {
+  box-shadow: var(--anillo-foco-oscuro);
+}
+
+::selection {
+  background-color: var(--accion);
+  color: var(--sobre-accion);
+}
+
+/* --- Utilidades ---------------------------------------------------------- */
+
+/* Oculta visualmente pero mantiene el texto para lectores de pantalla. */
+.soloLector {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Salto al contenido: primer tabulador de la página. */
+.saltoContenido {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 200;
+  padding: var(--space-3) var(--space-5);
+  background: var(--accion);
+  color: var(--sobre-accion);
+  font-weight: var(--peso-semi);
+  border-radius: var(--radius-sm);
+  transform: translateY(-250%);
+  transition: transform var(--dur-medio) var(--ease-salida);
+}
+
+.saltoContenido:focus-visible {
+  transform: translateY(0);
+}
+
+/* Cifras alineadas verticalmente (UF, m², teléfonos). */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Versalitas de sección: el recurso tipográfico que hereda del logotipo,
+   donde "Barrio Residencial" va espaciado bajo la marca. */
+.versalita {
+  font-family: var(--fuente-texto);
+  font-size: var(--text-xs);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--track-versalita);
+  text-transform: uppercase;
+}

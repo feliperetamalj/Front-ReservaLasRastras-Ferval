@@ -1,0 +1,78 @@
+.seccion {
+  padding-block: var(--ritmo-seccion);
+}
+
+.compacta {
+  padding-block: var(--ritmo-seccion-corto);
+}
+
+/* --- Fondos --- */
+.papel {
+  background-color: var(--fondo);
+}
+
+.blanco {
+  background-color: var(--fondo-elevado);
+}
+
+.alterno {
+  background-color: var(--fondo-alterno);
+}
+
+.tinta {
+  background-color: var(--fondo-oscuro);
+  color: var(--texto-inverso);
+}
+
+/* --- Cabecera --- */
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+
+.centrada {
+  justify-content: center;
+  text-align: center;
+}
+
+.centrada .cabeceraTexto {
+  margin-inline: auto;
+}
+
+.cabeceraTexto {
+  max-width: 62ch;
+}
+
+.versalita {
+  color: var(--texto-marca);
+  margin-bottom: var(--space-3);
+}
+
+.tinta .versalita {
+  color: var(--texto-marca-oscuro);
+}
+
+.titulo {
+  font-size: var(--text-3xl);
+}
+
+.bajada {
+  margin-top: var(--space-4);
+  font-size: var(--text-lg);
+  color: var(--texto-suave);
+  line-height: 1.55;
+}
+
+.tinta .bajada {
+  color: var(--texto-inverso-suave);
+}
+
+.acciones {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}

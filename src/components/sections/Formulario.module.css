@@ -1,0 +1,113 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.grilla {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grilla {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Etiqueta visible siempre: un placeholder desaparece al escribir y deja al
+   usuario sin saber qué campo está llenando. */
+.etiqueta {
+  font-size: var(--text-sm);
+  font-weight: var(--peso-semi);
+  color: var(--texto);
+}
+
+.opcional {
+  font-weight: var(--peso-normal);
+  color: var(--texto-tenue);
+}
+
+.control {
+  min-height: 50px;
+  padding: var(--space-3) var(--space-4);
+  border: var(--borde-fino) solid var(--borde-fuerte);
+  border-radius: var(--radius-sm);
+  background-color: var(--fondo-elevado);
+  color: var(--texto);
+  font-size: var(--text-base);
+  transition:
+    border-color var(--dur-rapido) var(--ease-salida),
+    box-shadow var(--dur-rapido) var(--ease-salida);
+}
+
+.control:hover {
+  border-color: var(--texto-tenue);
+}
+
+.area {
+  resize: vertical;
+  min-height: 116px;
+  line-height: 1.6;
+}
+
+.conError {
+  border-color: var(--vendido);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--vendido);
+  font-size: var(--text-sm);
+}
+
+.resumen {
+  padding: var(--space-3) var(--space-4);
+  border: var(--borde-fino) solid var(--vendido);
+  border-radius: var(--radius-sm);
+  background-color: var(--vendido-fondo);
+  color: var(--vendido);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-medio);
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.nota {
+  color: var(--texto-tenue);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+/* --- Sobre superficie oscura --- */
+.oscuro .etiqueta {
+  color: var(--texto-inverso);
+}
+
+.oscuro .opcional,
+.oscuro .nota {
+  color: var(--texto-inverso-suave);
+}
+
+.oscuro .control {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--borde-oscuro);
+  color: var(--texto-inverso);
+}
+
+.oscuro .control:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+}

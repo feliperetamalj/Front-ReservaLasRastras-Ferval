@@ -1,0 +1,20 @@
+.buscadorSeccion {
+  padding-block: var(--ritmo-seccion);
+}
+
+.plano {
+  padding: var(--space-4);
+  background-color: var(--fondo-elevado);
+  border: var(--borde-fino) solid var(--borde);
+  border-radius: var(--radius-md);
+  /* El plano es una imagen muy alta: se deja desplazar dentro de su caja en
+     vez de forzar el ancho de la página. */
+  max-height: 82svh;
+  overflow: auto;
+}
+
+.planoImg {
+  width: 100%;
+  min-width: 520px;
+  border-radius: var(--radius-sm);
+}

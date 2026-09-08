@@ -1,0 +1,127 @@
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: var(--borde-fino) solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--fuente-texto);
+  font-weight: var(--peso-semi);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+  /* La respuesta al presionar tiene que ser inmediata; el color puede tardar. */
+  transition:
+    transform var(--dur-instante) var(--ease-salida),
+    background-color var(--dur-rapido) var(--ease-salida),
+    border-color var(--dur-rapido) var(--ease-salida),
+    color var(--dur-rapido) var(--ease-salida);
+}
+
+/* Respuesta al presionar, no al soltar. */
+.boton:active {
+  transform: scale(0.975);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boton:active {
+    transform: none;
+  }
+}
+
+/* --- Tamaños. Todos superan los 44px de objetivo táctil. ----------------- */
+.chico {
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.medio {
+  min-height: 50px;
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-base);
+}
+
+.grande {
+  min-height: 58px;
+  padding: var(--space-4) var(--space-7);
+  font-size: var(--text-md);
+}
+
+/* --- Variantes ----------------------------------------------------------
+   El oro de marca solo se usa como RELLENO, con tinta encima (7.77:1).
+   Blanco sobre oro daría 2.36:1 y reprobaría. ---------------------------- */
+.primario {
+  background-color: var(--accion);
+  color: var(--sobre-accion);
+}
+
+.primario:hover {
+  background-color: var(--accion-hover);
+}
+
+/* Tinta sólida: la acción de peso sobre fondos claros y sobre foto. */
+.oscuro {
+  background-color: var(--accion-oscura);
+  color: var(--sobre-accion-oscura);
+}
+
+.oscuro:hover {
+  background-color: var(--accion-oscura-hover);
+}
+
+/* Contorno sobre claro. El texto va en tinta, no en oro: el oro puro no lee. */
+.contorno {
+  background-color: transparent;
+  border-color: var(--borde-fuerte);
+  color: var(--texto);
+}
+
+.contorno:hover {
+  border-color: var(--borde-accion-hover);
+  background-color: rgba(30, 18, 13, 0.04);
+}
+
+/* Contorno sobre oscuro o sobre fotografía. */
+.contornoClaro {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: var(--texto-inverso);
+  backdrop-filter: blur(8px);
+}
+
+.contornoClaro:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+  border-color: var(--texto-inverso);
+}
+
+/* Enlace con flecha, sin caja. */
+.texto {
+  display: inline-block;
+}
+
+.enlace {
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  background: none;
+  color: var(--texto-marca);
+  font-size: var(--text-base);
+}
+
+.enlace .icono {
+  transition: transform var(--dur-medio) var(--ease-salida);
+}
+
+.enlace:hover .icono {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enlace:hover .icono {
+    transform: none;
+  }
+}
+
+.icono {
+  flex-shrink: 0;
+}

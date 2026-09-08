@@ -1,0 +1,166 @@
+.vias {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 720px) {
+  .vias {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.via {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  background-color: var(--fondo-elevado);
+  border: var(--borde-fino) solid var(--borde);
+  border-radius: var(--radius-md);
+  transition:
+    transform var(--dur-medio) var(--ease-salida),
+    box-shadow var(--dur-medio) var(--ease-salida);
+}
+
+.via:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.iconoVia {
+  display: inline-flex;
+  color: var(--texto-marca);
+  margin-bottom: var(--space-2);
+}
+
+.viaTitulo {
+  font-size: var(--text-lg);
+}
+
+.viaDetalle {
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.viaAccion {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  margin-top: auto;
+  padding-top: var(--space-3);
+  color: var(--texto-marca);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-semi);
+  text-decoration: none;
+}
+
+.viaAccion svg {
+  transition: transform var(--dur-medio) var(--ease-salida);
+}
+
+.viaAccion:hover svg {
+  transform: translateX(3px);
+}
+
+/* --- Formulario --- */
+.grilla {
+  display: grid;
+  gap: var(--space-9);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1020px) {
+  .grilla {
+    grid-template-columns: 1.6fr 1fr;
+    gap: var(--space-11);
+  }
+}
+
+.versalita {
+  color: var(--texto-marca);
+  margin-bottom: var(--space-3);
+}
+
+.versalitaExtra {
+  margin-top: var(--space-8);
+}
+
+.tituloForm {
+  font-size: var(--text-2xl);
+}
+
+.bajadaForm {
+  max-width: 52ch;
+  margin-block: var(--space-4) var(--space-7);
+  color: var(--texto-suave);
+  line-height: 1.65;
+}
+
+.aside {
+  align-self: start;
+  padding: var(--space-6);
+  background-color: var(--fondo-alterno);
+  border-radius: var(--radius-md);
+}
+
+.direccion {
+  font-style: normal;
+  color: var(--texto-suave);
+  line-height: 1.7;
+}
+
+.horario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--borde-fino) solid var(--borde);
+  font-size: var(--text-sm);
+}
+
+.horas {
+  color: var(--texto-suave);
+  text-align: right;
+}
+
+.notaHorario {
+  margin-top: var(--space-5);
+  color: var(--texto-tenue);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+/* --- Aviso de ubicación --- */
+.mapaAviso {
+  display: flex;
+  align-items: start;
+  gap: var(--space-4);
+  color: var(--texto-suave);
+  line-height: 1.7;
+}
+
+.iconoMapa {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--texto-marca);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .via:hover {
+    transform: none;
+  }
+
+  .viaAccion:hover svg {
+    transform: none;
+  }
+}

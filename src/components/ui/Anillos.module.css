@@ -1,0 +1,51 @@
+.anillos {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Sobre papel: los anillos son marca de agua, no ilustración. Bajan a una
+   presencia mínima para no competir con el texto que llevan encima. */
+.claro .oroA {
+  fill: var(--anillo-a);
+  opacity: 0.4;
+}
+.claro .oroB {
+  fill: var(--anillo-b);
+  opacity: 0.32;
+}
+.claro .tinta {
+  fill: var(--anillo-c);
+  opacity: 0.22;
+}
+
+/* Sobre tinta: el oro puro aguanta, y aquí sí puede subir. */
+.oscuro .oroA {
+  fill: var(--anillo-a);
+  opacity: 0.55;
+}
+.oscuro .oroB {
+  fill: var(--anillo-b-claro);
+  opacity: 0.32;
+}
+.oscuro .tinta {
+  fill: var(--texto-inverso);
+  opacity: 0.14;
+}
+
+/* Versión sólida, para el pie y los sellos. */
+.solido .oroA {
+  fill: var(--anillo-a);
+}
+.solido .oroB {
+  fill: var(--anillo-b);
+}
+.solido .tinta {
+  fill: var(--anillo-c-oscuro);
+}
+
+@media (prefers-contrast: more) {
+  .anillos {
+    display: none;
+  }
+}

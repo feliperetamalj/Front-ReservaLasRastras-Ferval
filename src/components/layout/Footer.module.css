@@ -1,0 +1,163 @@
+.footer {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--ritmo-seccion) var(--space-8);
+  background-color: var(--fondo-oscuro);
+  color: var(--texto-inverso);
+}
+
+/* Los anillos del isotipo, muy grandes y sangrados por el borde: firman el
+   cierre de la página sin ocupar contenido. */
+.marcaAgua {
+  position: absolute;
+  right: -14%;
+  bottom: -46%;
+  width: min(660px, 72%);
+  pointer-events: none;
+}
+
+.grilla {
+  position: relative;
+  display: grid;
+  gap: var(--space-8) var(--space-6);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grilla {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1020px) {
+  .grilla {
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+    gap: var(--space-7);
+  }
+}
+
+.columnaMarca {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: var(--space-5);
+}
+
+.descripcion {
+  max-width: 42ch;
+  color: var(--texto-inverso-suave);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+.redes {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.red {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: var(--borde-fino) solid var(--borde-oscuro);
+  border-radius: var(--radius-sm);
+  color: var(--texto-inverso);
+  transition:
+    border-color var(--dur-rapido) var(--ease-salida),
+    color var(--dur-rapido) var(--ease-salida),
+    transform var(--dur-instante) var(--ease-salida);
+}
+
+.red:hover {
+  border-color: var(--borde-marca);
+  color: var(--texto-marca-oscuro);
+}
+
+.red:active {
+  transform: scale(0.94);
+}
+
+.tituloColumna {
+  margin-bottom: var(--space-4);
+  color: var(--texto-marca-oscuro);
+  font-weight: var(--peso-semi);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+
+/*
+  WCAG 2.5.8 (AA) exige 24×24 px de objetivo. Un enlace de texto en línea mide
+  el alto de su línea, que aquí eran 22 px: hace falta declararlo.
+*/
+.enlace {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  color: var(--texto-inverso-suave);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: color var(--dur-rapido) var(--ease-salida);
+}
+
+.enlace:hover {
+  color: var(--texto-marca-oscuro);
+}
+
+.dato {
+  display: flex;
+  gap: var(--space-3);
+  color: var(--texto-inverso-suave);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.iconoDato {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--texto-marca-oscuro);
+}
+
+.horario {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-sm);
+}
+
+.dias {
+  color: var(--texto-inverso);
+  font-weight: var(--peso-medio);
+}
+
+.horas {
+  color: var(--texto-inverso-suave);
+}
+
+.pie {
+  position: relative;
+  margin-top: var(--space-10);
+  padding-top: var(--space-6);
+  border-top: var(--borde-fino) solid var(--borde-oscuro);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.legal {
+  color: var(--texto-inverso-suave);
+  font-size: var(--text-sm);
+}
+
+.aviso {
+  max-width: 96ch;
+  color: var(--texto-inverso-tenue);
+  font-size: var(--text-xs);
+  line-height: 1.65;
+}

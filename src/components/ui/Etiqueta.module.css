@@ -1,0 +1,44 @@
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-xs);
+  border: var(--borde-fino) solid transparent;
+  font-size: var(--text-xs);
+  font-weight: var(--peso-semi);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.neutro {
+  background-color: var(--fondo-alterno);
+  border-color: var(--borde);
+  color: var(--texto-suave);
+}
+
+.marca {
+  background-color: rgba(199, 166, 38, 0.14);
+  border-color: rgba(199, 166, 38, 0.4);
+  color: var(--texto-marca);
+}
+
+.disponible {
+  background-color: var(--disponible-fondo);
+  border-color: rgba(47, 107, 79, 0.28);
+  color: var(--disponible);
+}
+
+.vendido {
+  background-color: var(--vendido-fondo);
+  border-color: rgba(154, 50, 50, 0.24);
+  color: var(--vendido);
+}
+
+.oscuro {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.24);
+  color: var(--texto-inverso);
+  backdrop-filter: blur(8px);
+}

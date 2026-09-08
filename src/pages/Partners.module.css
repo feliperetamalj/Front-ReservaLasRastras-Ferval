@@ -1,0 +1,113 @@
+.grilla {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grilla {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1020px) {
+  .grilla {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background-color: var(--fondo-elevado);
+  border: var(--borde-fino) solid var(--borde);
+  border-radius: var(--radius-md);
+  border-top: 2px solid var(--borde-marca);
+  transition: box-shadow var(--dur-medio) var(--ease-salida);
+}
+
+.tarjeta:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.nombre {
+  font-size: var(--text-md);
+  font-weight: var(--peso-semi);
+  line-height: 1.35;
+}
+
+.rol {
+  color: var(--texto-tenue);
+  font-size: var(--text-sm);
+}
+
+.contacto {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: var(--borde-fino) solid var(--borde);
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.rotulo {
+  display: block;
+  color: var(--texto-tenue);
+  font-size: var(--text-xs);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--track-versalita);
+  text-transform: uppercase;
+  margin-bottom: var(--space-1);
+}
+
+.enlaces {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-4);
+}
+
+
+/*
+  WCAG 2.5.8 (AA) exige 24×24 px de objetivo. Un enlace de texto en línea mide
+  el alto de su línea, que aquí eran 22 px: hace falta declararlo.
+*/
+.enlace {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  gap: var(--space-2);
+  color: var(--texto-marca);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-medio);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.enlace:hover {
+  text-decoration: underline;
+}
+
+/* --- Aviso --- */
+.aviso {
+  text-align: center;
+}
+
+.iconoAviso {
+  display: inline-block;
+  margin-bottom: var(--space-4);
+  color: var(--texto-marca);
+}
+
+.avisoTitulo {
+  font-size: var(--text-xl);
+}
+
+.avisoTexto {
+  margin-top: var(--space-4);
+  color: var(--texto-suave);
+  line-height: 1.7;
+}

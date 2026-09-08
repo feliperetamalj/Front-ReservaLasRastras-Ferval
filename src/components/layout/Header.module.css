@@ -1,0 +1,196 @@
+/*
+  Cromo translúcido: el contenido pasa por debajo en vez de encontrarse con una
+  franja opaca. Sin borde inferior duro — la separación la da el material.
+*/
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  background-color: transparent;
+  transition:
+    background-color var(--dur-medio) var(--ease-salida),
+    box-shadow var(--dur-medio) var(--ease-salida),
+    backdrop-filter var(--dur-medio) var(--ease-salida);
+}
+
+.desplazado {
+  background-color: var(--vidrio);
+  backdrop-filter: var(--vidrio-desenfoque);
+  -webkit-backdrop-filter: var(--vidrio-desenfoque);
+  box-shadow: 0 1px 0 rgba(30, 18, 13, 0.07);
+}
+
+.barra {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  max-width: 1560px;
+  margin-inline: auto;
+  min-height: var(--alto-header);
+  padding: var(--space-3) var(--space-5);
+}
+
+@media (min-width: 720px) {
+  .barra {
+    padding-inline: var(--space-7);
+  }
+}
+
+.marca {
+  flex-shrink: 0;
+  line-height: 0;
+  border-radius: var(--radius-sm);
+}
+
+/* Sobre fotografía, una sombra mínima despega el logotipo del fondo sin
+   alterar sus colores. */
+.sobreOscuro .marca {
+  filter: drop-shadow(0 2px 12px rgba(20, 12, 8, 0.55));
+}
+
+.navEscritorio {
+  display: none;
+  align-items: center;
+  gap: var(--space-6);
+  margin-inline-start: auto;
+}
+
+.enlace {
+  position: relative;
+  padding: var(--space-2) 0;
+  color: var(--texto);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-medio);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+/* Filete dorado que crece desde el centro. */
+.enlace::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accion);
+  transform: translateX(-50%);
+  transition: width var(--dur-medio) var(--ease-salida);
+}
+
+.enlace:hover::after,
+.activo::after {
+  width: 100%;
+}
+
+.accionesEscritorio {
+  display: none;
+}
+
+/* Sobre portada oscura, la navegación y el botón invierten su color. */
+.sobreOscuro .enlace {
+  color: var(--texto-inverso);
+}
+
+.sobreOscuro .botonMenu {
+  background-color: rgba(20, 12, 8, 0.42);
+  border: var(--borde-fino) solid rgba(255, 255, 255, 0.24);
+  color: var(--texto-inverso);
+}
+
+.botonMenu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-inline-start: auto;
+  border: var(--borde-fino) solid transparent;
+  border-radius: var(--radius-sm);
+  background-color: var(--vidrio);
+  backdrop-filter: var(--vidrio-desenfoque);
+  -webkit-backdrop-filter: var(--vidrio-desenfoque);
+  color: var(--texto);
+  transition: transform var(--dur-instante) var(--ease-salida);
+}
+
+.botonMenu:active {
+  transform: scale(0.94);
+}
+
+@media (min-width: 1020px) {
+  .navEscritorio,
+  .accionesEscritorio {
+    display: flex;
+  }
+
+  .accionesEscritorio {
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .botonMenu {
+    display: none;
+  }
+}
+
+/* --- Panel móvil --- */
+.panelMovil {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-5) var(--space-8);
+  background-color: var(--fondo);
+  border-top: var(--borde-fino) solid var(--borde);
+  box-shadow: var(--shadow-lg);
+  max-height: calc(100dvh - var(--alto-header));
+  overflow-y: auto;
+}
+
+.navMovil {
+  display: flex;
+  flex-direction: column;
+}
+
+.enlaceMovil {
+  padding: var(--space-4) 0;
+  border-bottom: var(--borde-fino) solid var(--borde);
+  color: var(--texto);
+  font-family: var(--fuente-display);
+  font-size: var(--text-xl);
+  text-decoration: none;
+  opacity: 0;
+  animation: entrar var(--dur-medio) var(--ease-salida) forwards;
+  animation-delay: var(--retraso, 0ms);
+}
+
+.enlaceMovil.activo {
+  color: var(--texto-marca);
+}
+
+.ctaMovil {
+  width: 100%;
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enlaceMovil {
+    animation: none;
+    opacity: 1;
+  }
+
+  .botonMenu:active {
+    transform: none;
+  }
+}
