@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Anillos, Contenedor, Icono, Logo } from '../ui';
-import { CONTACTO, HORARIO, PROYECTO } from '../../data/proyecto';
+import { CONTACTO, CREDITOS, HORARIO, PROYECTO } from '../../data/proyecto';
 import s from './Footer.module.css';
 
 const COLUMNAS = [
@@ -107,7 +107,12 @@ export function Footer() {
 
         <div className={s.pie}>
           <p className={s.legal}>
-            © {anio} {PROYECTO.nombre}. Un proyecto de {PROYECTO.desarrollador}.
+            {CREDITOS.map((titular, i) => (
+              <span key={titular} className={s.credito}>
+                {i > 0 && <span aria-hidden="true"> - </span>}©&nbsp;{anio} {titular}
+              </span>
+            ))}
+            .
           </p>
           <p className={s.aviso}>
             Las imágenes, planos y especificaciones técnicas de este sitio son

@@ -103,6 +103,16 @@ export const RAZONES = [
   },
 ];
 
+/**
+ * Titulares del pie de página, en orden: el proyecto, la inmobiliaria que lo
+ * desarrolla y el estudio que hizo el sitio.
+ */
+export const CREDITOS = [
+  PROYECTO.nombre,
+  PROYECTO.desarrollador,
+  'RB Software Solutions',
+];
+
 export const CONTACTO = {
   // El sitio del proyecto no publica teléfono propio; este es el comercial de
   // la inmobiliaria que lo desarrolla.

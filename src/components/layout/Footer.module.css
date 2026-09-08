@@ -155,6 +155,12 @@
   font-size: var(--text-sm);
 }
 
+/* Cada titular se mantiene entero: si la línea no cabe, corta entre uno y
+   otro, nunca dentro de un nombre. */
+.credito {
+  display: inline-block;
+}
+
 .aviso {
   max-width: 96ch;
   color: var(--texto-inverso-tenue);
