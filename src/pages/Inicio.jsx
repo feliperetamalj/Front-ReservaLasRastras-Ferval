@@ -4,7 +4,9 @@ import { Atributos, BloqueContacto, Carrusel, Hero, ModeloCard } from '../compon
 import { modelos, RANGOS } from '../data/modelos';
 import { FOTOS, GALERIA_BARRIO, ENTORNO, PROYECTO } from '../data/proyecto';
 import { RESUMEN } from '../data/sitios';
-import { m2Corto, uf } from '../utils/formato';
+import { enPalabras, m2Corto, uf } from '../utils/formato';
+
+const capitalizar = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 import s from './Inicio.module.css';
 
 /* Los tres modelos con precio publicado abren el catálogo; el resto va en la
@@ -49,8 +51,9 @@ export function Inicio() {
               {m2Corto(RESUMEN.m2Max)} m²
             </h2>
             <p className={s.planoBajada}>
-              Seis sectores conectados por avenidas amplias. Puedes filtrar por sector y
-              superficie, y ver cuáles siguen disponibles antes de venir a la sala de ventas.
+              {capitalizar(enPalabras(RESUMEN.sectores))} sectores conectados por avenidas amplias.
+              En el plano interactivo ves la superficie y el estado de cada sitio, y puedes filtrar
+              por sector y tamaño antes de venir a la sala de ventas.
             </p>
             <Boton a="/master-plan" variante="primario" tamano="grande" icono="flecha">
               Buscar un sitio

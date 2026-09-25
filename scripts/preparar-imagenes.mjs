@@ -28,7 +28,16 @@ const ANCHOS = {
   galeria: [1600, 900],
   planta: [1500],
   plano: [1600],
+  mapa: [1600],
 };
+
+/*
+  Calidad por rol. El plano del master plan va más comprimido que las plantas:
+  sus números impresos quedan tapados por los marcadores interactivos, y a
+  tamaño real 75 y 88 son indistinguibles en el texto de la calle y en los
+  trazos (975 KB → 542 KB).
+*/
+const CALIDAD = { planta: 88, plano: 88, mapa: 75 };
 
 /** origen -> [carpeta/nombre destino, rol] */
 const MAPA = [
@@ -39,7 +48,7 @@ const MAPA = [
   ['2022_05_P4-1.png', 'proyecto/plaza', 'galeria'],
   ['2023_01_FINAL1.png', 'proyecto/calle', 'galeria'],
   ['2023_01_EMPLAZAMIENTO.jpg', 'proyecto/emplazamiento', 'plano'],
-  ['2026_07_loteo-agosto2026.jpg', 'proyecto/master-plan', 'plano'],
+  ['2026_07_loteo-agosto2026.jpg', 'proyecto/master-plan', 'mapa'],
   ['2024_06_ELEVACION-A.png', 'proyecto/elevacion', 'galeria'],
 
   // --- Colonial 150 -------------------------------------------------------
@@ -124,7 +133,7 @@ for (const [archivo, destinoRel, rol] of MAPA) {
 
     await sharp(entrada)
       .resize({ width: objetivo, withoutEnlargement: true })
-      .webp({ quality: rol === 'planta' || rol === 'plano' ? 88 : 80 })
+      .webp({ quality: CALIDAD[rol] ?? 80 })
       .toFile(salida);
 
     pesoDestino += (await import('node:fs')).statSync(salida).size;

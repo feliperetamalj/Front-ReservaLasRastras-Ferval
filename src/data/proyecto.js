@@ -11,6 +11,8 @@ const IMAGENES = import.meta.glob('../assets/proyecto/*.webp', {
 });
 
 import { medida } from './medidas';
+import { SECTORES } from './sitios';
+import { enPalabras } from '../utils/formato';
 
 const img = (nombre) => IMAGENES[`../assets/proyecto/${nombre}.webp`];
 const dim = (nombre) => {
@@ -46,7 +48,7 @@ export const ATRIBUTOS = [
   {
     titulo: 'Diseño de microbarrios',
     detalle:
-      'El loteo se organiza en seis sectores conectados por avenidas amplias, no en una única grilla continua.',
+      `El loteo se organiza en ${enPalabras(SECTORES.length)} sectores conectados por avenidas amplias, no en una única grilla continua.`,
     icono: 'plano',
   },
   {

@@ -34,17 +34,52 @@ dentro de un componente.**
 |---|---|
 | `src/data/proyecto.js` | Datos del proyecto, contacto, horario, atributos, entorno |
 | `src/data/modelos.js` | Los seis modelos de casa |
-| `src/data/sitios.js` | Los 132 sitios del loteo con superficie y disponibilidad |
+| `src/data/sitios.js` | Los 184 sitios del loteo: superficie, estado y posición en el plano |
 | `src/data/partners.js` | Arquitectos y constructoras autorizados |
 | `src/data/medidas.js` | Generado — medidas de cada imagen. No editar a mano |
 
 ### Actualizar la disponibilidad de sitios
 
-`src/data/sitios.js` trae la disponibilidad al **8 de septiembre de 2026**,
-leída del master plan publicado. Para actualizarla, cambia `disponible` en las
-filas que corresponda: los totales, los rangos de superficie y los recuentos
-por sector se recalculan solos (`RESUMEN` y `POR_SECTOR`), no hay cifras
-escritas a mano en ninguna pantalla.
+`src/data/sitios.js` trae el estado de los 184 sitios al **24 de septiembre de
+2026**, leído del plano interactivo que publica el proyecto. Para actualizarlo:
+
+1. Cambia `estado` en las filas que corresponda: `'disponible'`,
+   `'reservado'` o `'vendido'`.
+2. Cambia `FECHA_DISPONIBILIDAD` en el mismo archivo; es la que se muestra
+   junto al buscador.
+
+Los totales, los rangos de superficie, los recuentos por sector y la cantidad
+de sectores que aparece en los textos se recalculan solos (`RESUMEN` y
+`POR_SECTOR`): no hay cifras escritas a mano en ninguna pantalla.
+
+`x` e `y` son la posición del centro de cada sitio en el plano, como fracción
+del ancho y del alto de la imagen. **No se tocan** salvo que cambie la imagen
+del plano; en ese caso hay que volver a medirlas (el comentario de cabecera de
+`sitios.js` explica cómo se obtuvieron).
+
+### El plano interactivo
+
+`src/components/sections/MapaSitios.jsx`. Cada sitio es un botón que tapa el
+círculo impreso en la imagen, así el estado que se ve es siempre el de los
+datos y no el que quedó dibujado el día que se hizo el plano.
+
+- **Escritorio:** se parte con los círculos a 28 px. Pasar el cursor abre la
+  ficha; hacer clic la fija. La rueda desplaza; Control + rueda (o pellizcar
+  en el trackpad) acerca sobre el cursor; arrastrar con el mouse desplaza.
+- **Teléfono:** se parte viendo el barrio completo. El primer toque acerca
+  sobre ese punto —el sitio tocado queda bajo el dedo— y abre su ficha; a
+  partir de ahí, tocar elige.
+- **Teclado:** el plano es una sola parada del tabulador. Las flechas mueven
+  al sitio vecino en esa dirección, Inicio y Fin van a los extremos, Intro
+  fija la ficha, Escape la cierra, y `+` / `−` acercan y alejan.
+- Los filtros del buscador **atenúan** lo que no coincide, no lo ocultan.
+- La vista de lista muestra los mismos sitios con los mismos filtros; es
+  también el camino más cómodo con lector de pantalla.
+
+Los estados se distinguen por luminosidad y forma, no solo por color: oro
+lleno (disponible), papel con borde discontinuo (reservado) y tinta
+(vendido). Verde y rojo tenían casi la misma luminancia —el par que más
+confunde la visión del color— y el verde se perdía sobre el pasto del plano.
 
 ### Reprocesar imágenes
 
@@ -143,7 +178,7 @@ visitante como nota cuando corresponde. **Ninguno se corrigió en silencio.**
 | Modelo de 179 m² de un piso | Su distintivo de precio dice **159 m²**; el título dice 179 |
 | Modelo colonial mayor | **190** en la portada, **192** en el menú y en su ficha |
 | Horario de la sala de ventas | **Cuatro horarios distintos** en cuatro páginas |
-| Sectores en venta | Dice "lote B, C, E, F y G", pero su tabla también lista el sector A |
+| Sectores en venta | Dice "lote B, C, E, F y G", pero su plano incluye también los sectores A y D |
 | Página `/reserva/` | Formulario roto ("Formulario de contacto no encontrado") y "Entrega: Noviembre 2021" |
 | Página `/visitasaladeventa/` | Muestra el código `[booked-calendar calendar=27]` sin renderizar |
 

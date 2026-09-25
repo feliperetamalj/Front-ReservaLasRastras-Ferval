@@ -128,8 +128,102 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-3) var(--space-5);
+}
+
+/* --- Plano / Lista: control segmentado --- */
+.vistas {
+  display: inline-flex;
+  margin-inline-start: auto;
+  padding: 3px;
+  border: var(--borde-fino) solid var(--borde-fuerte);
+  border-radius: var(--radius-md);
+  background-color: var(--fondo-alterno);
+}
+
+.vista {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-medio);
+  transition:
+    background-color var(--dur-rapido) var(--ease-salida),
+    color var(--dur-rapido) var(--ease-salida),
+    box-shadow var(--dur-rapido) var(--ease-salida);
+}
+
+.vista:hover {
+  color: var(--texto);
+}
+
+.vistaActiva {
+  background-color: var(--fondo-elevado);
+  color: var(--texto);
+  box-shadow: var(--shadow-sm);
+}
+
+/* --- Simbología del plano --- */
+.simbologia {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin-bottom: calc(-1 * var(--space-2));
+}
+
+.simbolo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+}
+
+/* La muestra reproduce el marcador del plano, con su halo. */
+.muestra {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background-color: var(--estado-disponible);
+  box-shadow:
+    0 0 0 1.5px var(--papel-000),
+    0 0 0 2.5px rgba(30, 18, 13, 0.55);
+}
+
+.muestra[data-estado='reservado'] {
+  background-color: var(--estado-reservado);
+  outline: 1.5px dashed var(--borde-estado-reservado);
+  outline-offset: -3px;
+}
+
+.muestra[data-estado='vendido'] {
+  background-color: var(--estado-vendido);
+}
+
+.simboloCuenta {
+  color: var(--texto-tenue);
+}
+
+.avisoVacio {
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+}
+
+.enlaceBoton {
+  min-height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--texto-marca);
+  font-weight: var(--peso-semi);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .cuentaResultados {
@@ -178,9 +272,16 @@
   border-color: var(--borde-fuerte);
 }
 
-.noDisponible {
+/* Vendido retrocede, igual que en el plano; reservado lleva el borde
+   discontinuo de su marcador. */
+.vendido {
   background-color: transparent;
   opacity: 0.72;
+}
+
+.reservado {
+  border-style: dashed;
+  border-color: var(--borde-estado-reservado);
 }
 
 .sitioCabecera {
@@ -206,6 +307,20 @@
 .sitioUnidad {
   font-size: var(--text-sm);
   color: var(--texto-tenue);
+}
+
+.sitioModelo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  color: var(--texto-marca);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-medio);
+  text-decoration: none;
+}
+
+.sitioModelo:hover {
+  text-decoration: underline;
 }
 
 .consultar {

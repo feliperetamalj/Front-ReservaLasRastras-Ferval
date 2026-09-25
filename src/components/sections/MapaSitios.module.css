@@ -1,0 +1,285 @@
+.mapa {
+  position: relative;
+}
+
+/*
+  El marco es un contenedor de desplazamiento real: el paneo con el dedo, la
+  inercia y la interrupción son las del sistema. `overscroll-behavior-x`
+  impide que llegar al borde izquierdo dispare el gesto de "atrás" del
+  trackpad; el eje vertical se deja encadenar con la página a propósito, para
+  que el plano no atrape la rueda del mouse.
+*/
+.marco {
+  position: relative;
+  height: min(78svh, 880px);
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  border: var(--borde-fino) solid var(--borde);
+  border-radius: var(--radius-lg);
+  background-color: var(--fondo-elevado);
+  cursor: grab;
+  /* El desplazamiento programático del zoom tiene que ser instantáneo. */
+  scroll-behavior: auto;
+  scrollbar-width: thin;
+}
+
+.marco[data-arrastrando] {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.lienzo {
+  position: relative;
+  margin-inline: auto;
+  aspect-ratio: 1600 / 4590;
+}
+
+.plano {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.capa {
+  position: absolute;
+  inset: 0;
+}
+
+/* --- Marcadores -------------------------------------------------------
+   Cubren el círculo impreso en el plano, así el estado que se ve es siempre
+   el de los datos y no el que quedó dibujado en la imagen. */
+.marcador {
+  --base: 1;
+  --realce: 1;
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: calc(var(--k) * 45px);
+  height: calc(var(--k) * 45px);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--estado-disponible);
+  color: var(--sobre-estado-disponible);
+  box-shadow: var(--halo-marcador);
+  cursor: pointer;
+  transform: translate(-50%, -50%) scale(calc(var(--base) * var(--realce)));
+  transition:
+    transform var(--dur-rapido) var(--ease-salida),
+    opacity var(--dur-medio) var(--ease-salida),
+    box-shadow var(--dur-rapido) var(--ease-salida);
+}
+
+.marcador[data-estado='reservado'] {
+  background-color: var(--estado-reservado);
+  color: var(--sobre-estado-reservado);
+  outline: 1.5px dashed var(--borde-estado-reservado);
+  outline-offset: -4px;
+}
+
+/*
+  Vendido va a tamaño completo, igual que los demás. El marcador tiene que
+  tapar entero el círculo impreso en el plano: si se achica, asoma un anillo
+  del color que quedó dibujado en la imagen, que puede contradecir el dato.
+*/
+.marcador[data-estado='vendido'] {
+  background-color: var(--estado-vendido);
+  color: var(--sobre-estado-vendido);
+}
+
+.numero {
+  font-family: var(--fuente-texto);
+  font-size: calc(var(--k) * 15px);
+  font-weight: var(--peso-semi);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-numeros='no'] .numero {
+  display: none;
+}
+
+/* Viendo el barrio entero el halo pesaría más que el punto: se aligera. El
+   borde discontinuo del reservado, en un punto de 9 px, sería solo un anillo
+   diminuto sin lectura posible. */
+[data-numeros='no'] .marcador {
+  box-shadow:
+    0 0 0 1px var(--papel-000),
+    0 0 0 1.5px rgba(30, 18, 13, 0.6);
+}
+
+[data-numeros='no'] .marcador[data-estado='reservado'] {
+  outline: none;
+}
+
+/* Respuesta al presionar, antes de soltar. */
+.marcador:active {
+  --realce: 0.9;
+  transition-duration: var(--dur-instante);
+}
+
+/* Activo: el que tiene la ficha abierta, o el que recibe el foco del teclado.
+   El aro dorado marca cuál es, y el sitio sube sobre sus vecinos. */
+.activo,
+.marcador:focus-visible {
+  --realce: 1.2;
+  z-index: 2;
+  box-shadow:
+    0 0 0 2px var(--papel-000),
+    0 0 0 4.5px var(--accion),
+    0 6px 16px rgba(30, 18, 13, 0.45);
+}
+
+@media (hover: hover) {
+  .marcador:hover {
+    --realce: 1.2;
+    z-index: 2;
+  }
+}
+
+/*
+  Lo que no coincide con los filtros queda atenuado, no oculto: sigue dando
+  contexto de dónde está cada cosa en el barrio.
+
+  Se atenúa con un velo claro encima y no bajando la opacidad. Un marcador
+  semitransparente deja ver el círculo impreso debajo, con el color que tenía
+  la imagen el día que se dibujó — que puede no ser el estado actual.
+*/
+.atenuado {
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.9);
+}
+
+.atenuado::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: rgba(250, 247, 242, 0.68);
+  pointer-events: none;
+  transition: opacity var(--dur-rapido) var(--ease-salida);
+}
+
+/* Al abrir su ficha, el sitio atenuado recupera su color y el aro dorado. */
+.atenuado.activo,
+.atenuado:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--papel-000),
+    0 0 0 4.5px var(--accion),
+    0 6px 16px rgba(30, 18, 13, 0.45);
+}
+
+.atenuado.activo::after,
+.atenuado:focus-visible::after {
+  opacity: 0;
+}
+
+/* --- Zoom ---------------------------------------------------------------
+   Material translúcido sobre el plano: una capa funcional que no roba la
+   atención. Arriba a la derecha, donde lo espera cualquiera que haya usado un
+   mapa. */
+.zoom {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  border: var(--borde-fino) solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-md);
+  background-color: var(--vidrio);
+  backdrop-filter: var(--vidrio-desenfoque);
+  -webkit-backdrop-filter: var(--vidrio-desenfoque);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.botonZoom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: none;
+  color: var(--texto);
+  transition:
+    background-color var(--dur-rapido) var(--ease-salida),
+    transform var(--dur-instante) var(--ease-salida);
+}
+
+.botonZoom + .botonZoom {
+  border-top: var(--borde-fino) solid var(--borde);
+}
+
+.botonZoom:hover:not(:disabled) {
+  background-color: rgba(30, 18, 13, 0.06);
+}
+
+.botonZoom:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.botonZoom:disabled {
+  color: var(--texto-tenue);
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* --- Pista para el primer toque --- */
+.pista {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-4);
+  z-index: 3;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  background-color: rgba(30, 18, 13, 0.78);
+  backdrop-filter: blur(8px);
+  color: var(--texto-inverso);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-medio);
+  white-space: nowrap;
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: asomar var(--dur-lento) var(--ease-salida);
+}
+
+@keyframes asomar {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marcador {
+    transition: opacity var(--dur-medio) ease;
+  }
+
+  .marcador:active,
+  .activo,
+  .marcador:focus-visible {
+    --realce: 1;
+  }
+
+  .pista {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .zoom {
+    background-color: var(--fondo-elevado);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

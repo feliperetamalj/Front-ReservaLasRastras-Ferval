@@ -59,23 +59,23 @@
 }
 
 .conError {
-  border-color: var(--vendido);
+  border-color: var(--error);
 }
 
 .error {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--vendido);
+  color: var(--error);
   font-size: var(--text-sm);
 }
 
 .resumen {
   padding: var(--space-3) var(--space-4);
-  border: var(--borde-fino) solid var(--vendido);
+  border: var(--borde-fino) solid var(--error);
   border-radius: var(--radius-sm);
-  background-color: var(--vendido-fondo);
-  color: var(--vendido);
+  background-color: var(--error-fondo);
+  color: var(--error);
   font-size: var(--text-sm);
   font-weight: var(--peso-medio);
 }

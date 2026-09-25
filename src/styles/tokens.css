@@ -41,10 +41,8 @@
   --papel-200: #e6dfd3; /* bordes y separadores                              */
   --papel-300: #d5cbba;
 
-  /* --- Estado. Uso restringido: disponibilidad de sitios y avisos. ------- */
-  --verde-600: #2f6b4f; /* disponible · 5.89:1 sobre papel                   */
-  --verde-050: #e8f1ec;
-  --rojo-600: #9a3232; /* vendido    · 6.83:1 sobre papel                    */
+  /* --- Error. Uso restringido: validación de formularios. --------------- */
+  --rojo-600: #9a3232; /* 6.83:1 sobre papel                                 */
   --rojo-050: #f6eaea;
 
   /* --- Tipografía --------------------------------------------------------
@@ -195,11 +193,40 @@
   --anillo-foco: 0 0 0 3px var(--fondo), 0 0 0 5px var(--oro-700);
   --anillo-foco-oscuro: 0 0 0 3px var(--tinta-900), 0 0 0 5px var(--oro-200);
 
-  /* --- Estado de disponibilidad ------------------------------------------ */
-  --disponible: var(--verde-600);
-  --disponible-fondo: var(--verde-050);
-  --vendido: var(--rojo-600);
-  --vendido-fondo: var(--rojo-050);
+  /* --- Estado de cada sitio --------------------------------------------
+     Se distinguen por luminosidad y por forma, no solo por tono: oro lleno
+     (disponible), papel con borde discontinuo (reservado) y tinta
+     (vendido). Verde y rojo tenían casi la misma luminancia —el par que más
+     confunde la visión del color— y el verde se perdía sobre el pasto del
+     plano.                                                                  */
+  --estado-disponible: var(--oro-400);
+  --sobre-estado-disponible: var(--tinta-900); /*  7.77:1 */
+  --estado-reservado: var(--papel-050);
+  --sobre-estado-reservado: var(--tinta-900); /* 17.12:1 */
+  --borde-estado-reservado: var(--grafito-500);
+  --estado-vendido: var(--tinta-700);
+  --sobre-estado-vendido: var(--papel-000); /* 12.64:1 */
+
+  /* Etiquetas de estado sobre fondo claro (la lista de sitios). */
+  --etiqueta-disponible-fondo: rgba(199, 166, 38, 0.16);
+  --etiqueta-disponible-texto: var(--oro-900); /* sobre ese fondo: >5.9:1 */
+  --etiqueta-reservado-fondo: var(--papel-100);
+  --etiqueta-reservado-texto: var(--grafito-600); /* 8.80:1 */
+  --etiqueta-vendido-fondo: rgba(30, 18, 13, 0.08);
+  --etiqueta-vendido-texto: var(--tinta-700); /* 10.06:1 */
+
+  /*
+    Halo de los marcadores del plano. El fondo alrededor de cada círculo va de
+    árboles casi negros a pasto casi blanco, y ningún relleno llega a 3:1
+    contra todo ese rango. El doble aro sí: contra fondo oscuro se lee el
+    blanco, contra fondo claro la tinta.
+  */
+  --halo-marcador: 0 0 0 2px var(--papel-000), 0 0 0 3.5px rgba(30, 18, 13, 0.7),
+    0 2px 6px rgba(30, 18, 13, 0.35);
+
+  /* --- Error de formulario ---------------------------------------------- */
+  --error: var(--rojo-600);
+  --error-fondo: var(--rojo-050);
 
   /* --- Cromo translúcido. El contenido pasa por debajo del header. ------- */
   --vidrio: rgba(250, 247, 242, 0.72);

@@ -24,16 +24,25 @@
   color: var(--texto-marca);
 }
 
+/* Los tres estados de un sitio. Mismo lenguaje que los marcadores del plano:
+   oro para disponible, borde discontinuo para reservado, tinta para vendido. */
 .disponible {
-  background-color: var(--disponible-fondo);
-  border-color: rgba(47, 107, 79, 0.28);
-  color: var(--disponible);
+  background-color: var(--etiqueta-disponible-fondo);
+  border-color: rgba(199, 166, 38, 0.45);
+  color: var(--etiqueta-disponible-texto);
+}
+
+.reservado {
+  background-color: var(--etiqueta-reservado-fondo);
+  border-color: var(--borde-estado-reservado);
+  border-style: dashed;
+  color: var(--etiqueta-reservado-texto);
 }
 
 .vendido {
-  background-color: var(--vendido-fondo);
-  border-color: rgba(154, 50, 50, 0.24);
-  color: var(--vendido);
+  background-color: var(--etiqueta-vendido-fondo);
+  border-color: rgba(30, 18, 13, 0.18);
+  color: var(--etiqueta-vendido-texto);
 }
 
 .oscuro {

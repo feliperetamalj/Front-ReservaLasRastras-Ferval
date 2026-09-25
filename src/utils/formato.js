@@ -16,3 +16,14 @@ export const m2Corto = (valor) => nf({ maximumFractionDigits: 0 }).format(valor)
 /** 3 -> "3 dormitorios" · 1 -> "1 dormitorio" */
 export const plural = (n, singular, pluralPalabra) =>
   `${n} ${n === 1 ? singular : pluralPalabra}`;
+
+const PALABRAS = ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez', 'once', 'doce'];
+
+/** 7 -> "siete". Para cifras que van en una frase y no deben escribirse a mano. */
+export const enPalabras = (n) => PALABRAS[n] ?? String(n);
+
+/** "2026-09-24" -> "24 de septiembre de 2026" */
+export const fechaLarga = (iso) =>
+  new Intl.DateTimeFormat('es-CL', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(`${iso}T00:00:00Z`),
+  );

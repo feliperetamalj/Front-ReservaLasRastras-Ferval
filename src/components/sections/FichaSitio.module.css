@@ -1,0 +1,258 @@
+/*
+  La ficha es un material: fondo casi opaco con desenfoque, y la sombra más
+  profunda del sistema, porque flota sobre una ilustración muy cargada. Sobre
+  un fondo así, un blanco translúcido de verdad perdería el texto.
+*/
+.ficha {
+  position: absolute;
+  z-index: 20;
+  width: var(--ancho-ficha, 288px);
+  padding: var(--space-5);
+  border: var(--borde-fino) solid rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-lg);
+  background-color: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(30, 18, 13, 0.06);
+  color: var(--texto);
+}
+
+/* Primer paso: se renderiza invisible para medirla antes de ubicarla. */
+.midiendo {
+  visibility: hidden;
+  left: 0;
+  top: 0;
+}
+
+/*
+  La ficha crece desde el sitio: el origen de la transformación es la punta de
+  la flecha, del lado donde está el marcador. Entra y sale por el mismo camino.
+*/
+.arriba {
+  transform-origin: var(--flecha) calc(100% + 10px);
+  animation: materializar var(--dur-medio) var(--ease-salida);
+}
+
+.abajo {
+  transform-origin: var(--flecha) -10px;
+  animation: materializar var(--dur-medio) var(--ease-salida);
+}
+
+@keyframes materializar {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* --- Flecha que apunta al sitio --- */
+.flecha {
+  position: absolute;
+  left: var(--flecha);
+  width: 14px;
+  height: 14px;
+  background-color: inherit;
+  border: inherit;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.arriba .flecha {
+  bottom: -7px;
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+
+.abajo .flecha {
+  top: -7px;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+}
+
+/* --- Contenido --- */
+/* La versalita deja sitio al botón de cerrar; el título y su estado van en
+   una misma fila y, si no caben, la etiqueta baja entera sin partir el
+   nombre del sitio. */
+.cabecera {
+  display: flex;
+  flex-direction: column;
+}
+
+.tituloFila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.sector {
+  color: var(--texto-marca);
+  margin-bottom: var(--space-1);
+  padding-inline-end: var(--space-7);
+}
+
+.titulo {
+  white-space: nowrap;
+  font-family: var(--fuente-display);
+  font-size: var(--text-xl);
+  font-weight: var(--peso-semi);
+  line-height: 1.1;
+}
+
+.datos {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: var(--borde-fino) solid var(--borde);
+}
+
+.rotulo {
+  color: var(--texto-tenue);
+  font-size: var(--text-sm);
+}
+
+.valor {
+  font-family: var(--fuente-display);
+  font-size: var(--text-lg);
+  font-weight: var(--peso-semi);
+}
+
+.modelo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding: var(--space-2);
+  border: var(--borde-fino) solid var(--borde);
+  border-radius: var(--radius-md);
+  color: var(--texto);
+  text-decoration: none;
+  transition:
+    border-color var(--dur-rapido) var(--ease-salida),
+    background-color var(--dur-rapido) var(--ease-salida);
+}
+
+.modelo:hover {
+  border-color: var(--borde-fuerte);
+  background-color: var(--fondo-alterno);
+}
+
+.miniatura {
+  width: 64px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background-color: var(--fondo-alterno);
+}
+
+.modeloTexto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.modeloRotulo {
+  color: var(--texto-tenue);
+  font-size: var(--text-xs);
+}
+
+.modeloNombre {
+  font-size: var(--text-sm);
+  font-weight: var(--peso-semi);
+}
+
+.modeloFlecha {
+  margin-inline-start: auto;
+  flex-shrink: 0;
+  color: var(--texto-marca);
+}
+
+.consultar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  margin-top: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  background-color: var(--accion);
+  color: var(--sobre-accion);
+  font-size: var(--text-sm);
+  font-weight: var(--peso-semi);
+  text-decoration: none;
+  transition:
+    background-color var(--dur-rapido) var(--ease-salida),
+    transform var(--dur-instante) var(--ease-salida);
+}
+
+.consultar:hover {
+  background-color: var(--accion-hover);
+}
+
+.consultar:active {
+  transform: scale(0.98);
+}
+
+.nota {
+  margin-top: var(--space-4);
+  color: var(--texto-tenue);
+  font-size: var(--text-sm);
+}
+
+.cerrar {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--fondo-alterno);
+  color: var(--texto-suave);
+  transition: background-color var(--dur-rapido) var(--ease-salida);
+}
+
+.cerrar:hover {
+  background-color: var(--borde);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arriba,
+  .abajo {
+    animation: aparecer var(--dur-rapido) ease;
+  }
+
+  .consultar:active {
+    transform: none;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .ficha {
+    background-color: var(--fondo-elevado);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

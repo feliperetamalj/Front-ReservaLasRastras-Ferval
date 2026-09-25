@@ -108,6 +108,22 @@ const TRAZOS = {
   ),
   check: <path d="m5 12.5 4.5 4.5L19 7" />,
   expandir: <path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5" />,
+  mas: <path d="M12 5v14M5 12h14" />,
+  menos: <path d="M5 12h14" />,
+  vistaPlano: (
+    <>
+      <path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5L9 4Z" />
+      <path d="M9 4v13.5M15 6.5V20" />
+    </>
+  ),
+  lista: (
+    <>
+      <path d="M9 6h11M9 12h11M9 18h11" />
+      <circle cx="4.5" cy="6" r="1" />
+      <circle cx="4.5" cy="12" r="1" />
+      <circle cx="4.5" cy="18" r="1" />
+    </>
+  ),
   instagram: (
     <>
       <rect x="3.5" y="3.5" width="17" height="17" rx="5" />

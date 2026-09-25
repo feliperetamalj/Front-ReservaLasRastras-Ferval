@@ -1,7 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Boton, Etiqueta, Icono } from '../ui';
-import { POR_SECTOR, RESUMEN, SITIOS } from '../../data/sitios';
-import { m2Corto } from '../../utils/formato';
+import { MapaSitios } from './MapaSitios';
+import { porSlug } from '../../data/modelos';
+import { ESTADOS, FECHA_DISPONIBILIDAD, POR_SECTOR, RESUMEN, SITIOS } from '../../data/sitios';
+import { fechaLarga, m2Corto } from '../../utils/formato';
 import { enlaceWhatsApp } from '../../utils/contacto';
 import s from './BuscadorSitios.module.css';
 
@@ -15,19 +18,41 @@ const TRAMOS = [
 
 const INICIAL = { sector: 'todos', tramo: 'todos', soloDisponibles: true };
 
+/** Cuántos sitios hay en cada estado, para la simbología del plano. */
+const CUENTA_POR_ESTADO = {
+  disponible: RESUMEN.disponibles,
+  reservado: RESUMEN.reservados,
+  vendido: RESUMEN.vendidos,
+};
+
+const VISTAS = [
+  { id: 'plano', texto: 'Plano', icono: 'vistaPlano' },
+  { id: 'lista', texto: 'Lista', icono: 'lista' },
+];
+
 export function BuscadorSitios() {
   const [filtros, setFiltros] = useState(INICIAL);
+  const [vista, setVista] = useState('plano');
 
-  const resultados = useMemo(() => {
-    const tramo = TRAMOS.find((t) => t.id === filtros.tramo);
-    return SITIOS.filter(
-      (sitio) =>
+  /*
+    Un solo criterio para las dos vistas. En la lista decide qué se muestra;
+    en el plano, qué se resalta. Memorizado porque el plano lo usa para
+    decidir cuáles de sus 184 marcadores se repintan.
+  */
+  const coincide = useCallback(
+    (sitio) => {
+      const tramo = TRAMOS.find((t) => t.id === filtros.tramo);
+      return (
         (filtros.sector === 'todos' || sitio.sector === filtros.sector) &&
         sitio.m2 >= tramo.min &&
         sitio.m2 < tramo.max &&
-        (!filtros.soloDisponibles || sitio.disponible),
-    );
-  }, [filtros]);
+        (!filtros.soloDisponibles || sitio.estado === 'disponible')
+      );
+    },
+    [filtros],
+  );
+
+  const resultados = useMemo(() => SITIOS.filter(coincide), [coincide]);
 
   const cambiar = (clave, valor) => setFiltros((f) => ({ ...f, [clave]: valor }));
   const limpiar = () => setFiltros(INICIAL);
@@ -56,6 +81,9 @@ export function BuscadorSitios() {
                 className={`${s.pastilla} ${filtros.sector === sec.sector ? s.activa : ''}`}
                 onClick={() => cambiar('sector', sec.sector)}
                 aria-pressed={filtros.sector === sec.sector}
+                aria-label={`Sector ${sec.sector}: ${sec.disponibles} ${
+                  sec.disponibles === 1 ? 'sitio disponible' : 'sitios disponibles'
+                } de ${sec.total}`}
               >
                 Sector {sec.sector}
                 <span className={`${s.cuenta} tabular`}>{sec.disponibles}</span>
@@ -101,44 +129,89 @@ export function BuscadorSitios() {
           {resultados.length === 1 ? 'sitio' : 'sitios'}
           {hayFiltros && ' con estos filtros'}
         </p>
+
         {hayFiltros && (
           <button type="button" className={s.limpiar} onClick={limpiar}>
             <Icono nombre="cerrar" tamano={14} />
             Quitar filtros
           </button>
         )}
+
+        <div className={s.vistas} role="group" aria-label="Cómo ver los sitios">
+          {VISTAS.map((v) => (
+            <button
+              key={v.id}
+              type="button"
+              className={`${s.vista} ${vista === v.id ? s.vistaActiva : ''}`}
+              onClick={() => setVista(v.id)}
+              aria-pressed={vista === v.id}
+            >
+              <Icono nombre={v.icono} tamano={17} />
+              {v.texto}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {resultados.length > 0 ? (
+      {vista === 'plano' ? (
+        <>
+          <ul className={s.simbologia} aria-label="Simbología del plano">
+            {Object.entries(ESTADOS).map(([estado, texto]) => (
+              <li key={estado} className={s.simbolo}>
+                <span className={s.muestra} data-estado={estado} aria-hidden="true" />
+                {texto}
+                <span className={`${s.simboloCuenta} tabular`}>{CUENTA_POR_ESTADO[estado]}</span>
+              </li>
+            ))}
+          </ul>
+          <MapaSitios sitios={SITIOS} coincide={coincide} />
+          {resultados.length === 0 && (
+            <p className={s.avisoVacio}>
+              Ningún sitio coincide con estos filtros: en el plano todos quedan atenuados.{' '}
+              <button type="button" className={s.enlaceBoton} onClick={limpiar}>
+                Quitar filtros
+              </button>
+            </p>
+          )}
+        </>
+      ) : resultados.length > 0 ? (
         <ul className={s.grilla}>
-          {resultados.map((sitio) => (
-            <li key={sitio.id} className={`${s.sitio} ${sitio.disponible ? '' : s.noDisponible}`}>
-              <div className={s.sitioCabecera}>
-                <span className={s.sitioId}>{sitio.id}</span>
-                <Etiqueta tono={sitio.disponible ? 'disponible' : 'vendido'}>
-                  {sitio.disponible ? 'Disponible' : 'Vendido'}
-                </Etiqueta>
-              </div>
-              <p className={`${s.sitioM2} tabular`}>
-                {m2Corto(sitio.m2)} <span className={s.sitioUnidad}>m²</span>
-              </p>
-              {sitio.disponible && (
-                <a
-                  className={s.consultar}
-                  href={enlaceWhatsApp(
-                    `Hola, me interesa el sitio ${sitio.id} de Reserva Las Rastras (${m2Corto(
-                      sitio.m2,
-                    )} m²). ¿Sigue disponible?`,
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Consultar
-                  <Icono nombre="flecha" tamano={14} />
-                </a>
-              )}
-            </li>
-          ))}
+          {resultados.map((sitio) => {
+            const modelo = sitio.modelo ? porSlug(sitio.modelo) : null;
+            return (
+              <li key={sitio.id} className={`${s.sitio} ${s[sitio.estado]}`}>
+                <div className={s.sitioCabecera}>
+                  <span className={s.sitioId}>{sitio.id}</span>
+                  <Etiqueta tono={sitio.estado}>{ESTADOS[sitio.estado]}</Etiqueta>
+                </div>
+                <p className={`${s.sitioM2} tabular`}>
+                  {m2Corto(sitio.m2)} <span className={s.sitioUnidad}>m²</span>
+                </p>
+                {modelo && (
+                  <Link to={`/modelos/${modelo.slug}`} className={s.sitioModelo}>
+                    Casa modelo {modelo.nombre}
+                  </Link>
+                )}
+                {sitio.estado !== 'vendido' && (
+                  <a
+                    className={s.consultar}
+                    href={enlaceWhatsApp(
+                      sitio.estado === 'reservado'
+                        ? `Hola, el sitio ${sitio.id} de Reserva Las Rastras aparece reservado. ¿Me avisan si se libera?`
+                        : `Hola, me interesa el sitio ${sitio.id} de Reserva Las Rastras (${m2Corto(
+                            sitio.m2,
+                          )} m²). ¿Sigue disponible?`,
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {sitio.estado === 'reservado' ? 'Preguntar' : 'Consultar'}
+                    <Icono nombre="flecha" tamano={14} />
+                  </a>
+                )}
+              </li>
+            );
+          })}
         </ul>
       ) : (
         <div className={s.vacio}>
@@ -146,7 +219,7 @@ export function BuscadorSitios() {
           <h3 className={s.tituloVacio}>Ningún sitio con esos filtros</h3>
           <p className={s.textoVacio}>
             {filtros.soloDisponibles
-              ? 'Prueba con otro sector o incluye los sitios ya vendidos para ver el loteo completo.'
+              ? 'Prueba con otro sector o incluye los sitios reservados y vendidos para ver el loteo completo.'
               : 'Prueba ampliando el rango de superficie o cambiando de sector.'}
           </p>
           <Boton variante="contorno" tamano="medio" onClick={limpiar}>
@@ -156,8 +229,8 @@ export function BuscadorSitios() {
       )}
 
       <p className={s.aviso}>
-        Disponibilidad al 8 de septiembre de 2026, según el master plan publicado por el proyecto.
-        Confírmala con la sala de ventas antes de reservar.
+        Disponibilidad al {fechaLarga(FECHA_DISPONIBILIDAD)}, según el plano publicado por el
+        proyecto. Confírmala con la sala de ventas antes de reservar.
       </p>
     </div>
   );
