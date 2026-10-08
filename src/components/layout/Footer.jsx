@@ -139,6 +139,11 @@ export function Footer() {
             ))}
             .
           </p>
+          <p className={s.legal}>
+            <Link to="/privacidad" className={s.enlace}>
+              Política de privacidad
+            </Link>
+          </p>
           <p className={s.aviso}>
             Las imágenes, planos y especificaciones técnicas de este sitio son
             referenciales y tienen por objeto mostrar las características generales

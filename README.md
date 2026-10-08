@@ -36,6 +36,7 @@ dentro de un componente.**
 | `src/data/modelos.js` | Los seis modelos de casa |
 | `src/data/sitios.js` | Los 184 sitios del plano (superficie, estado, posición) y los macrolotes |
 | `src/data/partners.js` | Arquitectos y constructoras autorizados |
+| `src/data/privacidad.js` | Política de privacidad (versión, fecha y secciones) |
 | `src/data/medidas.js` | Generado — medidas de cada imagen. No editar a mano |
 
 ### Actualizar la disponibilidad de sitios
@@ -223,6 +224,27 @@ visitante como nota cuando corresponde. **Ninguno se corrigió en silencio.**
 Los cuatro modelos cuyo precio se contradice muestran **"Precio a consultar"**.
 Publicar una cifra que el propio cliente desmiente en otra pantalla es peor que
 no publicarla.
+
+## Política de privacidad
+
+`/privacidad` cubre la información permanente que exige el Art. 14 ter de la
+Ley 19.628, modificada por la Ley 21.719 (vigente desde el 1 de diciembre de
+2026): cada sección de `src/data/privacidad.js` indica la letra que responde.
+Hay enlace en el pie de todas las páginas y en el formulario de contacto.
+
+Es un borrador fundado en el texto de la ley, no asesoría legal. **Antes de
+publicar en el dominio del cliente**, Ferval tiene que completar los
+marcadores `[COMPLETAR: …]` (razón social, RUT, representante legal,
+domicilio, correo para solicitudes y las garantías de las transferencias
+internacionales). La página los resalta en amarillo para que no pasen
+inadvertidos:
+
+```bash
+grep -n "COMPLETAR" src/data/privacidad.js
+```
+
+Si cambia el texto, sube `POLITICA.version` y la fecha: la versión se guarda
+con cada consentimiento de la agenda.
 
 ## Datos personales de terceros
 

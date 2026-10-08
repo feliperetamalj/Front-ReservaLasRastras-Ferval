@@ -92,6 +92,13 @@
   line-height: 1.6;
 }
 
+/* Hereda el color de la nota: se lee en los dos tonos del formulario. */
+.enlaceNota {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* --- Sobre superficie oscura --- */
 .oscuro .etiqueta {
   color: var(--texto-inverso);

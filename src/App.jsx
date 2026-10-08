@@ -10,6 +10,7 @@ import { MasterPlan } from './pages/MasterPlan';
 import { ElBarrio } from './pages/ElBarrio';
 import { Partners } from './pages/Partners';
 import { Contacto } from './pages/Contacto';
+import { Privacidad } from './pages/Privacidad';
 import { NoEncontrada } from './pages/NoEncontrada';
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/el-barrio" element={<ElBarrio />} />
           <Route path="/partners" element={<Partners />} />
           <Route path="/contacto" element={<Contacto />} />
+          <Route path="/privacidad" element={<Privacidad />} />
           <Route path="*" element={<NoEncontrada />} />
         </Routes>
       </main>

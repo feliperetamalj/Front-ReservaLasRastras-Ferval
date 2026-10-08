@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Boton, Icono } from '../ui';
 import { componerMensaje, enlaceCorreo, enlaceWhatsApp } from '../../utils/contacto';
 import s from './Formulario.module.css';
@@ -173,7 +174,10 @@ export function Formulario({ interes, tono = 'claro' }) {
 
       <p className={s.nota}>
         Al continuar se abre WhatsApp o tu correo con el mensaje ya escrito. Nada se envía ni se
-        guarda desde este sitio.
+        guarda desde este sitio.{' '}
+        <Link to="/privacidad" className={s.enlaceNota}>
+          Política de privacidad
+        </Link>
       </p>
     </form>
   );

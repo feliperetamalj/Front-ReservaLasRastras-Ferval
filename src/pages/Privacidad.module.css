@@ -1,0 +1,94 @@
+.version {
+  margin-top: var(--space-4);
+  color: var(--texto-tenue);
+  font-size: var(--text-sm);
+}
+
+.cuerpo {
+  padding-block: var(--space-8) var(--space-10);
+  color: var(--texto-suave);
+  line-height: 1.7;
+}
+
+/* En escritorio el índice queda a la izquierda y acompaña la lectura. */
+@media (min-width: 1020px) {
+  .cuerpo {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(0, 2.6fr);
+    gap: var(--space-10);
+    align-items: start;
+  }
+
+  .indice {
+    position: sticky;
+    top: calc(var(--alto-header) + var(--space-5));
+    margin-bottom: 0;
+  }
+}
+
+.texto {
+  max-width: 68ch;
+}
+
+.texto > .seccion:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.indice {
+  margin-bottom: var(--space-8);
+  padding: var(--space-5) var(--space-6);
+  border: var(--borde-fino) solid var(--borde);
+  border-radius: var(--radius-md);
+  background-color: var(--fondo-alterno);
+}
+
+.indiceTitulo {
+  margin-bottom: var(--space-3);
+  color: var(--texto-marca);
+}
+
+.indiceLista {
+  display: grid;
+  gap: var(--space-1);
+  padding-left: 1.4em;
+  font-size: var(--text-sm);
+}
+
+.indiceLista a {
+  display: inline-block;
+  min-height: 24px;
+  color: var(--texto);
+  text-underline-offset: 3px;
+}
+
+.seccion {
+  display: grid;
+  gap: var(--space-3);
+  padding-block: var(--space-6);
+  border-top: var(--borde-fino) solid var(--borde);
+  /* El encabezado fijo no tapa el título al saltar desde el índice. */
+  scroll-margin-top: calc(var(--alto-header) + var(--space-4));
+}
+
+.titulo {
+  font-size: var(--text-lg);
+  font-weight: var(--peso-semi);
+  line-height: 1.3;
+  color: var(--texto);
+}
+
+.lista {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: 1.2em;
+  list-style: disc;
+}
+
+/* Dato que falta: a la vista, para completarlo antes de publicar. */
+.pendiente {
+  padding: 0 0.2em;
+  border-radius: var(--radius-sm);
+  background-color: var(--oro-200);
+  color: var(--tinta-900);
+}
