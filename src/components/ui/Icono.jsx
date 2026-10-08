@@ -28,6 +28,13 @@ const TRAZOS = {
       <path d="M10.25 19.5v-5h3.5v5" />
     </>
   ),
+  calendario: (
+    <>
+      <rect x="3.5" y="5" width="17" height="15.5" rx="2" />
+      <path d="M3.5 10h17M8 3v4M16 3v4" />
+      <path d="M8 14h2M14 14h2M8 17h2" />
+    </>
+  ),
   rayo: <path d="M13 2 5 13h6l-2 9 8-11h-6l2-9Z" />,
   sitio: (
     <>

@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Claves: nunca en el repositorio
+.env
+.env.*
+!.env.example

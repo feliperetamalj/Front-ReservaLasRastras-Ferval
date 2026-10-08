@@ -11,6 +11,8 @@ import { ElBarrio } from './pages/ElBarrio';
 import { Partners } from './pages/Partners';
 import { Contacto } from './pages/Contacto';
 import { Privacidad } from './pages/Privacidad';
+import { Agendar } from './pages/Agendar';
+import { Gestionar } from './pages/Gestionar';
 import { NoEncontrada } from './pages/NoEncontrada';
 
 export default function App() {
@@ -33,6 +35,8 @@ export default function App() {
           <Route path="/partners" element={<Partners />} />
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/privacidad" element={<Privacidad />} />
+          <Route path="/agendar" element={<Agendar />} />
+          <Route path="/agendar/gestionar" element={<Gestionar />} />
           <Route path="*" element={<NoEncontrada />} />
         </Routes>
       </main>

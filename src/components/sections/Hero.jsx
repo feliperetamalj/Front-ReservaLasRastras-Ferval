@@ -3,7 +3,6 @@ import { FOTOS, PROYECTO } from '../../data/proyecto';
 import { RESUMEN } from '../../data/sitios';
 import { RANGOS } from '../../data/modelos';
 import { m2Corto } from '../../utils/formato';
-import { whatsAppDirecto } from '../../utils/contacto';
 import s from './Hero.module.css';
 
 /**
@@ -61,11 +60,7 @@ export function Hero() {
             <Boton a="/master-plan" variante="primario" tamano="grande">
               Sitios disponibles
             </Boton>
-            <Boton
-              href={whatsAppDirecto('agendar una visita a Reserva Las Rastras')}
-              variante="contornoClaro"
-              tamano="grande"
-            >
+            <Boton a="/agendar" variante="contornoClaro" tamano="grande">
               Agendar visita
             </Boton>
           </div>

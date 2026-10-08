@@ -67,9 +67,12 @@ export function ModeloDetalle() {
           </dl>
 
           <div className={s.acciones}>
+            <Boton a={`/agendar?modelo=${modelo.slug}`} variante="primario" tamano="grande" icono="calendario" iconoAlInicio>
+              Agendar visita
+            </Boton>
             <Boton
               href={whatsAppDirecto(`el modelo ${modelo.nombre} de Reserva Las Rastras`)}
-              variante="primario"
+              variante="contornoClaro"
               tamano="grande"
               icono="whatsapp"
               iconoAlInicio
@@ -191,6 +194,7 @@ export function ModeloDetalle() {
 
       <BloqueContacto
         interes={`el modelo ${modelo.nombre} de Reserva Las Rastras`}
+        agendar={`/agendar?modelo=${modelo.slug}`}
         titulo={`Cotiza el ${modelo.nombre}`}
         bajada="Te enviamos el detalle de superficies, terminaciones y las condiciones de compra vigentes."
       />

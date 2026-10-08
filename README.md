@@ -22,6 +22,7 @@ export PATH="$HOME/.local/node/bin:$PATH" && npm install && npm run dev
 | `npm run dev` | Servidor de desarrollo |
 | `npm run build` | Compila a `dist/` |
 | `npm run preview` | Sirve `dist/` como en producción |
+| `npm test` | Pruebas de la agenda (`node --test`, sin dependencias) |
 
 ---
 
@@ -32,7 +33,10 @@ dentro de un componente.**
 
 | Archivo | Contiene |
 |---|---|
-| `src/data/proyecto.js` | Datos del proyecto, contacto, horario, atributos, entorno |
+| `src/data/proyecto.js` | Datos del proyecto, atributos, entorno, fotos |
+| `src/data/contacto.js` | Sala de ventas, Ferval y horario de atención |
+| `src/data/agenda.js` | Reglas, textos de consentimiento y correos de la agenda |
+| `src/data/feriados.js` | Feriados en que la agenda no ofrece visitas (actualizar cada año) |
 | `src/data/modelos.js` | Los seis modelos de casa |
 | `src/data/sitios.js` | Los 184 sitios del plano (superficie, estado, posición) y los macrolotes |
 | `src/data/partners.js` | Arquitectos y constructoras autorizados |
@@ -187,6 +191,25 @@ blanco cumpla 3:1.
 
 ---
 
+## Agenda de visitas
+
+`/agendar` ofrece los próximos 21 días en bloques de una hora, según el
+horario de `ATENCION` y los feriados de `src/data/feriados.js`, con 2 horas de
+anticipación mínima. Todo se calcula en la hora de Santiago.
+
+- La lógica vive en `src/utils/agenda.js` y la comparten la página y las
+  funciones de `api/` (disponibilidad, agendar, gestionar): el servidor valida
+  con las mismas reglas. Por eso esos archivos y los de `src/data/` que
+  importan no pueden traer imágenes y sus imports llevan `.js`.
+- Base de datos en Supabase y correos con Resend, ambos con `fetch`, sin
+  dependencias. Las claves solo existen como variables de entorno en Vercel
+  (ver `.env.example`); sin ellas, la página envía la solicitud por WhatsApp.
+- El enlace para cancelar o borrar datos lleva el token en el fragmento
+  (`#token=…`), que el navegador no manda al servidor.
+
+Puesta en marcha, operación diaria y cómo atender pedidos de borrado:
+[`docs/agenda.md`](docs/agenda.md).
+
 ## Despliegue
 
 `vercel.json` está validado contra el esquema. **No le agregues claves de
@@ -194,8 +217,9 @@ comentario:** JSON no admite comentarios y Vercel rechaza cualquier propiedad
 que no reconozca, con un error que solo aparece al desplegar.
 
 La reescritura de rutas manda todo a `index.html` salvo los archivos reales
-(`assets/`, favicon, `og-image.jpg`, `robots.txt`, `sitemap.xml`); sin ella,
-recargar `/modelos/colonial-150` devuelve 404.
+(`assets/`, favicon, `og-image.jpg`, `robots.txt`, `sitemap.xml`) y las
+funciones de `api/`; sin ella, recargar `/modelos/colonial-150` devuelve 404.
+Las funciones corren en São Paulo (`gru1`), junto a la base de datos.
 
 Si conectas el repositorio a Vercel *después* del último push, no hay evento que
 dispare la construcción. Un commit vacío la despierta:

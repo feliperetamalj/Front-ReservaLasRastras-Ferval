@@ -10,7 +10,7 @@
  * `POLITICA.version` se guarda con cada consentimiento de la agenda. Si cambia
  * el texto, sube la versión y la fecha.
  */
-import { CORPORATIVO } from './proyecto';
+import { CORPORATIVO } from './contacto.js';
 
 export const POLITICA = { version: '1.0', fecha: '2026-10-08' };
 

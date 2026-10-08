@@ -76,12 +76,15 @@ export function Header() {
         <div className={s.accionesEscritorio}>
           <Boton
             href={whatsAppDirecto()}
-            variante="primario"
+            variante={sobreOscuro ? 'contornoClaro' : 'contorno'}
             tamano="chico"
             icono="whatsapp"
             iconoAlInicio
           >
             Cotizar
+          </Boton>
+          <Boton a="/agendar" variante="primario" tamano="chico">
+            Agendar visita
           </Boton>
         </div>
 
@@ -113,16 +116,14 @@ export function Header() {
               </NavLink>
             ))}
           </nav>
-          <Boton
-            href={whatsAppDirecto()}
-            variante="primario"
-            tamano="grande"
-            icono="whatsapp"
-            iconoAlInicio
-            className={s.ctaMovil}
-          >
-            Cotizar por WhatsApp
-          </Boton>
+          <div className={s.ctasMovil}>
+            <Boton a="/agendar" variante="primario" tamano="grande" icono="calendario" iconoAlInicio>
+              Agendar visita
+            </Boton>
+            <Boton href={whatsAppDirecto()} variante="contorno" tamano="grande" icono="whatsapp" iconoAlInicio>
+              Cotizar por WhatsApp
+            </Boton>
+          </div>
         </div>
       )}
     </header>

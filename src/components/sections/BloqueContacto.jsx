@@ -1,4 +1,4 @@
-import { Contenedor, Icono } from '../ui';
+import { Boton, Contenedor, Icono } from '../ui';
 import { Formulario } from './Formulario';
 import { CONTACTO, HORARIO } from '../../data/proyecto';
 import { whatsAppDirecto } from '../../utils/contacto';
@@ -8,6 +8,7 @@ import s from './BloqueContacto.module.css';
 export function BloqueContacto({
   id = 'contacto',
   interes,
+  agendar = '/agendar',
   titulo = 'Conversemos sobre tu casa',
   bajada = 'Déjanos tus datos y una ejecutiva te contacta. O escríbenos directo por WhatsApp, que suele ser más rápido.',
 }) {
@@ -24,6 +25,10 @@ export function BloqueContacto({
 
           <aside className={s.columnaDatos}>
             <h3 className={`versalita ${s.tituloAside}`}>Sala de ventas</h3>
+
+            <Boton a={agendar} variante="primario" icono="calendario" iconoAlInicio className={s.agendar}>
+              Agendar visita
+            </Boton>
 
             <ul className={s.datos}>
               <li className={s.dato}>

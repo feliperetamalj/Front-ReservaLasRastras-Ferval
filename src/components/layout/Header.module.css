@@ -169,8 +169,9 @@
   color: var(--texto-marca);
 }
 
-.ctaMovil {
-  width: 100%;
+.ctasMovil {
+  display: grid;
+  gap: var(--space-3);
 }
 
 @keyframes entrar {

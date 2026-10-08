@@ -206,6 +206,17 @@ a.modelo:hover {
   background-color: var(--accion-hover);
 }
 
+.secundario {
+  margin-top: var(--space-2);
+  border: var(--borde-fino) solid var(--borde-fuerte);
+  background-color: transparent;
+  color: var(--texto);
+}
+
+.secundario:hover {
+  background-color: var(--fondo-alterno);
+}
+
 .consultar:active {
   transform: scale(0.98);
 }

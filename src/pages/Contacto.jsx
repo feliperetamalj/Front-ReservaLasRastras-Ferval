@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Contenedor, Icono, Reveal, Seccion } from '../components/ui';
 import { Formulario } from '../components/sections';
 import { Encabezado } from './Encabezado';
@@ -6,6 +7,13 @@ import { whatsAppDirecto } from '../utils/contacto';
 import s from './Contacto.module.css';
 
 const VIAS = [
+  {
+    icono: 'calendario',
+    titulo: 'Visita a la sala',
+    detalle: 'Elige día y hora: te mostramos el barrio, los sitios y las casas.',
+    accion: 'Agendar visita',
+    a: '/agendar',
+  },
   {
     icono: 'whatsapp',
     titulo: 'WhatsApp',
@@ -48,14 +56,21 @@ export function Contacto() {
               </span>
               <h2 className={s.viaTitulo}>{v.titulo}</h2>
               <p className={s.viaDetalle}>{v.detalle}</p>
-              <a
-                href={v.href}
-                className={s.viaAccion}
-                {...(v.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              >
-                {v.accion}
-                <Icono nombre="flecha" tamano={15} />
-              </a>
+              {v.a ? (
+                <Link to={v.a} className={s.viaAccion}>
+                  {v.accion}
+                  <Icono nombre="flecha" tamano={15} />
+                </Link>
+              ) : (
+                <a
+                  href={v.href}
+                  className={s.viaAccion}
+                  {...(v.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                  {v.accion}
+                  <Icono nombre="flecha" tamano={15} />
+                </a>
+              )}
             </Reveal>
           ))}
         </ul>

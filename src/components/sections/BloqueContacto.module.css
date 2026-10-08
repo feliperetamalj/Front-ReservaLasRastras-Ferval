@@ -62,6 +62,10 @@
   color: var(--texto-marca-oscuro);
 }
 
+.agendar {
+  margin-bottom: var(--space-6);
+}
+
 .datos {
   display: flex;
   flex-direction: column;

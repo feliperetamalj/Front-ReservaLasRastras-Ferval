@@ -86,11 +86,19 @@ export const FichaSitio = forwardRef(function FichaSitio(
           </div>
         ))}
 
+      {sitio.estado === 'disponible' && (
+        <Link to={`/agendar?sitio=${sitio.id}`} className={s.consultar}>
+          <Icono nombre="calendario" tamano={17} />
+          Agendar visita
+        </Link>
+      )}
+
       {sitio.estado === 'vendido' ? (
         <p className={s.nota}>Este sitio ya fue vendido.</p>
       ) : (
         <a
-          className={s.consultar}
+          // Con la agenda como acción principal, WhatsApp pasa a segundo plano.
+          className={`${s.consultar} ${sitio.estado === 'disponible' ? s.secundario : ''}`}
           href={enlaceWhatsApp(mensaje(sitio))}
           target="_blank"
           rel="noopener noreferrer"
