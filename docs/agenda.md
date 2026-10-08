@@ -16,8 +16,10 @@ misma página arma la solicitud y la abre en WhatsApp. Nada se pierde.
    `supabase/migrations/20261008000000_visitas.sql`. Crea la tabla, el índice
    que impide dos visitas en el mismo bloque, RLS sin políticas (nadie la lee
    con la clave pública) y el borrado automático a los 12 meses.
-2. **Resend.** Crear la cuenta (idealmente de Ferval), verificar el dominio
-   remitente (registros DNS que Resend indica) y crear una API key.
+2. **Gmail.** En la cuenta que enviará los correos (idealmente de la sala o
+   de Ferval), activar la verificación en dos pasos y crear una contraseña de
+   aplicación en myaccount.google.com/apppasswords. Gmail admite unos 500
+   destinatarios al día, de sobra para la agenda.
 3. **Vercel.** En *Settings → Environment Variables* (Production), cargar las
    seis variables de `.env.example`. Redesplegar.
 4. **Probar.** Pedir una visita con un correo propio, revisar que llegan los
@@ -69,12 +71,18 @@ a CSV desde el editor.
 Si una visita termina en compra, sus datos pasan a la gestión comercial de
 Ferval, fuera de este sistema: esta tabla no es un CRM.
 
+Los correos enviados quedan también en la carpeta *Enviados* de la cuenta de
+Gmail remitente: si alguien pide borrar sus datos, borrar ahí también su
+confirmación.
+
 ## Si algo falla
 
 - **No llegan correos a la sala:** la solicitud no se guarda (se deshace) y la
-  página le ofrece WhatsApp a la persona. Revisar la API key y el dominio en
-  Resend, y los registros de la función `api/agendar` en Vercel (no contienen
-  datos personales, solo códigos de estado).
+  página le ofrece WhatsApp a la persona. Revisar `SMTP_USUARIO` y
+  `SMTP_CLAVE` (si se cambió la contraseña de la cuenta, Google anula las
+  contraseñas de aplicación y hay que crear otra), y los registros de la
+  función `api/agendar` en Vercel: `EAUTH` es clave rechazada. No contienen
+  datos personales, solo códigos de error.
 - **Una persona dice que el día que quería aparece cerrado:** revisar
   `src/data/feriados.js` y el horario en `src/data/contacto.js`.
 - **Cambia el horario de la sala:** se edita `ATENCION` en

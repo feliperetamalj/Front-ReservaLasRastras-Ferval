@@ -99,7 +99,7 @@ export default async function agendar(req, res) {
     await enviarCorreo({
       para: visita.email,
       ...correo,
-      adjuntos: [{ filename: 'visita-reserva-las-rastras.ics', content: Buffer.from(ics).toString('base64') }],
+      adjuntos: [{ filename: 'visita-reserva-las-rastras.ics', content: ics, contentType: 'text/calendar; charset=utf-8' }],
     });
   }
 

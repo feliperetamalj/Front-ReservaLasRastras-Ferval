@@ -12,7 +12,7 @@
  */
 import { CORPORATIVO } from './contacto.js';
 
-export const POLITICA = { version: '1.0', fecha: '2026-10-08' };
+export const POLITICA = { version: '1.1', fecha: '2026-10-08' };
 
 const CANAL = '[COMPLETAR: correo para solicitudes de privacidad, p. ej. contacto@fervali.cl]';
 
@@ -69,7 +69,7 @@ export const SECCIONES = [
     lista: [
       'Vercel Inc., que aloja este sitio.',
       'Supabase Inc., que guarda las solicitudes de visita.',
-      'Resend, que envía los correos de confirmación.',
+      'Google (Gmail), que envía los correos de confirmación.',
     ],
     cierre: 'No vendemos ni cedemos tus datos a nadie.',
   },
@@ -103,7 +103,7 @@ export const SECCIONES = [
     letra: 'h',
     titulo: 'Datos fuera de Chile',
     parrafos: [
-      'Supabase guarda las solicitudes en servidores de São Paulo, Brasil. Vercel y Resend procesan datos en Estados Unidos.',
+      'Supabase guarda las solicitudes en servidores de São Paulo, Brasil. Vercel procesa datos en Estados Unidos y Google, en sus centros de datos de Estados Unidos y otros países.',
       '[COMPLETAR: si esos países tienen un nivel adecuado de protección según la Agencia y, si no, las garantías que se usan; p. ej., las cláusulas contractuales de los acuerdos de tratamiento de datos (DPA) de cada proveedor. Confirmar con asesoría legal.]',
     ],
   },

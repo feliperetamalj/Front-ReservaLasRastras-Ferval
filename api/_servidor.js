@@ -2,21 +2,23 @@
  * Piezas comunes de las funciones de la agenda. El guion bajo del nombre le
  * dice a Vercel que este archivo no es un endpoint.
  *
- * Sin dependencias: Supabase se consulta por su API REST (PostgREST) y los
- * correos salen por la API de Resend, las dos con `fetch`.
+ * Supabase se consulta por su API REST (PostgREST) con `fetch`. Los correos
+ * salen por el SMTP de Gmail con nodemailer, con una contraseña de aplicación
+ * de la cuenta remitente.
  *
  * Reglas que no se rompen:
  * - Las claves solo existen aquí, en variables de entorno de Vercel.
  * - Ningún dato personal va a `console`: los registros de Vercel los guardan.
  */
 import { createHash } from 'node:crypto';
+import nodemailer from 'nodemailer';
 
 const VARIABLES = [
   'SUPABASE_URL',
   'SUPABASE_SERVICE_ROLE_KEY',
-  'RESEND_API_KEY',
+  'SMTP_USUARIO',
+  'SMTP_CLAVE',
   'AGENDA_CORREO_SALA',
-  'AGENDA_REMITENTE',
   'HASH_SALT',
 ];
 
@@ -59,24 +61,39 @@ export async function db(ruta, { method = 'GET', body, prefer } = {}) {
   return { ok: r.ok, estado: r.status, datos, total: rango ? Number(rango.split('/')[1]) : null };
 }
 
-/** Envía un correo. Devuelve true si Resend lo aceptó. */
+let transporte;
+
+/**
+ * Quien entrega los correos. Es un objeto para que las pruebas puedan
+ * reemplazar `enviar` sin conectarse a Gmail.
+ */
+export const cartero = {
+  enviar(mensaje) {
+    transporte ??= nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user: process.env.SMTP_USUARIO, pass: process.env.SMTP_CLAVE },
+    });
+    return transporte.sendMail(mensaje);
+  },
+};
+
+/** Envía un correo. Devuelve true si Gmail lo aceptó. */
 export async function enviarCorreo({ para, asunto, html, adjuntos }) {
-  const r = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: process.env.AGENDA_REMITENTE,
-      to: [para],
+  try {
+    await cartero.enviar({
+      // Gmail siempre envía desde la cuenta autenticada: solo se elige el nombre visible.
+      from: { name: 'Reserva Las Rastras', address: process.env.SMTP_USUARIO },
+      to: para,
       subject: asunto,
       html,
       attachments: adjuntos,
-    }),
-  });
-  if (!r.ok) console.error('Resend rechazó un correo:', r.status);
-  return r.ok;
+    });
+    return true;
+  } catch (e) {
+    // Solo el código: el mensaje de error puede traer la dirección del destinatario.
+    console.error('Gmail rechazó un correo:', e.code ?? e.responseCode ?? 'sin código');
+    return false;
+  }
 }
 
 /**

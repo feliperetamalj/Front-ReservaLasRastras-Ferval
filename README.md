@@ -205,9 +205,10 @@ anticipación mínima. Todo se calcula en la hora de Santiago.
   funciones de `api/` (disponibilidad, agendar, gestionar): el servidor valida
   con las mismas reglas. Por eso esos archivos y los de `src/data/` que
   importan no pueden traer imágenes y sus imports llevan `.js`.
-- Base de datos en Supabase y correos con Resend, ambos con `fetch`, sin
-  dependencias. Las claves solo existen como variables de entorno en Vercel
-  (ver `.env.example`); sin ellas, la página envía la solicitud por WhatsApp.
+- Base de datos en Supabase (por su API REST, con `fetch`) y correos por el
+  SMTP de Gmail con `nodemailer`, la única dependencia del servidor. Las claves
+  solo existen como variables de entorno en Vercel (ver `.env.example`); sin
+  ellas, la página envía la solicitud por WhatsApp.
 - El enlace para cancelar o borrar datos lleva el token en el fragmento
   (`#token=…`), que el navegador no manda al servidor.
 

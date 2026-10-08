@@ -1,25 +1,35 @@
 /*
-  Funciones de la agenda contra un Supabase y un Resend simulados: se
-  reemplaza `fetch` y se revisa qué se pidió. No sale nada a la red.
+  Funciones de la agenda contra un Supabase y un Gmail simulados: se
+  reemplazan `fetch` y `cartero.enviar`, y se revisa qué se pidió. No sale
+  nada a la red.
 */
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import agendar from '../api/agendar.js';
 import disponibilidad from '../api/disponibilidad.js';
 import gestionar from '../api/gestionar.js';
+import { cartero } from '../api/_servidor.js';
 import { calendario } from '../src/utils/agenda.js';
+import { POLITICA } from '../src/data/privacidad.js';
 
 const ENTORNO = {
   SUPABASE_URL: 'https://prueba.supabase.co',
   SUPABASE_SERVICE_ROLE_KEY: 'secreto-de-prueba',
-  RESEND_API_KEY: 'clave-de-prueba',
+  SMTP_USUARIO: 'agenda@ejemplo.cl',
+  SMTP_CLAVE: 'clave-de-prueba',
   AGENDA_CORREO_SALA: 'sala@ejemplo.cl',
-  AGENDA_REMITENTE: 'Agenda <agenda@ejemplo.cl>',
   HASH_SALT: 'sal',
 };
 
 let llamadas;
 let respuestas;
+let correos;
+let gmailFalla;
+
+cartero.enviar = async (mensaje) => {
+  if (gmailFalla) throw Object.assign(new Error('rechazado'), { code: 'EAUTH' });
+  correos.push(mensaje);
+};
 
 /** `respuestas` decide qué contesta cada servicio: (url, opciones) => { status, body, headers }. */
 globalThis.fetch = async (url, opciones = {}) => {
@@ -34,6 +44,8 @@ globalThis.fetch = async (url, opciones = {}) => {
 beforeEach(() => {
   Object.assign(process.env, ENTORNO);
   llamadas = [];
+  correos = [];
+  gmailFalla = false;
   respuestas = () => undefined;
 });
 
@@ -67,14 +79,13 @@ const solicitud = (cambios = {}) => ({
 });
 
 const supabaseInserta = (url, op) => {
-  if (url.includes('resend.com')) return { status: 200, body: { id: 'correo' } };
   if (op.method === 'HEAD') return { status: 200, headers: { 'content-range': '*/0' } };
   if (op.method === 'POST') return { status: 201, body: [{ id: 'v1', token_gestion: '11111111-2222-4333-8444-555555555555' }] };
   return undefined;
 };
 
 test('sin variables de entorno la agenda se declara apagada y no consulta nada', async () => {
-  delete process.env.RESEND_API_KEY;
+  delete process.env.SMTP_CLAVE;
   const d = await llamar(disponibilidad, peticion('GET'));
   assert.deepEqual(d.cuerpo, { configurada: false, ocupados: [] });
   const a = await llamar(agendar, peticion('POST', solicitud()));
@@ -98,25 +109,26 @@ test('agenda, avisa a la sala y confirma al visitante con el .ics', async () => 
   const insercion = llamadas.find((l) => l.metodo === 'POST' && l.url.includes('/rest/v1/visitas'));
   assert.equal(insercion.cuerpo.consentimiento, true);
   assert.match(insercion.cuerpo.consentimiento_texto, /^Acepto que Inmobiliaria Ferval/);
-  assert.equal(insercion.cuerpo.politica_version, '1.0');
+  assert.equal(insercion.cuerpo.politica_version, POLITICA.version);
   assert.match(insercion.cuerpo.ip_hash, /^[0-9a-f]{64}$/);
   assert.ok(!JSON.stringify(insercion.cuerpo).includes('1.2.3.4'), 'la IP no se guarda en claro');
   assert.ok(!('website' in insercion.cuerpo));
 
-  const correos = llamadas.filter((l) => l.url.includes('resend.com'));
   assert.equal(correos.length, 2);
-  assert.deepEqual(correos[0].cuerpo.to, ['sala@ejemplo.cl']);
-  assert.ok(correos[0].cuerpo.html.includes('&lt;b&gt;hola&lt;/b&gt;'), 'el comentario va escapado');
-  assert.match(correos[0].cuerpo.html, /wa\.me\/56912345678\?text=/);
-  assert.deepEqual(correos[1].cuerpo.to, ['ana@ejemplo.cl']);
-  assert.equal(correos[1].cuerpo.attachments[0].filename, 'visita-reserva-las-rastras.ics');
-  assert.match(correos[1].cuerpo.html, /\/agendar\/gestionar#token=11111111-/);
+  assert.equal(correos[0].to, 'sala@ejemplo.cl');
+  assert.equal(correos[0].from.address, 'agenda@ejemplo.cl');
+  assert.ok(correos[0].html.includes('&lt;b&gt;hola&lt;/b&gt;'), 'el comentario va escapado');
+  assert.match(correos[0].html, /wa\.me\/56912345678\?text=/);
+  assert.equal(correos[1].to, 'ana@ejemplo.cl');
+  assert.equal(correos[1].attachments[0].filename, 'visita-reserva-las-rastras.ics');
+  assert.match(correos[1].attachments[0].content, /^BEGIN:VCALENDAR/);
+  assert.match(correos[1].html, /\/agendar\/gestionar#token=11111111-/);
 });
 
 test('sin correo del visitante solo se avisa a la sala', async () => {
   respuestas = supabaseInserta;
   await llamar(agendar, peticion('POST', solicitud({ email: '' })));
-  assert.equal(llamadas.filter((l) => l.url.includes('resend.com')).length, 1);
+  assert.equal(correos.length, 1);
 });
 
 test('la trampa para bots responde bien y no guarda nada', async () => {
@@ -146,7 +158,8 @@ test('cinco solicitudes en diez minutos desde la misma IP frenan la sexta', asyn
 });
 
 test('si el aviso a la sala falla, la visita se deshace y la página ofrece WhatsApp', async () => {
-  respuestas = (url, op) => (url.includes('resend.com') ? { status: 500, body: {} } : supabaseInserta(url, op));
+  respuestas = supabaseInserta;
+  gmailFalla = true;
   const res = await llamar(agendar, peticion('POST', solicitud()));
   assert.equal(res.statusCode, 502);
   assert.ok(llamadas.some((l) => l.metodo === 'DELETE' && l.url.includes('id=eq.v1')));
@@ -157,14 +170,15 @@ test('gestionar: token inválido 400; cancelar avisa a la sala; borrar elimina',
   const malo = await llamar(gestionar, peticion('POST', { token: 'x', accion: 'borrar' }));
   assert.equal(malo.statusCode, 400);
 
-  respuestas = (url, op) =>
-    url.includes('resend.com')
-      ? { status: 200, body: {} }
-      : { status: 200, body: [{ fecha: '2026-10-09', hora: '10:00:00', estado: op.method === 'PATCH' ? 'cancelada' : 'solicitada' }] };
+  respuestas = (url, op) => ({
+    status: 200,
+    body: [{ fecha: '2026-10-09', hora: '10:00:00', estado: op.method === 'PATCH' ? 'cancelada' : 'solicitada' }],
+  });
 
   const cancelada = await llamar(gestionar, peticion('POST', { token, accion: 'cancelar' }));
   assert.deepEqual(cancelada.cuerpo.visita, { fecha: '2026-10-09', hora: '10:00', estado: 'cancelada' });
-  assert.equal(llamadas.filter((l) => l.url.includes('resend.com')).length, 1);
+  assert.equal(correos.length, 1);
+  assert.match(correos[0].subject, /^Visita cancelada/);
 
   llamadas = [];
   const borrada = await llamar(gestionar, peticion('POST', { token, accion: 'borrar' }));
