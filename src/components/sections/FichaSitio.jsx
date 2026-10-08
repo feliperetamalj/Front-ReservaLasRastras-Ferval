@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Etiqueta, Icono } from '../ui';
 import { porSlug } from '../../data/modelos';
-import { ESTADOS } from '../../data/sitios';
+import { ESTADOS, rotuloCasa } from '../../data/sitios';
 import { casaCorta, m2 } from '../../utils/formato';
 import { enlaceWhatsApp } from '../../utils/contacto';
 import s from './FichaSitio.module.css';
@@ -24,7 +24,7 @@ export const FichaSitio = forwardRef(function FichaSitio(
 ) {
   const { casa } = sitio;
   const modelo = casa?.slugModelo ? porSlug(casa.slugModelo) : null;
-  const rotuloCasa = sitio.estado === 'vendido' ? 'Casa construida' : 'Se vende con casa';
+  const rotulo = casa && rotuloCasa(sitio);
 
   return (
     <div
@@ -68,7 +68,7 @@ export const FichaSitio = forwardRef(function FichaSitio(
               decoding="async"
             />
             <span className={s.modeloTexto}>
-              <span className={s.modeloRotulo}>{rotuloCasa}</span>
+              <span className={s.modeloRotulo}>{rotulo}</span>
               <span className={s.modeloNombre}>{casaCorta(casa.texto)}</span>
               <span className={s.modeloRotulo}>Ver el modelo {modelo.nombre}</span>
             </span>
@@ -80,7 +80,7 @@ export const FichaSitio = forwardRef(function FichaSitio(
               <Icono nombre="casa" tamano={22} />
             </span>
             <span className={s.modeloTexto}>
-              <span className={s.modeloRotulo}>{rotuloCasa}</span>
+              <span className={s.modeloRotulo}>{rotulo}</span>
               <span className={s.modeloNombre}>{casaCorta(casa.texto)}</span>
             </span>
           </div>

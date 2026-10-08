@@ -46,34 +46,45 @@ dentro de un componente.**
 
 ### Actualizar la disponibilidad de sitios
 
-`src/data/sitios.js` trae los estados del **listado del 7 de octubre de 2026**
-que publica el sitio nuevo de Ferval (`reservalasrastras.cl/master-plan.html`).
-Para actualizarlo:
+`src/data/sitios.js` trae los estados y superficies de la **planilla de ventas
+de Ferval de octubre de 2026** (recibida el 8 de octubre). La planilla no va
+al repositorio: trae nombres de clientes, precios y saldos. Para actualizar:
 
 1. Cambia `estado` en las filas que corresponda: `'disponible'`,
    `'reservado'` o `'vendido'`.
 2. Cambia `FECHA_DISPONIBILIDAD` en el mismo archivo; es la que se muestra
    junto al buscador.
 
-Criterios que quedaron aplicados en octubre (detalle en la cabecera de
-`sitios.js`):
+Cómo se lee la planilla (detalle en la cabecera de `sitios.js`):
 
-- Donde la superficie del listado difiere en más de 1 m² de la anterior, se
-  mantiene la anterior y la del listado queda en `nota`. `nota` es **interna**:
-  no se muestra en el sitio.
-- Los 22 sitios que el listado ya no publica pasan a `reservado` con `nota`
-  (B5 sigue `vendido`). No se borran: su círculo sigue impreso en el plano.
-- D26 y H1 son **macrolotes** (`MACROLOTES`): solo aparecen en la vista de
-  lista y no entran en el rango de superficies ni en los recuentos de sitios.
-- `casa` guarda la casa construida con la que se vende el sitio (39 sitios),
-  con el texto que publica el listado. Enlaza a la ficha del modelo solo
-  cuando la equivalencia es inequívoca: Mediterránea 308 → 310, 182, 179 de 2
-  pisos, y Colonial 150 y 192. Mediterránea 140/176/180 y Colonial 140 no
-  tienen modelo en el catálogo y van sin enlace. Reemplaza al antiguo campo
-  `modelo`, que asociaba 14 sitios por la foto que mostraba el sitio anterior.
-- El listado llama **"Casa Chilena"** a lo que el catálogo, el brochure 2026 y
-  el sitio anterior llaman **Colonial** (G2 y G4 tenían la foto de la Colonial
-  150; G3 y G32, la de la Colonial 192). Aquí se publican como Colonial.
+- **Disponible:** "Lotes disponibles", "Casas disponibles" y "Nuevas casas"
+  (lotes que se venden con una casa por construir).
+- **Vendido:** "Sitios vendidos (pagados)", "Sitios vendidos por recuperar"
+  (promesa o escrituración en curso) y "Casas vendidas".
+- **Reservado:** "Casas en proceso de venta".
+- **Macrolotes:** "Sitios de gran superficie" (D26 y H1). Solo aparecen en la
+  vista de lista y no entran en el rango de superficies ni en los recuentos.
+
+Donde la planilla se contradice, gana lo prudente y la fila lleva `nota`
+(**interna**: no se muestra en el sitio):
+
+- Nunca se publica disponible algo que la planilla da por vendido (F5 figura
+  como vendido y a la vez como lote para casa nueva: va vendido).
+- Sus D20 a D24 son los D18 a D22 anteriores corridos dos lugares, y E9 trae
+  la superficie de B5: esas seis mantienen la superficie anterior.
+- Los 22 sitios que no figuran pasan a `reservado` (B5 sigue `vendido`). No se
+  borran: su círculo sigue impreso en el plano.
+
+`casa` guarda la casa con la que se vende el sitio (38 sitios); `porConstruir`
+marca las 23 "Nuevas casas", que se presentan como "Se vende con casa por
+construir". Enlaza a la ficha del modelo solo cuando la equivalencia es
+inequívoca: Mediterránea 308 → 310, 182, 179 de uno y de dos pisos, y Colonial
+150 y 192. Mediterránea 140/176/180 y Colonial 140 van sin enlace.
+
+La planilla y el listado web llaman **"Chilena"** a lo que el catálogo, el
+brochure 2026 y el sitio anterior llaman **Colonial** (G2 y G4 tenían la foto
+de la Colonial 150; G3 y G32, la de la Colonial 192). Aquí se publica como
+Colonial.
 
 Los totales, los rangos de superficie, los recuentos por sector y la cantidad
 de sectores que aparece en los textos se recalculan solos (`RESUMEN` y
@@ -111,9 +122,9 @@ lleno (disponible), papel con borde discontinuo (reservado) y tinta
 (vendido). Verde y rojo tenían casi la misma luminancia —el par que más
 confunde la visión del color— y el verde se perdía sobre el pasto del plano.
 
-Los sitios que se venden con casa llevan una insignia con forma de casa en el
-marcador (papel con la casa en tinta, legible sobre los tres estados) y se
-pueden filtrar con "Con casa construida".
+Los sitios que se venden con casa, construida o por construir, llevan una
+insignia con forma de casa en el marcador (papel con la casa en tinta, legible
+sobre los tres estados) y se pueden filtrar con "Con casa".
 
 ### Reprocesar imágenes
 

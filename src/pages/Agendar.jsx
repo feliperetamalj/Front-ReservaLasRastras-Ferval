@@ -24,7 +24,7 @@ const VACIO = {
 
 const OPCIONES = [
   ...modelos.map((m) => `Modelo ${m.nombre}`),
-  'Un sitio con casa construida',
+  'Un sitio con casa',
   'Un sitio para construir',
 ];
 

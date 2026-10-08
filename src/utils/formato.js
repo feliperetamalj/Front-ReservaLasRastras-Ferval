@@ -30,6 +30,6 @@ export const fechaLarga = (iso) =>
 
 /**
  * "Casa Mediterránea 308 m²" -> "Mediterránea 308 m²", para mostrar junto al
- * rótulo "Se vende con casa". El espacio antes de m² no se parte.
+ * rótulo "Se vende con casa" (o "por construir"). El espacio antes de m² no se parte.
  */
 export const casaCorta = (texto) => texto.replace(/^Casa /, '').replace(' m²', ' m²');

@@ -10,6 +10,7 @@ import {
   POR_SECTOR,
   RESUMEN,
   SITIOS,
+  rotuloCasa,
 } from '../../data/sitios';
 import { casaCorta, fechaLarga, m2Corto } from '../../utils/formato';
 import { enlaceWhatsApp } from '../../utils/contacto';
@@ -164,7 +165,7 @@ export function BuscadorSitios() {
               checked={filtros.conCasa}
               onChange={(e) => cambiar('conCasa', e.target.checked)}
             />
-            <span>Con casa construida</span>
+            <span>Con casa</span>
           </label>
         </div>
       </div>
@@ -216,7 +217,7 @@ export function BuscadorSitios() {
               <span className={s.muestraCasa} aria-hidden="true">
                 <Icono nombre="casa" tamano={12} strokeWidth={2.6} />
               </span>
-              Con casa construida
+              Con casa
             </li>
           </ul>
           <MapaSitios sitios={SITIOS} coincide={coincide} />
@@ -277,7 +278,7 @@ export function BuscadorSitios() {
                       <Icono nombre="casa" tamano={16} className={s.iconoCasa} />
                       <span>
                         <span className={s.sitioCasaRotulo}>
-                          {sitio.estado === 'vendido' ? 'Casa construida' : 'Se vende con casa'}
+                          {rotuloCasa(sitio)}
                         </span>{' '}
                         {modelo ? (
                           <Link to={`/modelos/${modelo.slug}`} className={s.sitioModelo}>
@@ -363,7 +364,7 @@ export function BuscadorSitios() {
 
       <div className={s.cierre}>
         <p className={s.aviso}>
-          Disponibilidad al {fechaLarga(FECHA_DISPONIBILIDAD)}, según el listado publicado por el
+          Disponibilidad al {fechaLarga(FECHA_DISPONIBILIDAD)}, según la información de ventas del
           proyecto. La disponibilidad cambia: un ejecutivo la confirma en la visita.
         </p>
         <Boton a="/agendar" variante="primario" icono="calendario" iconoAlInicio>
