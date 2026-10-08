@@ -175,13 +175,28 @@ export const HORARIO = [
  * grande y una pantalla de 1440 px o cualquier retina recibe una imagen
  * ampliada.
  */
-const ANCHO_BASE = { portal: 1920, avenida: 1920, 'areas-verdes': 1920, plaza: 1920, calle: 1920, elevacion: 1600 };
+const ANCHO_BASE = {
+  portal: 1920,
+  portada: 1600,
+  avenida: 1920,
+  'areas-verdes': 1920,
+  plaza: 1920,
+  calle: 1920,
+  elevacion: 1600,
+};
 
 const conVariantes = (nombre, anchos) =>
   [`${img(nombre)} ${ANCHO_BASE[nombre]}w`, ...anchos.map((a) => `${variante(nombre, a)} ${a}w`)].join(', ');
 
 export const FOTOS = {
   portal: { src: img('portal'), srcSet: conVariantes('portal', [1200, 760]) },
+  // Portada: fotos reales del acceso, horizontal para escritorio y vertical para móvil.
+  portada: { src: img('portada'), srcSet: conVariantes('portada', [1200, 760]), ...dim('portada') },
+  portadaMovil: {
+    src: img('portada-movil'),
+    srcSet: `${img('portada-movil')} 890w, ${variante('portada-movil', 600)} 600w`,
+    ...dim('portada-movil'),
+  },
   avenida: { src: img('avenida'), srcSet: conVariantes('avenida', [900]) },
   areasVerdes: { src: img('areas-verdes'), srcSet: conVariantes('areas-verdes', [900]) },
   plaza: { src: img('plaza'), srcSet: conVariantes('plaza', [900]) },

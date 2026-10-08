@@ -1,49 +1,96 @@
+/*
+  Portada a pantalla completa con la foto real del acceso como protagonista.
+  El texto vive al pie, sobre la parte oscura de la imagen; la foto no se
+  apaga entera para poder leer encima.
+*/
 .hero {
   position: relative;
+  isolation: isolate;
   display: flex;
-  align-items: end;
-  min-height: min(94svh, 900px);
-  padding-block: calc(var(--alto-header) + var(--space-9)) var(--space-10);
+  align-items: flex-end;
+  min-height: 100svh;
+  padding-block: calc(var(--alto-header) + var(--space-8)) clamp(var(--space-7), 7vh, var(--space-10));
   overflow: hidden;
   background-color: var(--fondo-oscuro);
   color: var(--texto-inverso);
 }
 
-.foto {
+.media {
   position: absolute;
   inset: 0;
+  z-index: -2;
+  display: block;
+}
+
+.foto {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 66%;
+  object-position: center 58%;
+  /* Entrada sin fundido: un fundido retrasaría el pintado de la imagen
+     principal. Solo un acercamiento leve que se asienta. */
+  animation: asentar 1600ms var(--ease-salida) both;
 }
 
+/*
+  En el teléfono el texto no puede ir encima del portal: la portada se alarga
+  lo que haga falta para que el bloque de texto empiece bajo él, sobre el
+  pasto, y la foto se ancla arriba para que el portal no se corra al crecer.
+  El margen inferior deja libre la zona del botón flotante de WhatsApp.
+*/
+@media (max-width: 640px) {
+  .hero {
+    /* 42 % deja el titular en la base del portal y los botones por encima
+       del botón flotante en una pantalla de 812 px. */
+    padding-top: max(42svh, 320px);
+    padding-bottom: calc(56px + var(--space-7));
+  }
+
+  .versalita {
+    margin-bottom: var(--space-3);
+  }
+
+  .foto {
+    object-position: center top;
+  }
+}
+
+@keyframes asentar {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/*
+  Dos sombras con dos trabajos distintos, sin superponerse:
+
+  - El velo de la portada solo oscurece la franja de arriba, para que el menú
+    se lea sobre el cielo. El resto de la foto queda limpio.
+  - La base oscura que hace legible el texto va pegada al bloque de texto
+    (`.contenido::before`), no a un porcentaje de la portada. En el teléfono la
+    portada se alarga para que el texto empiece bajo el portal; con un
+    degradado en porcentajes, el tramo oscuro quedaba por debajo del texto.
+*/
 .velo {
   position: absolute;
   inset: 0;
-  /*
-    Un solo velo, vertical, y con peso suficiente arriba.
-    La fotografía del portal tiene el cielo casi blanco en su mitad superior:
-    con un velo suave, el titular blanco quedaba en 1.9:1 sobre ese cielo. Las
-    paradas de abajo mantienen el texto sobre 6:1 en toda la franja donde vive
-    el contenido, sin que la foto se convierta en un rectángulo negro.
-
-    Dos capas superpuestas (una vertical y otra lateral) no son alternativa: en
-    columnas angostas cubren la misma zona y la opacidad combinada llega a
-    1 − (1−0.78)(1−0.80) = 0.956, y la fotografía desaparece.
-  */
+  z-index: -1;
   background: linear-gradient(
-    to top,
-    rgba(20, 12, 8, 0.9) 0%,
-    rgba(20, 12, 8, 0.84) 30%,
-    rgba(20, 12, 8, 0.78) 55%,
-    rgba(20, 12, 8, 0.72) 78%,
-    rgba(20, 12, 8, 0.66) 100%
+    to bottom,
+    rgba(20, 12, 8, 0.74) 0,
+    rgba(20, 12, 8, 0.56) 64px,
+    rgba(20, 12, 8, 0.22) 130px,
+    rgba(20, 12, 8, 0) 240px
   );
 }
 
 .contenido {
   position: relative;
+  display: grid;
+  gap: var(--space-5);
   width: 100%;
   max-width: var(--ancho-contenido);
   margin-inline: auto;
@@ -56,15 +103,81 @@
   }
 }
 
+/* Base oscura del texto: empieza transparente 180 px por encima del bloque y
+   llega a su máximo al inicio del texto; se extiende hasta el borde inferior
+   y a lo ancho de toda la portada (la portada la recorta). */
+.contenido::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: -180px;
+  bottom: -400px;
+  left: -100vw;
+  right: -100vw;
+  background: linear-gradient(
+    to bottom,
+    rgba(20, 12, 8, 0) 0,
+    rgba(20, 12, 8, 0.74) 180px,
+    rgba(20, 12, 8, 0.84) 55%,
+    rgba(20, 12, 8, 0.9) 100%
+  );
+  pointer-events: none;
+}
+
+/*
+  En escritorio, como en la portada del sitio nuevo: el titular en dos líneas
+  a todo lo ancho, y debajo el texto y los botones a la izquierda con las
+  cifras a la derecha. Encerrado en la columna izquierda, el titular en Cinzel
+  se partía en cuatro líneas, el bloque subía hasta arriba y la sombra del
+  texto tapaba el portal.
+*/
+@media (min-width: 1020px) {
+  .contenido {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    grid-template-areas:
+      'cabeza cabeza'
+      'cuerpo cifras';
+    align-items: end;
+    gap: var(--space-6) var(--space-10);
+  }
+
+  .cabeza {
+    grid-area: cabeza;
+  }
+
+  .cuerpo {
+    grid-area: cuerpo;
+  }
+
+  .cifras {
+    grid-area: cifras;
+    align-self: start;
+  }
+
+  /* En escritorio el bloque es más bajo y la foto más ancha: la sombra del
+     texto puede empezar más cerca y más suave sin perder contraste. */
+  .contenido::before {
+    top: -130px;
+    background: linear-gradient(
+      to bottom,
+      rgba(20, 12, 8, 0) 0,
+      rgba(20, 12, 8, 0.7) 130px,
+      rgba(20, 12, 8, 0.8) 45%,
+      rgba(20, 12, 8, 0.9) 100%
+    );
+  }
+}
+
 .versalita {
   color: var(--texto-marca-foto);
   margin-bottom: var(--space-4);
 }
 
 .titular {
-  max-width: 17ch;
-  font-size: var(--text-4xl);
+  font-size: clamp(2.25rem, 1rem + 3.4vw, 4rem);
   font-weight: var(--peso-normal);
+  line-height: var(--alto-display);
+  letter-spacing: var(--track-display);
   color: var(--texto-inverso);
   text-wrap: balance;
 }
@@ -77,12 +190,24 @@
   .linea {
     display: inline;
   }
+
+  .titular {
+    font-size: clamp(2rem, 1.2rem + 3.6vw, 2.5rem);
+  }
+
+  .bajada {
+    font-size: var(--text-base);
+  }
+}
+
+/* El acento dorado de la segunda mitad, como en la portada del cliente. */
+.acento {
+  color: var(--texto-marca-foto);
 }
 
 .bajada {
-  max-width: 56ch;
-  margin-top: var(--space-5);
-  font-size: var(--text-lg);
+  max-width: 46ch;
+  font-size: var(--text-md);
   line-height: 1.6;
   color: var(--texto-inverso-suave);
 }
@@ -91,18 +216,46 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
-  margin-top: var(--space-7);
+  margin-top: var(--space-6);
+}
+
+/* En el teléfono los dos botones comparten fila mientras quepan, como en la
+   portada del cliente; si no caben, el segundo baja entero. */
+@media (max-width: 560px) {
+  .acciones > * {
+    flex: 1 1 auto;
+    padding-inline: var(--space-4);
+    font-size: var(--text-sm);
+  }
 }
 
 /* --- Cifras --- */
 .cifras {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--space-5);
-  max-width: 660px;
-  margin-top: var(--space-9);
-  padding-top: var(--space-6);
+  gap: var(--space-3);
+  padding-top: var(--space-5);
   border-top: var(--borde-fino) solid rgba(255, 255, 255, 0.22);
+}
+
+.cifra {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+@media (min-width: 1020px) {
+  .cifras {
+    gap: var(--space-5);
+    padding: 0 0 0 var(--space-6);
+    border-top: none;
+    border-left: var(--borde-fino) solid rgba(255, 255, 255, 0.28);
+  }
+
+  .cifra {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
 }
 
 .cifraRotulo {
@@ -114,11 +267,17 @@
 }
 
 .cifraValor {
-  margin-top: var(--space-2);
   font-family: var(--fuente-display);
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   color: var(--texto-inverso);
   line-height: 1.2;
+  white-space: nowrap;
+}
+
+@media (min-width: 1020px) {
+  .cifraValor {
+    font-size: var(--text-xl);
+  }
 }
 
 .unidad {
@@ -128,41 +287,8 @@
   color: var(--texto-inverso-suave);
 }
 
-/* --- Indicador de continuación --- */
-.bajar {
-  position: absolute;
-  left: 50%;
-  bottom: var(--space-4);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  margin-left: -22px;
-  border: var(--borde-fino) solid rgba(255, 255, 255, 0.32);
-  border-radius: var(--radius-full);
-  color: var(--texto-inverso);
-  animation: latir 2.6s var(--ease-salida) infinite;
-}
-
-@media (min-width: 1020px) and (min-height: 700px) {
-  .bajar {
-    display: flex;
-  }
-}
-
-@keyframes latir {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(5px);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .bajar {
+  .foto {
     animation: none;
   }
 }

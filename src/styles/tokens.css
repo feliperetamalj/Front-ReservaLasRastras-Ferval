@@ -224,6 +224,14 @@
   --halo-marcador: 0 0 0 2px var(--papel-000), 0 0 0 3.5px rgba(30, 18, 13, 0.7),
     0 2px 6px rgba(30, 18, 13, 0.35);
 
+  /* --- Botón flotante de WhatsApp ---------------------------------------
+     El verde de la marca WhatsApp (#25D366) con el ícono blanco da 1,98:1.
+     Este se sigue leyendo como WhatsApp y da 4,39:1 con el ícono, 4,11:1
+     sobre papel y 4,17:1 sobre tinta.                                      */
+  --whatsapp: #1a8a4c;
+  --whatsapp-hover: #16774a;
+  --sobre-whatsapp: var(--papel-000);
+
   /* --- Error de formulario ---------------------------------------------- */
   --error: var(--rojo-600);
   --error-fondo: var(--rojo-050);

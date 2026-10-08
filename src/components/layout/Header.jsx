@@ -32,6 +32,14 @@ export function Header() {
   // El menú se cierra al navegar; si no, queda abierto sobre la página nueva.
   useEffect(() => setAbierto(false), [pathname]);
 
+  // Marca el documento mientras el menú está abierto, para que lo flotante
+  // (el botón de WhatsApp) se aparte.
+  useEffect(() => {
+    if (abierto) document.documentElement.dataset.menu = 'abierto';
+    else delete document.documentElement.dataset.menu;
+    return () => delete document.documentElement.dataset.menu;
+  }, [abierto]);
+
   useEffect(() => {
     const alDesplazar = () => setDesplazado(window.scrollY > 16);
     alDesplazar();

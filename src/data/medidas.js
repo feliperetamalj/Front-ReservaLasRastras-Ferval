@@ -52,6 +52,8 @@ export const MEDIDAS = {
   'proyecto/emplazamiento': [1600, 1014],
   'proyecto/master-plan': [1600, 4590],
   'proyecto/plaza': [1600, 900],
+  'proyecto/portada': [1600, 900],
+  'proyecto/portada-movil': [890, 1920],
   'proyecto/portal': [1920, 1080],
 };
 

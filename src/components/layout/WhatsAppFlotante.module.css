@@ -1,0 +1,41 @@
+.flotante {
+  position: fixed;
+  right: max(var(--space-4), env(safe-area-inset-right));
+  bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background-color: var(--whatsapp);
+  color: var(--sobre-whatsapp);
+  /* Aro blanco y sombra: se despega igual sobre la foto, el papel o la tinta. */
+  box-shadow:
+    0 0 0 2px var(--papel-000),
+    var(--shadow-lg);
+  transition:
+    transform var(--dur-instante) var(--ease-salida),
+    background-color var(--dur-rapido) var(--ease-salida);
+}
+
+.flotante:hover {
+  background-color: var(--whatsapp-hover);
+}
+
+/* Respuesta al presionar, antes de soltar. */
+.flotante:active {
+  transform: scale(0.92);
+}
+
+/* Con el menú móvil abierto, el botón estorbaría sobre la lista de enlaces. */
+:global(html[data-menu='abierto']) .flotante {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flotante:active {
+    transform: none;
+  }
+}

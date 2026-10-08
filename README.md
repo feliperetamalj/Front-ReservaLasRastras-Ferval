@@ -107,8 +107,16 @@ El nombre de cada original conserva la ruta de WordPress
 habitual que dos meses distintos tengan un `01.jpg` que no es la misma foto; si
 se guarda solo el nombre base, una sobrescribe a la otra en silencio.
 
-El script también regenera `src/data/medidas.js`, que es lo que permite a cada
+El script también actualiza `src/data/medidas.js`, que es lo que permite a cada
 `<img>` declarar `width` y `height` y reservar su espacio antes de descargar.
+Es incremental: conserva las medidas que ya estaban y solo agrega o reemplaza
+las de los originales presentes en la carpeta, así que se puede correr con una
+sola foto nueva sin perder las demás.
+
+Las dos fotos de la portada (`cliente_hero-acceso.jpg`, 1600×900, y
+`cliente_hero-acceso-movil.jpg`, 890×1920) vienen del sitio nuevo de Ferval
+(reservalasrastras.cl). La vertical se sirve bajo 640 px con `<picture>`: en el
+teléfono el portal queda arriba y el texto abajo, sobre el pasto.
 
 ### Regenerar favicon e imagen Open Graph
 
@@ -160,6 +168,11 @@ Inmobiliaria Ferval, que aparece en el pie.
 
 El horario sale de `ATENCION` en el mismo archivo: días y tramos de atención.
 Es la única fuente del horario que se muestra en el sitio.
+
+El botón flotante de WhatsApp (`WhatsAppFlotante.jsx`) abre el mismo número en
+todas las rutas y se oculta mientras el menú móvil está abierto. Su verde
+(`--whatsapp`) es más oscuro que el de la marca de WhatsApp para que el ícono
+blanco cumpla 3:1.
 
 ---
 

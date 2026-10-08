@@ -10,7 +10,7 @@
  */
 import sharp from 'sharp';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 const ORIGEN = process.argv[2];
@@ -29,6 +29,8 @@ const ANCHOS = {
   planta: [1500],
   plano: [1600],
   mapa: [1600],
+  // Foto vertical de la portada, solo bajo 640 px: el original mide 890 px de ancho.
+  heroMovil: [890, 600],
 };
 
 /*
@@ -43,6 +45,10 @@ const CALIDAD = { planta: 88, plano: 88, mapa: 75 };
 const MAPA = [
   // --- Proyecto -----------------------------------------------------------
   ['2022_05_P2.png', 'proyecto/portal', 'hero'],
+  // Portada: las dos fotos reales del acceso que publica el sitio nuevo de Ferval
+  // (reservalasrastras.cl/assets/hero-acceso*.jpg, octubre de 2026).
+  ['cliente_hero-acceso.jpg', 'proyecto/portada', 'hero'],
+  ['cliente_hero-acceso-movil.jpg', 'proyecto/portada-movil', 'heroMovil'],
   ['2022_05_P1.png', 'proyecto/avenida', 'galeria'],
   ['2022_05_P3.png', 'proyecto/areas-verdes', 'galeria'],
   ['2022_05_P4-1.png', 'proyecto/plaza', 'galeria'],
@@ -109,7 +115,18 @@ const faltantes = [];
 /* Medidas intrínsecas del archivo principal de cada imagen. Se emiten a un
    módulo para que los componentes reserven la proporción y el navegador no
    desplace el contenido al cargar (CLS). */
+/*
+  Las medidas se fusionan con las que ya estaban en src/data/medidas.js. Así
+  el script se puede correr con solo algunos originales a mano (los que se
+  agregan o cambian) sin borrar las medidas de los demás.
+*/
 const medidas = {};
+if (existsSync('src/data/medidas.js')) {
+  const previo = readFileSync('src/data/medidas.js', 'utf8');
+  for (const [, clave, ancho, alto] of previo.matchAll(/'([^']+)': \[(\d+), (\d+)\]/g)) {
+    medidas[clave] = [Number(ancho), Number(alto)];
+  }
+}
 
 for (const [archivo, destinoRel, rol] of MAPA) {
   const entrada = path.join(ORIGEN, archivo);

@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { IrArriba } from './components/layout/IrArriba';
+import { WhatsAppFlotante } from './components/layout/WhatsAppFlotante';
 import { Inicio } from './pages/Inicio';
 import { Modelos } from './pages/Modelos';
 import { ModeloDetalle } from './pages/ModeloDetalle';
@@ -35,6 +36,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <WhatsAppFlotante />
     </>
   );
 }
