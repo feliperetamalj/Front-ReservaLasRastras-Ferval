@@ -28,13 +28,19 @@
  * círculo en el plano. La imagen de octubre es la misma de septiembre,
  * recomprimida: las posiciones siguen valiendo.
  *
- * `casa`: casa construida con la que se vende el sitio, con el texto tal como
- * lo publica el listado de octubre. `slugModelo` enlaza a la ficha del modelo
+ * `casa`: casa construida con la que se vende el sitio, con el texto que
+ * publica el listado de octubre. `slugModelo` enlaza a la ficha del modelo
  * solo cuando coincide sin ambigüedad con el catálogo: "Mediterránea 308 m²"
  * es la Mediterránea 310 (la contradicción 308/310 está en el README), y
  * "Mediterránea 182 m²" y "Mediterránea 179 m² 2 pisos" son las del mismo
- * nombre. Las demás (Chilena 140/150/190, Mediterránea 140/176/180, o sin
- * superficie) no tienen modelo en el catálogo y van sin enlace.
+ * nombre. Mediterránea 140/176/180 y las casas sin superficie no tienen
+ * modelo en el catálogo y van sin enlace.
+ *
+ * El listado llama "Casa Chilena" a casas que el catálogo, el brochure 2026 y
+ * el sitio anterior llaman Colonial: G2 y G4 se mostraban con la foto de la
+ * Colonial 150, y G3 y G32 con la de la Colonial 192 (que el listado anota
+ * como "190 m² 2 pisos"). Aquí van con el nombre Colonial; "Colonial 140 m²"
+ * (E4–E8) no está en el catálogo y va sin enlace.
  */
 
 /** Fecha del listado del que salen los estados. Se muestra junto al buscador. */
@@ -159,14 +165,14 @@ export const SITIOS = [
   { id: 'E1', sector: 'E', m2: 1280.24, estado: 'disponible', x: 0.5542, y: 0.5071, casa: null },
   { id: 'E2', sector: 'E', m2: 1056.64, estado: 'disponible', x: 0.5712, y: 0.54, casa: null },
   { id: 'E3', sector: 'E', m2: 917.12, estado: 'disponible', x: 0.5783, y: 0.5697, casa: { texto: 'Casa Mediterránea 308 m²', slugModelo: 'mediterranea-310' } },
-  { id: 'E4', sector: 'E', m2: 473.64, estado: 'disponible', x: 0.649, y: 0.5712, casa: { texto: 'Casa Chilena 140 m²', slugModelo: null } },
-  { id: 'E5', sector: 'E', m2: 477.95, estado: 'disponible', x: 0.7014, y: 0.5711, casa: { texto: 'Casa Chilena 140 m²', slugModelo: null } },
-  { id: 'E6', sector: 'E', m2: 473.49, estado: 'disponible', x: 0.7547, y: 0.5711, casa: { texto: 'Casa Chilena 140 m²', slugModelo: null } },
-  { id: 'E7', sector: 'E', m2: 474.15, estado: 'disponible', x: 0.8063, y: 0.5711, casa: { texto: 'Casa Chilena 140 m²', slugModelo: null } },
-  { id: 'E8', sector: 'E', m2: 670.54, estado: 'disponible', x: 0.8661, y: 0.5709, casa: { texto: 'Casa Chilena 140 m²', slugModelo: null } },
+  { id: 'E4', sector: 'E', m2: 473.64, estado: 'disponible', x: 0.649, y: 0.5712, casa: { texto: 'Casa Colonial 140 m²', slugModelo: null } },
+  { id: 'E5', sector: 'E', m2: 477.95, estado: 'disponible', x: 0.7014, y: 0.5711, casa: { texto: 'Casa Colonial 140 m²', slugModelo: null } },
+  { id: 'E6', sector: 'E', m2: 473.49, estado: 'disponible', x: 0.7547, y: 0.5711, casa: { texto: 'Casa Colonial 140 m²', slugModelo: null } },
+  { id: 'E7', sector: 'E', m2: 474.15, estado: 'disponible', x: 0.8063, y: 0.5711, casa: { texto: 'Casa Colonial 140 m²', slugModelo: null } },
+  { id: 'E8', sector: 'E', m2: 670.54, estado: 'disponible', x: 0.8661, y: 0.5709, casa: { texto: 'Casa Colonial 140 m²', slugModelo: null } },
   { id: 'E9', sector: 'E', m2: 861.86, estado: 'vendido', x: 0.6443, y: 0.5058, casa: null, nota: "El listado del 2026-10-07 publica 719,54 m²; se mantiene la cifra anterior hasta confirmar." },
   { id: 'E10', sector: 'E', m2: 942.13, estado: 'vendido', x: 0.6561, y: 0.54, casa: null },
-  { id: 'E11', sector: 'E', m2: 625.72, estado: 'vendido', x: 0.7239, y: 0.547, casa: { texto: 'Casa Chilena', slugModelo: null } },
+  { id: 'E11', sector: 'E', m2: 625.72, estado: 'vendido', x: 0.7239, y: 0.547, casa: { texto: 'Casa Colonial', slugModelo: null } },
   { id: 'E12', sector: 'E', m2: 632.35, estado: 'disponible', x: 0.7944, y: 0.5473, casa: null },
   { id: 'E13', sector: 'E', m2: 817.12, estado: 'disponible', x: 0.8638, y: 0.542, casa: null },
   { id: 'E14', sector: 'E', m2: 512.08, estado: 'disponible', x: 0.8639, y: 0.5211, casa: null },
@@ -201,9 +207,9 @@ export const SITIOS = [
   { id: 'F13', sector: 'F', m2: 447.54, estado: 'disponible', x: 0.7641, y: 0.3322, casa: { texto: 'Casa Mediterránea 140 m² 2 pisos', slugModelo: null } },
   { id: 'F14', sector: 'F', m2: 439.26, estado: 'disponible', x: 0.7672, y: 0.3507, casa: { texto: 'Casa Mediterránea 140 m² 2 pisos', slugModelo: null } },
   { id: 'G1', sector: 'G', m2: 594.66, estado: 'disponible', x: 0.5419, y: 0.1565, casa: null },
-  { id: 'G2', sector: 'G', m2: 602.01, estado: 'vendido', x: 0.5458, y: 0.1752, casa: { texto: 'Casa Chilena', slugModelo: null } },
-  { id: 'G3', sector: 'G', m2: 662.14, estado: 'disponible', x: 0.5528, y: 0.1954, casa: { texto: 'Casa Chilena 190 m² 2 pisos', slugModelo: null } },
-  { id: 'G4', sector: 'G', m2: 573.66, estado: 'disponible', x: 0.5712, y: 0.2134, casa: { texto: 'Casa Chilena 150 m²', slugModelo: null } },
+  { id: 'G2', sector: 'G', m2: 602.01, estado: 'vendido', x: 0.5458, y: 0.1752, casa: { texto: 'Casa Colonial 150 m²', slugModelo: 'colonial-150' } },
+  { id: 'G3', sector: 'G', m2: 662.14, estado: 'disponible', x: 0.5528, y: 0.1954, casa: { texto: 'Casa Colonial 192 m² 2 pisos', slugModelo: 'colonial-192' } },
+  { id: 'G4', sector: 'G', m2: 573.66, estado: 'disponible', x: 0.5712, y: 0.2134, casa: { texto: 'Casa Colonial 150 m²', slugModelo: 'colonial-150' } },
   { id: 'G5', sector: 'G', m2: 645.34, estado: 'disponible', x: 0.6234, y: 0.1564, casa: null },
   { id: 'G6', sector: 'G', m2: 642.74, estado: 'vendido', x: 0.6235, y: 0.1751, casa: null },
   { id: 'G7', sector: 'G', m2: 671.63, estado: 'disponible', x: 0.6392, y: 0.1938, casa: null },
@@ -213,7 +219,7 @@ export const SITIOS = [
   { id: 'G11', sector: 'G', m2: 675.39, estado: 'disponible', x: 0.8574, y: 0.2137, casa: { texto: 'Casa Mediterránea 182 m²', slugModelo: 'mediterranea-182' } },
   { id: 'G12', sector: 'G', m2: 583.04, estado: 'disponible', x: 0.8619, y: 0.1923, casa: { texto: 'Casa Mediterránea 176 m²', slugModelo: null } },
   { id: 'G13', sector: 'G', m2: 763.73, estado: 'vendido', x: 0.852, y: 0.1736, casa: null, nota: "El listado del 2026-10-07 publica 736,73 m²; se mantiene la cifra anterior hasta confirmar." },
-  { id: 'G14', sector: 'G', m2: 712.81, estado: 'vendido', x: 0.8523, y: 0.1539, casa: { texto: 'Casa Chilena', slugModelo: null } },
+  { id: 'G14', sector: 'G', m2: 712.81, estado: 'vendido', x: 0.8523, y: 0.1539, casa: { texto: 'Casa Colonial', slugModelo: null } },
   { id: 'G15', sector: 'G', m2: 699.13, estado: 'disponible', x: 0.8524, y: 0.135, casa: null },
   { id: 'G16', sector: 'G', m2: 688.53, estado: 'disponible', x: 0.8516, y: 0.114, casa: null },
   { id: 'G17', sector: 'G', m2: 661.32, estado: 'vendido', x: 0.8521, y: 0.0956, casa: { texto: 'Casa Mediterránea', slugModelo: null } },
@@ -231,7 +237,7 @@ export const SITIOS = [
   { id: 'G29', sector: 'G', m2: 700.98, estado: 'disponible', x: 0.5811, y: 0.0754, casa: null },
   { id: 'G30', sector: 'G', m2: 756.11, estado: 'disponible', x: 0.5843, y: 0.0542, casa: null },
   { id: 'G31', sector: 'G', m2: 568.03, estado: 'disponible', x: 0.6151, y: 0.2498, casa: null },
-  { id: 'G32', sector: 'G', m2: 615.22, estado: 'vendido', x: 0.5923, y: 0.232, casa: { texto: 'Casa Chilena', slugModelo: null } },
+  { id: 'G32', sector: 'G', m2: 615.22, estado: 'vendido', x: 0.5923, y: 0.232, casa: { texto: 'Casa Colonial 192 m² 2 pisos', slugModelo: 'colonial-192' } },
   { id: 'G33', sector: 'G', m2: 743.57, estado: 'disponible', x: 0.6714, y: 0.2354, casa: null },
   { id: 'G34', sector: 'G', m2: 646.48, estado: 'vendido', x: 0.7266, y: 0.2378, casa: null },
   { id: 'G35', sector: 'G', m2: 628.12, estado: 'vendido', x: 0.7753, y: 0.2378, casa: null, nota: "El listado del 2026-10-07 publica 626,92 m²; se mantiene la cifra anterior hasta confirmar." },

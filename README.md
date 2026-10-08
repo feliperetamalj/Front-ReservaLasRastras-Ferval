@@ -66,11 +66,14 @@ Criterios que quedaron aplicados en octubre (detalle en la cabecera de
 - D26 y H1 son **macrolotes** (`MACROLOTES`): solo aparecen en la vista de
   lista y no entran en el rango de superficies ni en los recuentos de sitios.
 - `casa` guarda la casa construida con la que se vende el sitio (39 sitios),
-  con el texto tal como lo publica el listado. Enlaza a la ficha del modelo
-  solo cuando la equivalencia es inequívoca: Mediterránea 308 → 310, 182 y
-  179 de 2 pisos. Chilena 140/150/190 y Mediterránea 140/176/180 no tienen
-  modelo en el catálogo y van sin enlace. Reemplaza al antiguo campo `modelo`,
-  que asociaba 14 sitios por la foto que mostraba el sitio anterior.
+  con el texto que publica el listado. Enlaza a la ficha del modelo solo
+  cuando la equivalencia es inequívoca: Mediterránea 308 → 310, 182, 179 de 2
+  pisos, y Colonial 150 y 192. Mediterránea 140/176/180 y Colonial 140 no
+  tienen modelo en el catálogo y van sin enlace. Reemplaza al antiguo campo
+  `modelo`, que asociaba 14 sitios por la foto que mostraba el sitio anterior.
+- El listado llama **"Casa Chilena"** a lo que el catálogo, el brochure 2026 y
+  el sitio anterior llaman **Colonial** (G2 y G4 tenían la foto de la Colonial
+  150; G3 y G32, la de la Colonial 192). Aquí se publican como Colonial.
 
 Los totales, los rangos de superficie, los recuentos por sector y la cantidad
 de sectores que aparece en los textos se recalculan solos (`RESUMEN` y
