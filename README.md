@@ -239,11 +239,15 @@ prerenderiza y en producción responde 404.
 
 ### Vercel
 
-`cleanUrls` sirve `dist/master-plan.html` en `/master-plan`; no hay
-reescritura a `index.html`, así que una ruta inexistente responde **404 de
-verdad** con nuestra página. Las URLs `.html` del sitio de Ferval y las del
-WordPress antiguo redirigen con 301 a sus equivalentes (`redirects` en
-`vercel.json`). Las funciones de `api/` corren en São Paulo (`gru1`), junto a
+Una reescritura sirve `dist/master-plan.html` en `/master-plan` (Vercel la
+aplica solo si no hay un archivo con ese nombre exacto, así que `assets/`,
+`docs/` y `api/` no se tocan). No hay reescritura a `index.html`: una ruta
+inexistente responde **404 de verdad** con nuestra página.
+
+Las URLs `.html` (las del sitio de Ferval), las con barra final y las del
+WordPress antiguo redirigen con **301** en un solo salto. No se usa
+`cleanUrls` ni `trailingSlash`: Vercel los aplica antes que las reglas propias
+y responde 308, a veces encadenando dos saltos. Las funciones de `api/` corren en São Paulo (`gru1`), junto a
 la base de datos.
 
 El brochure 2026 se sirve desde `public/docs/` y se enlaza en el pie y en

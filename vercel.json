@@ -6,27 +6,10 @@
   "regions": [
     "gru1"
   ],
-  "cleanUrls": true,
-  "trailingSlash": false,
   "redirects": [
     {
       "source": "/index.html",
       "destination": "/",
-      "statusCode": 301
-    },
-    {
-      "source": "/master-plan.html",
-      "destination": "/master-plan",
-      "statusCode": 301
-    },
-    {
-      "source": "/agendar.html",
-      "destination": "/agendar",
-      "statusCode": 301
-    },
-    {
-      "source": "/partners.html",
-      "destination": "/partners",
       "statusCode": 301
     },
     {
@@ -40,8 +23,8 @@
       "statusCode": 301
     },
     {
-      "source": "/modelos/:slug.html",
-      "destination": "/modelos/:slug",
+      "source": "/reserva/",
+      "destination": "/",
       "statusCode": 301
     },
     {
@@ -50,8 +33,8 @@
       "statusCode": 301
     },
     {
-      "source": "/reserva/",
-      "destination": "/",
+      "source": "/visitasaladeventa/",
+      "destination": "/agendar",
       "statusCode": 301
     },
     {
@@ -60,19 +43,25 @@
       "statusCode": 301
     },
     {
-      "source": "/visitasaladeventa/",
-      "destination": "/agendar",
-      "statusCode": 301
-    },
-    {
-      "source": "/partners/",
-      "destination": "/partners",
-      "statusCode": 301
-    },
-    {
       "source": "/assets/docs/brochure-reserva-las-rastras-2026.pdf",
       "destination": "/docs/brochure-reserva-las-rastras-2026.pdf",
       "statusCode": 301
+    },
+    {
+      "source": "/(.*)\\.html",
+      "destination": "/$1",
+      "statusCode": 301
+    },
+    {
+      "source": "/(.*)/",
+      "destination": "/$1",
+      "statusCode": 301
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/$1.html"
     }
   ],
   "headers": [
