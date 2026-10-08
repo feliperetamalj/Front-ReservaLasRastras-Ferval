@@ -103,12 +103,6 @@ export function ModeloDetalle() {
               <strong>Estructura:</strong> {modelo.material}.
             </p>
 
-            {modelo.notaDato && (
-              <p className={s.nota}>
-                <Icono nombre="lupa" tamano={16} className={s.iconoNota} />
-                {modelo.notaDato}
-              </p>
-            )}
           </Reveal>
 
           <Reveal className={s.terminaciones} retraso={100}>

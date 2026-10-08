@@ -1,6 +1,8 @@
+import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Anillos, Contenedor, Icono, Logo } from '../ui';
-import { CONTACTO, CREDITOS, HORARIO, PROYECTO } from '../../data/proyecto';
+import { CONTACTO, CORPORATIVO, CREDITOS, HORARIO, PROYECTO } from '../../data/proyecto';
+import { whatsAppDirecto } from '../../utils/contacto';
 import s from './Footer.module.css';
 
 const COLUMNAS = [
@@ -71,22 +73,37 @@ export function Footer() {
             <ul className={s.lista}>
               <li className={s.dato}>
                 <Icono nombre="pin" tamano={18} className={s.iconoDato} />
-                <span>
-                  {CONTACTO.direccion}
-                  <br />
-                  {CONTACTO.ciudad}
-                </span>
+                <a href={CONTACTO.mapa} className={s.enlace} target="_blank" rel="noopener noreferrer">
+                  {CONTACTO.direccion}, {CONTACTO.ciudad}
+                </a>
               </li>
               <li className={s.dato}>
-                <Icono nombre="telefono" tamano={18} className={s.iconoDato} />
-                <a href={`tel:${CONTACTO.telefonoLink}`} className={`${s.enlace} tabular`}>
+                <Icono nombre="whatsapp" tamano={18} className={s.iconoDato} />
+                <a
+                  href={whatsAppDirecto()}
+                  className={`${s.enlace} tabular`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {CONTACTO.telefono}
+                </a>
+              </li>
+            </ul>
+
+            <h2 className={`versalita ${s.tituloColumna} ${s.tituloSecundario}`}>
+              {CORPORATIVO.nombre}
+            </h2>
+            <ul className={s.lista}>
+              <li className={s.dato}>
+                <Icono nombre="telefono" tamano={18} className={s.iconoDato} />
+                <a href={`tel:${CORPORATIVO.telefonoLink}`} className={`${s.enlace} tabular`}>
+                  {CORPORATIVO.telefono}
                 </a>
               </li>
               <li className={s.dato}>
                 <Icono nombre="correo" tamano={18} className={s.iconoDato} />
-                <a href={`mailto:${CONTACTO.email}`} className={s.enlace}>
-                  {CONTACTO.email}
+                <a href={`mailto:${CORPORATIVO.email}`} className={s.enlace}>
+                  {CORPORATIVO.email}
                 </a>
               </li>
             </ul>
@@ -107,10 +124,18 @@ export function Footer() {
 
         <div className={s.pie}>
           <p className={s.legal}>
+            {/*
+              El separador va fuera del bloque de cada titular: dentro de un
+              `inline-block`, el espacio inicial se colapsa y se leía
+              "Rastras- © 2026".
+            */}
             {CREDITOS.map((titular, i) => (
-              <span key={titular} className={s.credito}>
-                {i > 0 && <span aria-hidden="true"> - </span>}©&nbsp;{anio} {titular}
-              </span>
+              <Fragment key={titular}>
+                {i > 0 && <span aria-hidden="true"> - </span>}
+                <span className={s.credito}>
+                  ©&nbsp;{anio} {titular}
+                </span>
+              </Fragment>
             ))}
             .
           </p>

@@ -7,16 +7,17 @@ import { CONTACTO, PROYECTO } from '../data/proyecto';
 
 /** Arma el texto que se envía, con el contexto de dónde salió la consulta. */
 export function componerMensaje({ nombre, telefono, email, interes, mensaje }) {
-  const lineas = [
-    `Hola, me interesa ${interes || PROYECTO.nombre}.`,
-    '',
+  const datos = [
     nombre && `Nombre: ${nombre}`,
     telefono && `Teléfono: ${telefono}`,
     email && `Correo: ${email}`,
-    mensaje && '',
-    mensaje && mensaje,
-  ];
-  return lineas.filter(Boolean).join('\n');
+  ].filter(Boolean);
+  // Saludo, datos y mensaje en párrafos separados por una línea en blanco.
+  // Las líneas vacías no pueden ir dentro de la lista que se filtra: '' es
+  // falso y `filter(Boolean)` las descartaba, pegando todo en un bloque.
+  return [`Hola, me interesa ${interes || PROYECTO.nombre}.`, datos.join('\n'), mensaje?.trim()]
+    .filter(Boolean)
+    .join('\n\n');
 }
 
 export const enlaceWhatsApp = (texto) =>

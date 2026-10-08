@@ -3,7 +3,14 @@ import { Link } from 'react-router-dom';
 import { Boton, Etiqueta, Icono } from '../ui';
 import { MapaSitios } from './MapaSitios';
 import { porSlug } from '../../data/modelos';
-import { ESTADOS, FECHA_DISPONIBILIDAD, POR_SECTOR, RESUMEN, SITIOS } from '../../data/sitios';
+import {
+  ESTADOS,
+  FECHA_DISPONIBILIDAD,
+  MACROLOTES,
+  POR_SECTOR,
+  RESUMEN,
+  SITIOS,
+} from '../../data/sitios';
 import { fechaLarga, m2Corto } from '../../utils/formato';
 import { enlaceWhatsApp } from '../../utils/contacto';
 import s from './BuscadorSitios.module.css';
@@ -53,6 +60,8 @@ export function BuscadorSitios() {
   );
 
   const resultados = useMemo(() => SITIOS.filter(coincide), [coincide]);
+  // Los macrolotes no están en el plano: solo aparecen en la lista, con los mismos filtros.
+  const macrolotes = useMemo(() => MACROLOTES.filter(coincide), [coincide]);
 
   const cambiar = (clave, valor) => setFiltros((f) => ({ ...f, [clave]: valor }));
   const limpiar = () => setFiltros(INICIAL);
@@ -127,6 +136,9 @@ export function BuscadorSitios() {
         <p className={s.cuentaResultados} role="status">
           <strong className="tabular">{resultados.length}</strong>{' '}
           {resultados.length === 1 ? 'sitio' : 'sitios'}
+          {vista === 'lista' &&
+            macrolotes.length > 0 &&
+            ` y ${macrolotes.length} ${macrolotes.length === 1 ? 'macrolote' : 'macrolotes'}`}
           {hayFiltros && ' con estos filtros'}
         </p>
 
@@ -174,45 +186,82 @@ export function BuscadorSitios() {
             </p>
           )}
         </>
-      ) : resultados.length > 0 ? (
-        <ul className={s.grilla}>
-          {resultados.map((sitio) => {
-            const modelo = sitio.modelo ? porSlug(sitio.modelo) : null;
-            return (
-              <li key={sitio.id} className={`${s.sitio} ${s[sitio.estado]}`}>
-                <div className={s.sitioCabecera}>
-                  <span className={s.sitioId}>{sitio.id}</span>
-                  <Etiqueta tono={sitio.estado}>{ESTADOS[sitio.estado]}</Etiqueta>
-                </div>
-                <p className={`${s.sitioM2} tabular`}>
-                  {m2Corto(sitio.m2)} <span className={s.sitioUnidad}>m²</span>
-                </p>
-                {modelo && (
-                  <Link to={`/modelos/${modelo.slug}`} className={s.sitioModelo}>
-                    Casa modelo {modelo.nombre}
-                  </Link>
-                )}
-                {sitio.estado !== 'vendido' && (
-                  <a
-                    className={s.consultar}
-                    href={enlaceWhatsApp(
-                      sitio.estado === 'reservado'
-                        ? `Hola, el sitio ${sitio.id} de Reserva Las Rastras aparece reservado. ¿Me avisan si se libera?`
-                        : `Hola, me interesa el sitio ${sitio.id} de Reserva Las Rastras (${m2Corto(
-                            sitio.m2,
-                          )} m²). ¿Sigue disponible?`,
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {sitio.estado === 'reservado' ? 'Preguntar' : 'Consultar'}
-                    <Icono nombre="flecha" tamano={14} />
-                  </a>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+      ) : resultados.length + macrolotes.length > 0 ? (
+        <>
+          <ul className={s.grilla}>
+            {resultados.map((sitio) => {
+              const modelo = sitio.modelo ? porSlug(sitio.modelo) : null;
+              return (
+                <li key={sitio.id} className={`${s.sitio} ${s[sitio.estado]}`}>
+                  <div className={s.sitioCabecera}>
+                    <span className={s.sitioId}>{sitio.id}</span>
+                    <Etiqueta tono={sitio.estado}>{ESTADOS[sitio.estado]}</Etiqueta>
+                  </div>
+                  <p className={`${s.sitioM2} tabular`}>
+                    {m2Corto(sitio.m2)} <span className={s.sitioUnidad}>m²</span>
+                  </p>
+                  {modelo && (
+                    <Link to={`/modelos/${modelo.slug}`} className={s.sitioModelo}>
+                      Casa modelo {modelo.nombre}
+                    </Link>
+                  )}
+                  {sitio.estado !== 'vendido' && (
+                    <a
+                      className={s.consultar}
+                      href={enlaceWhatsApp(
+                        sitio.estado === 'reservado'
+                          ? `Hola, el sitio ${sitio.id} de Reserva Las Rastras aparece reservado. ¿Me avisan si se libera?`
+                          : `Hola, me interesa el sitio ${sitio.id} de Reserva Las Rastras (${m2Corto(
+                              sitio.m2,
+                            )} m²). ¿Sigue disponible?`,
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {sitio.estado === 'reservado' ? 'Preguntar' : 'Consultar'}
+                      <Icono nombre="flecha" tamano={14} />
+                    </a>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+
+          {macrolotes.length > 0 && (
+            <div className={s.macrolotes}>
+              <h3 className={`versalita ${s.leyenda}`}>Macrolotes</h3>
+              <p className={s.macrolotesTexto}>
+                Terrenos de mayor superficie que no forman parte del plano de sitios del loteo.
+              </p>
+              <ul className={s.grilla}>
+                {macrolotes.map((lote) => (
+                  <li key={lote.id} className={`${s.sitio} ${s.macrolote}`}>
+                    <div className={s.sitioCabecera}>
+                      <span className={s.sitioId}>{lote.id}</span>
+                      <Etiqueta tono="macrolote">Macrolote</Etiqueta>
+                    </div>
+                    <p className={`${s.sitioM2} tabular`}>
+                      {m2Corto(lote.m2)} <span className={s.sitioUnidad}>m²</span>
+                    </p>
+                    <a
+                      className={s.consultar}
+                      href={enlaceWhatsApp(
+                        `Hola, me interesa el macrolote ${lote.id} de Reserva Las Rastras (${m2Corto(
+                          lote.m2,
+                        )} m²). ¿Me pueden dar más información?`,
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Consultar
+                      <Icono nombre="flecha" tamano={14} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
       ) : (
         <div className={s.vacio}>
           <Icono nombre="lupa" tamano={30} className={s.iconoVacio} />
@@ -229,7 +278,7 @@ export function BuscadorSitios() {
       )}
 
       <p className={s.aviso}>
-        Disponibilidad al {fechaLarga(FECHA_DISPONIBILIDAD)}, según el plano publicado por el
+        Disponibilidad al {fechaLarga(FECHA_DISPONIBILIDAD)}, según el listado publicado por el
         proyecto. Confírmala con la sala de ventas antes de reservar.
       </p>
     </div>

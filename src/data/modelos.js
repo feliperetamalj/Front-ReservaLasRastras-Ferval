@@ -1,10 +1,13 @@
 /**
  * Los seis modelos de vivienda del proyecto.
  *
- * Todo el contenido sale de las fichas de reservalasrastras.cl leídas el
- * 2026-09-08. Donde el sitio original se contradice a sí mismo, el campo queda
- * en `null` y se explica en `notaDato` — es preferible decir "consultar" a
- * publicar una cifra que el propio cliente desmiente en otra pantalla.
+ * Contenido de las fichas de reservalasrastras.cl (septiembre de 2026),
+ * actualizado en octubre con el brochure 2026 y las fichas del sitio nuevo
+ * donde ambos coinciden (material de la Mediterránea 182, alturas de las 179).
+ *
+ * Donde las fuentes se contradicen, el campo queda en `null` y la razón en
+ * `notaDato`. Esa nota es interna: no se muestra al público, igual que no se
+ * publica un precio que el propio cliente desmiente en otra pantalla.
  */
 
 // Vite resuelve estas rutas en tiempo de compilación, con hash y sin parpadeo.
@@ -28,9 +31,15 @@ export const variantes = (slug, nombre, anchos) =>
     .filter(Boolean)
     .join(', ');
 
-/** Terminaciones comunes a toda la promoción. */
+/**
+ * Terminaciones comunes a toda la promoción. La altura de piso a cielo va
+ * aparte porque no es igual en todos: el brochure 2026 y las fichas del sitio
+ * nuevo publican 2,50 m en la Mediterránea 179 de un piso y 2,43 m en la de
+ * dos; el resto, 2,60 m.
+ */
+const alturaInterior = (metros) => `Altura de piso a cielo ${metros} m`;
+
 const TERMINACIONES_BASE = [
-  'Altura de piso a cielo 2,60 m',
   'Pisos de gres porcelánico',
   'Ventanas de PVC folio madera con vidrio termopanel',
   'Puertas interiores enchapadas',
@@ -62,7 +71,7 @@ export const MODELOS = [
       'en un solo piso. Todo con un concepto abierto que funciona gracias a puertas ' +
       'correderas en las zonas centrales.',
     destacados: ['Puertas correderas en zonas centrales', 'Baño de servicio', 'Quincho con parrilla'],
-    terminaciones: [...TERMINACIONES_BASE, 'Baño de servicio'],
+    terminaciones: [alturaInterior('2,60'), ...TERMINACIONES_BASE, 'Baño de servicio'],
     adicionales: ['Quincho con parrilla', 'Caldera'],
     galeria: ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'],
     plantas: ['planta'],
@@ -85,7 +94,7 @@ export const MODELOS = [
       'uno de servicio y 5 baños. Amplio espacio versátil en el segundo piso, con ' +
       'concepto abierto, cocina equipada y una gran isla central.',
     destacados: ['Dormitorio y baño de servicio', 'Segundo piso versátil', 'Piso superior en SPC vinílico'],
-    terminaciones: [...TERMINACIONES_BASE, 'Segundo piso en SPC vinílico', 'Dormitorio y baño de servicio'],
+    terminaciones: [alturaInterior('2,60'), ...TERMINACIONES_BASE, 'Segundo piso en SPC vinílico', 'Dormitorio y baño de servicio'],
     adicionales: ['Quincho con parrilla', 'Caldera'],
     galeria: ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'],
     plantas: ['planta', 'planta-2'],
@@ -108,7 +117,7 @@ export const MODELOS = [
       'Modelo de estilo mediterráneo de 310 m² con 5 dormitorios, 5 baños y sala de ' +
       'estar. Vivienda de hormigón armado con sistema térmico de envolvente EIFS.',
     destacados: ['Sala de estar independiente', 'Hormigón armado', 'Envolvente térmica EIFS'],
-    terminaciones: [...TERMINACIONES_BASE, 'Baño de servicio'],
+    terminaciones: [alturaInterior('2,60'), ...TERMINACIONES_BASE, 'Baño de servicio'],
     adicionales: ['Quincho con parrilla', 'Caldera'],
     galeria: ['g1', 'g2', 'g3'],
     plantas: ['planta'],
@@ -126,13 +135,13 @@ export const MODELOS = [
     banos: 4,
     pisos: 2,
     estilo: 'Mediterránea',
-    material: 'Hormigón armado',
-    resumen: 'Cuatro dormitorios y sala de estar en hormigón armado.',
+    material: 'Albañilería reforzada',
+    resumen: 'Cuatro dormitorios y sala de estar en albañilería reforzada.',
     descripcion:
       'Modelo de estilo mediterráneo de 182 m² con 4 dormitorios, 4 baños y sala de ' +
-      'estar. Vivienda de hormigón armado con sistema térmico de envolvente EIFS.',
-    destacados: ['Sala de estar independiente', 'Hormigón armado', 'Envolvente térmica EIFS'],
-    terminaciones: [...TERMINACIONES_BASE, 'Baño de servicio'],
+      'estar. Vivienda de albañilería reforzada con sistema térmico de envolvente EIFS.',
+    destacados: ['Sala de estar independiente', 'Albañilería reforzada', 'Envolvente térmica EIFS'],
+    terminaciones: [alturaInterior('2,60'), ...TERMINACIONES_BASE, 'Baño de servicio'],
     adicionales: ['Quincho con parrilla', 'Caldera'],
     galeria: ['g1', 'g2', 'g3'],
     plantas: ['planta'],
@@ -154,7 +163,7 @@ export const MODELOS = [
       'estar. Vivienda de albañilería reforzada con sistema térmico de envolvente EIFS. ' +
       'Superficie construida: 107,18 m² en el primer piso y 72,07 m² en el segundo.',
     destacados: ['Sala de estar independiente', 'Superficie detallada por piso', 'Envolvente térmica EIFS'],
-    terminaciones: [...TERMINACIONES_BASE, 'Baño de servicio'],
+    terminaciones: [alturaInterior('2,43'), ...TERMINACIONES_BASE, 'Baño de servicio'],
     adicionales: ['Quincho con parrilla', 'Caldera'],
     galeria: ['g1', 'g2', 'g3', 'g4'],
     plantas: ['planta'],
@@ -175,7 +184,7 @@ export const MODELOS = [
       'Nuestro modelo 179 de estilo mediterráneo en un solo piso cuenta con 3 ' +
       'dormitorios, 4 baños y sala de estar. Vivienda de albañilería reforzada.',
     destacados: ['Todo en un nivel', 'Sala de estar independiente', 'Albañilería reforzada'],
-    terminaciones: [...TERMINACIONES_BASE, 'Baño de servicio'],
+    terminaciones: [alturaInterior('2,50'), ...TERMINACIONES_BASE, 'Baño de servicio'],
     adicionales: ['Quincho con parrilla', 'Caldera'],
     galeria: ['g1', 'g2', 'g3'],
     plantas: ['planta'],

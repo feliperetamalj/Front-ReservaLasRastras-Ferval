@@ -63,7 +63,7 @@ export const ATRIBUTOS = [
   },
   {
     titulo: 'Amplios sectores de áreas verdes',
-    detalle: 'Plazas y paisajismo integrados al recorrido del barrio, no como relleno de esquinas.',
+    detalle: 'Plazas infantiles, cancha de pádel y paisajismo integrados al recorrido del barrio, no como relleno de esquinas.',
     icono: 'arbol',
   },
   {
@@ -115,31 +115,55 @@ export const CREDITOS = [
   'RB Software Solutions',
 ];
 
+/**
+ * Sala de ventas del proyecto. Datos del sitio nuevo de Ferval y del brochure
+ * 2026 (octubre de 2026): ambos publican el mismo WhatsApp, la misma
+ * dirección y el mismo horario.
+ */
 export const CONTACTO = {
-  // El sitio del proyecto no publica teléfono propio; este es el comercial de
-  // la inmobiliaria que lo desarrolla.
-  telefono: '+56 71 2 234830',
-  telefonoLink: '+56712234830',
-  whatsapp: '56712234830',
+  sala: 'Sala de ventas Alto Las Rastras',
+  telefono: '+56 9 6642 4037',
+  telefonoLink: '+56966424037',
+  whatsapp: '56966424037',
+  // La sala no publica correo propio: el correo es el de la inmobiliaria.
   email: 'contacto@fervali.cl',
-  direccion: 'Avda. 30 Oriente, Edificio Las Rastras III, Piso 1, Local E',
+  direccion: 'Alto Las Rastras · Camino Las Rastras, cruce Ruta 115-CH',
   ciudad: 'Talca, Región del Maule',
+  mapa: 'https://www.google.com/maps/search/?api=1&query=Camino%20Las%20Rastras%20cruce%20Ruta%20115-CH%2C%20Talca',
   instagram: 'https://www.instagram.com/reservalasrastras',
   facebook: 'https://www.facebook.com/reservalasrastras/',
-  sitioInmobiliaria: 'https://fervali.cl',
+};
+
+/** La inmobiliaria que desarrolla el proyecto, como contacto corporativo. */
+export const CORPORATIVO = {
+  nombre: 'Inmobiliaria Ferval',
+  telefono: '+56 71 2 234830',
+  telefonoLink: '+56712234830',
+  email: 'contacto@fervali.cl',
+  direccion: 'Avda. 30 Oriente, Edificio Las Rastras III, Piso 1, Local E, Talca',
+  sitio: 'https://fervali.cl',
 };
 
 /**
- * Horario de la sala de ventas.
+ * Atención de la sala de ventas: una sola fuente para el horario que se
+ * muestra y para los bloques de la agenda de visitas.
  *
- * El sitio original publica cuatro horarios distintos en cuatro páginas. Este
- * es el que aparece siete veces (portada y las seis fichas de modelo); los
- * otros tres aparecen una vez cada uno. Conviene confirmarlo con la sala de
- * ventas antes de publicar.
+ * El sitio anterior publicaba cuatro horarios distintos en cuatro páginas. El
+ * sitio nuevo y el brochure 2026 publican uno solo, igual en todas partes.
+ * `dias` usa la numeración de JavaScript: 0 es domingo.
  */
+export const ATENCION = {
+  dias: [1, 2, 3, 4, 5, 6],
+  tramos: [
+    ['10:00', '13:00'],
+    ['14:00', '18:00'],
+  ],
+};
+
+const tramosEnTexto = ATENCION.tramos.map(([a, b]) => `${a} – ${b}`).join(' y ');
+
 export const HORARIO = [
-  { dias: 'Lunes a viernes', horas: '10:00 – 13:00 y 14:00 – 18:30' },
-  { dias: 'Sábado', horas: '10:00 – 15:00' },
+  { dias: 'Lunes a sábado', horas: tramosEnTexto },
   { dias: 'Domingo', horas: 'Cerrado' },
 ];
 

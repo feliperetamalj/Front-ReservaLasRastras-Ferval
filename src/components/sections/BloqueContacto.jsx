@@ -1,6 +1,7 @@
 import { Contenedor, Icono } from '../ui';
 import { Formulario } from './Formulario';
 import { CONTACTO, HORARIO } from '../../data/proyecto';
+import { whatsAppDirecto } from '../../utils/contacto';
 import s from './BloqueContacto.module.css';
 
 /** Cierre de página: formulario a la izquierda, datos de la sala a la derecha. */
@@ -28,14 +29,21 @@ export function BloqueContacto({
               <li className={s.dato}>
                 <Icono nombre="pin" tamano={20} className={s.icono} />
                 <span>
-                  {CONTACTO.direccion}
+                  <span className={s.sala}>{CONTACTO.sala}</span>
                   <br />
-                  {CONTACTO.ciudad}
+                  <a href={CONTACTO.mapa} className={s.enlace} target="_blank" rel="noopener noreferrer">
+                    {CONTACTO.direccion}, {CONTACTO.ciudad}
+                  </a>
                 </span>
               </li>
               <li className={s.dato}>
-                <Icono nombre="telefono" tamano={20} className={s.icono} />
-                <a href={`tel:${CONTACTO.telefonoLink}`} className={`${s.enlace} tabular`}>
+                <Icono nombre="whatsapp" tamano={20} className={s.icono} />
+                <a
+                  href={whatsAppDirecto()}
+                  className={`${s.enlace} tabular`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {CONTACTO.telefono}
                 </a>
               </li>

@@ -175,25 +175,6 @@
   font-size: var(--text-sm);
 }
 
-/* Nota sobre datos contradictorios del sitio original. */
-.nota {
-  display: flex;
-  gap: var(--space-3);
-  margin-top: var(--space-5);
-  padding: var(--space-4);
-  border-left: 2px solid var(--borde-marca);
-  background-color: var(--fondo-alterno);
-  color: var(--texto-suave);
-  font-size: var(--text-sm);
-  line-height: 1.6;
-}
-
-.iconoNota {
-  flex-shrink: 0;
-  margin-top: 3px;
-  color: var(--texto-marca);
-}
-
 .terminaciones {
   align-self: start;
   padding: var(--space-6);

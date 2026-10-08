@@ -20,7 +20,8 @@ const pendientes = new Set();
 let oyenteActivo = false;
 
 function revisarPendientes() {
-  for (const revisar of [...pendientes]) revisar();
+  // Borrar del Set el elemento que se está visitando es seguro: no hace falta copiarlo.
+  for (const revisar of pendientes) revisar();
   if (pendientes.size === 0) {
     window.removeEventListener('scroll', revisarPendientes);
     oyenteActivo = false;

@@ -85,6 +85,10 @@
   font-weight: var(--peso-semi);
 }
 
+.tituloSecundario {
+  margin-top: var(--space-6);
+}
+
 .lista {
   display: flex;
   flex-direction: column;

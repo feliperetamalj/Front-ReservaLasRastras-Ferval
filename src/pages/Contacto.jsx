@@ -1,7 +1,7 @@
 import { Contenedor, Icono, Reveal, Seccion } from '../components/ui';
 import { Formulario } from '../components/sections';
 import { Encabezado } from './Encabezado';
-import { CONTACTO, HORARIO } from '../data/proyecto';
+import { CONTACTO, CORPORATIVO, HORARIO } from '../data/proyecto';
 import { whatsAppDirecto } from '../utils/contacto';
 import s from './Contacto.module.css';
 
@@ -16,14 +16,14 @@ const VIAS = [
   },
   {
     icono: 'telefono',
-    titulo: 'Teléfono',
+    titulo: 'Teléfono de la sala',
     detalle: CONTACTO.telefono,
     accion: 'Llamar',
     href: `tel:${CONTACTO.telefonoLink}`,
   },
   {
     icono: 'correo',
-    titulo: 'Correo',
+    titulo: `Correo de ${CORPORATIVO.nombre}`,
     detalle: CONTACTO.email,
     accion: 'Escribir',
     href: `mailto:${CONTACTO.email}`,
@@ -73,11 +73,15 @@ export function Contacto() {
           </div>
 
           <aside className={s.aside}>
-            <h2 className={`versalita ${s.versalita}`}>Sala de ventas</h2>
+            <h2 className={`versalita ${s.versalita}`}>{CONTACTO.sala}</h2>
             <address className={s.direccion}>
               {CONTACTO.direccion}
               <br />
               {CONTACTO.ciudad}
+              <br />
+              <a href={CONTACTO.mapa} target="_blank" rel="noopener noreferrer" className={s.mapa}>
+                Ver en Google Maps
+              </a>
             </address>
 
             <h3 className={`versalita ${s.versalita} ${s.versalitaExtra}`}>Horario</h3>
@@ -91,8 +95,16 @@ export function Contacto() {
             </ul>
 
             <p className={s.notaHorario}>
-              Las visitas al proyecto se agendan de lunes a sábado. Confirma el horario antes de
-              venir.
+              Desde la sala salen las visitas al loteo, de lunes a sábado. Domingo cerrado.
+            </p>
+
+            <h3 className={`versalita ${s.versalita} ${s.versalitaExtra}`}>{CORPORATIVO.nombre}</h3>
+            <p className={s.direccion}>
+              {CORPORATIVO.direccion}
+              <br />
+              <a href={`tel:${CORPORATIVO.telefonoLink}`} className="tabular">
+                {CORPORATIVO.telefono}
+              </a>
             </p>
           </aside>
         </div>
@@ -103,7 +115,10 @@ export function Contacto() {
           <Icono nombre="pin" tamano={24} className={s.iconoMapa} />
           <p>
             La sala de ventas está en {CONTACTO.direccion}, {CONTACTO.ciudad}. El acceso al barrio
-            es directo desde Av. Las Rastras.
+            es directo desde Av. Las Rastras.{' '}
+            <a href={CONTACTO.mapa} target="_blank" rel="noopener noreferrer">
+              Cómo llegar
+            </a>
           </p>
         </Contenedor>
       </Seccion>

@@ -387,3 +387,21 @@
     transform: none;
   }
 }
+
+/* --- Macrolotes: van aparte, debajo de los sitios del plano --- */
+.macrolotes {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: var(--borde-fino) solid var(--borde);
+}
+
+.macrolotesTexto {
+  margin-bottom: var(--space-4);
+  color: var(--texto-suave);
+  font-size: var(--text-sm);
+}
+
+.macrolote {
+  border-style: solid;
+  border-color: var(--borde-fuerte);
+}

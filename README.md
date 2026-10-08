@@ -34,19 +34,31 @@ dentro de un componente.**
 |---|---|
 | `src/data/proyecto.js` | Datos del proyecto, contacto, horario, atributos, entorno |
 | `src/data/modelos.js` | Los seis modelos de casa |
-| `src/data/sitios.js` | Los 184 sitios del loteo: superficie, estado y posición en el plano |
+| `src/data/sitios.js` | Los 184 sitios del plano (superficie, estado, posición) y los macrolotes |
 | `src/data/partners.js` | Arquitectos y constructoras autorizados |
 | `src/data/medidas.js` | Generado — medidas de cada imagen. No editar a mano |
 
 ### Actualizar la disponibilidad de sitios
 
-`src/data/sitios.js` trae el estado de los 184 sitios al **24 de septiembre de
-2026**, leído del plano interactivo que publica el proyecto. Para actualizarlo:
+`src/data/sitios.js` trae los estados del **listado del 7 de octubre de 2026**
+que publica el sitio nuevo de Ferval (`reservalasrastras.cl/master-plan.html`).
+Para actualizarlo:
 
 1. Cambia `estado` en las filas que corresponda: `'disponible'`,
    `'reservado'` o `'vendido'`.
 2. Cambia `FECHA_DISPONIBILIDAD` en el mismo archivo; es la que se muestra
    junto al buscador.
+
+Criterios que quedaron aplicados en octubre (detalle en la cabecera de
+`sitios.js`):
+
+- Donde la superficie del listado difiere en más de 1 m² de la anterior, se
+  mantiene la anterior y la del listado queda en `nota`. `nota` es **interna**:
+  no se muestra en el sitio.
+- Los 22 sitios que el listado ya no publica pasan a `reservado` con `nota`
+  (B5 sigue `vendido`). No se borran: su círculo sigue impreso en el plano.
+- D26 y H1 son **macrolotes** (`MACROLOTES`): solo aparecen en la vista de
+  lista y no entran en el rango de superficies ni en los recuentos de sitios.
 
 Los totales, los rangos de superficie, los recuentos por sector y la cantidad
 de sectores que aparece en los textos se recalculan solos (`RESUMEN` y
@@ -141,10 +153,13 @@ No hay backend. El formulario valida, compone el mensaje y lo entrega a
 WhatsApp o al cliente de correo. Nada se envía ni se guarda desde el sitio, y
 ningún dato personal viaja a un tercero.
 
-El destinatario está en `CONTACTO` (`src/data/proyecto.js`). Hoy es el contacto
-comercial de Ferval, porque **el sitio del proyecto no publica un teléfono
-propio**; si Reserva Las Rastras tiene su propio número de sala de ventas, es el
-único valor que hay que cambiar.
+El destinatario está en `CONTACTO` (`src/data/proyecto.js`): el WhatsApp de la
+sala de ventas de Alto Las Rastras (+56 9 6642 4037), el mismo que publican el
+sitio nuevo y el brochure 2026. `CORPORATIVO` guarda el contacto de
+Inmobiliaria Ferval, que aparece en el pie.
+
+El horario sale de `ATENCION` en el mismo archivo: días y tramos de atención.
+Es la única fuente del horario que se muestra en el sitio.
 
 ---
 

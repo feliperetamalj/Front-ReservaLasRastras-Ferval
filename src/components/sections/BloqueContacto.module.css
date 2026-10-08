@@ -96,6 +96,11 @@
   transition: color var(--dur-rapido) var(--ease-salida);
 }
 
+.sala {
+  color: var(--texto-inverso);
+  font-weight: var(--peso-medio);
+}
+
 .enlace:hover {
   color: var(--texto-marca-oscuro);
 }
