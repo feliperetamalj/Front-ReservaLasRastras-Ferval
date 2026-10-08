@@ -117,6 +117,33 @@
   outline: none;
 }
 
+/* Insignia de "se vende con casa", en la esquina del marcador. Papel con la
+   casa en tinta: se lee igual sobre los tres estados y sobre el plano. */
+.casa {
+  position: absolute;
+  top: calc(var(--k) * -8px);
+  right: calc(var(--k) * -8px);
+  display: grid;
+  place-items: center;
+  width: calc(var(--k) * 24px);
+  height: calc(var(--k) * 24px);
+  border-radius: var(--radius-full);
+  background-color: var(--papel-000);
+  color: var(--tinta-900);
+  box-shadow: 0 0 0 1px rgba(30, 18, 13, 0.55);
+  pointer-events: none;
+}
+
+.casa svg {
+  width: 74%;
+  height: 74%;
+}
+
+/* Viendo el barrio entero la insignia sería una mota: la reemplaza el filtro. */
+[data-numeros='no'] .casa {
+  display: none;
+}
+
 /* Respuesta al presionar, antes de soltar. */
 .marcador:active {
   --realce: 0.9;
@@ -152,6 +179,18 @@
 */
 .atenuado {
   box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.9);
+}
+
+/* Sin transparencia, por la misma razón: la insignia se aclara en vez de desvanecerse. */
+.atenuado .casa {
+  color: rgba(30, 18, 13, 0.4);
+  box-shadow: 0 0 0 1px rgba(30, 18, 13, 0.22);
+}
+
+.atenuado.activo .casa,
+.atenuado:focus-visible .casa {
+  color: var(--tinta-900);
+  box-shadow: 0 0 0 1px rgba(30, 18, 13, 0.55);
 }
 
 .atenuado::after {

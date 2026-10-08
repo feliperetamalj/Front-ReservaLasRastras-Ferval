@@ -140,7 +140,7 @@
     background-color var(--dur-rapido) var(--ease-salida);
 }
 
-.modelo:hover {
+a.modelo:hover {
   border-color: var(--borde-fuerte);
   background-color: var(--fondo-alterno);
 }
@@ -152,6 +152,13 @@
   border-radius: var(--radius-sm);
   object-fit: cover;
   background-color: var(--fondo-alterno);
+}
+
+/* Casa sin modelo en el catálogo: el ícono ocupa el lugar de la foto. */
+.iconoCasa {
+  display: grid;
+  place-items: center;
+  color: var(--texto-marca);
 }
 
 .modeloTexto {

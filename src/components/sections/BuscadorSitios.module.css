@@ -206,6 +206,18 @@
   background-color: var(--estado-vendido);
 }
 
+/* Reproduce la insignia de casa del marcador. */
+.muestraCasa {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  background-color: var(--papel-000);
+  color: var(--tinta-900);
+  box-shadow: 0 0 0 1px rgba(30, 18, 13, 0.55);
+}
+
 .simboloCuenta {
   color: var(--texto-tenue);
 }
@@ -309,13 +321,37 @@
   color: var(--texto-tenue);
 }
 
-.sitioModelo {
-  display: inline-flex;
-  align-items: center;
-  min-height: 24px;
-  color: var(--texto-marca);
+.sitioCasa {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  color: var(--texto-suave);
   font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+.iconoCasa {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--texto-marca);
+}
+
+/* Rótulo arriba y la casa abajo: en tarjetas angostas, la frase seguida se
+   partía en tres o cuatro líneas. */
+.sitioCasaRotulo {
+  display: block;
+  color: var(--texto-tenue);
+  font-size: var(--text-xs);
+}
+
+.sitioCasaTexto,
+.sitioModelo {
+  color: var(--texto);
   font-weight: var(--peso-medio);
+}
+
+.sitioModelo {
+  color: var(--texto-marca);
   text-decoration: none;
 }
 

@@ -11,7 +11,7 @@ import {
   RESUMEN,
   SITIOS,
 } from '../../data/sitios';
-import { fechaLarga, m2Corto } from '../../utils/formato';
+import { casaCorta, fechaLarga, m2Corto } from '../../utils/formato';
 import { enlaceWhatsApp } from '../../utils/contacto';
 import s from './BuscadorSitios.module.css';
 
@@ -23,7 +23,7 @@ const TRAMOS = [
   { id: 'grande', texto: 'Más de 700 m²', min: 700, max: Infinity },
 ];
 
-const INICIAL = { sector: 'todos', tramo: 'todos', soloDisponibles: true };
+const INICIAL = { sector: 'todos', tramo: 'todos', soloDisponibles: true, conCasa: false };
 
 /** Cuántos sitios hay en cada estado, para la simbología del plano. */
 const CUENTA_POR_ESTADO = {
@@ -53,7 +53,8 @@ export function BuscadorSitios() {
         (filtros.sector === 'todos' || sitio.sector === filtros.sector) &&
         sitio.m2 >= tramo.min &&
         sitio.m2 < tramo.max &&
-        (!filtros.soloDisponibles || sitio.estado === 'disponible')
+        (!filtros.soloDisponibles || sitio.estado === 'disponible') &&
+        (!filtros.conCasa || Boolean(sitio.casa))
       );
     },
     [filtros],
@@ -65,7 +66,7 @@ export function BuscadorSitios() {
 
   const cambiar = (clave, valor) => setFiltros((f) => ({ ...f, [clave]: valor }));
   const limpiar = () => setFiltros(INICIAL);
-  const hayFiltros = filtros.sector !== 'todos' || filtros.tramo !== 'todos';
+  const hayFiltros = filtros.sector !== 'todos' || filtros.tramo !== 'todos' || filtros.conCasa;
 
   return (
     <div className={s.buscador}>
@@ -129,6 +130,16 @@ export function BuscadorSitios() {
             />
             <span>Solo disponibles</span>
           </label>
+
+          <label className={s.interruptor}>
+            <input
+              type="checkbox"
+              className={s.casilla}
+              checked={filtros.conCasa}
+              onChange={(e) => cambiar('conCasa', e.target.checked)}
+            />
+            <span>Con casa construida</span>
+          </label>
         </div>
       </div>
 
@@ -175,6 +186,12 @@ export function BuscadorSitios() {
                 <span className={`${s.simboloCuenta} tabular`}>{CUENTA_POR_ESTADO[estado]}</span>
               </li>
             ))}
+            <li className={s.simbolo}>
+              <span className={s.muestraCasa} aria-hidden="true">
+                <Icono nombre="casa" tamano={12} strokeWidth={2.6} />
+              </span>
+              Con casa construida
+            </li>
           </ul>
           <MapaSitios sitios={SITIOS} coincide={coincide} />
           {resultados.length === 0 && (
@@ -190,7 +207,7 @@ export function BuscadorSitios() {
         <>
           <ul className={s.grilla}>
             {resultados.map((sitio) => {
-              const modelo = sitio.modelo ? porSlug(sitio.modelo) : null;
+              const modelo = sitio.casa?.slugModelo ? porSlug(sitio.casa.slugModelo) : null;
               return (
                 <li key={sitio.id} className={`${s.sitio} ${s[sitio.estado]}`}>
                   <div className={s.sitioCabecera}>
@@ -200,10 +217,22 @@ export function BuscadorSitios() {
                   <p className={`${s.sitioM2} tabular`}>
                     {m2Corto(sitio.m2)} <span className={s.sitioUnidad}>m²</span>
                   </p>
-                  {modelo && (
-                    <Link to={`/modelos/${modelo.slug}`} className={s.sitioModelo}>
-                      Casa modelo {modelo.nombre}
-                    </Link>
+                  {sitio.casa && (
+                    <p className={s.sitioCasa}>
+                      <Icono nombre="casa" tamano={16} className={s.iconoCasa} />
+                      <span>
+                        <span className={s.sitioCasaRotulo}>
+                          {sitio.estado === 'vendido' ? 'Casa construida' : 'Se vende con casa'}
+                        </span>{' '}
+                        {modelo ? (
+                          <Link to={`/modelos/${modelo.slug}`} className={s.sitioModelo}>
+                            {casaCorta(sitio.casa.texto)}
+                          </Link>
+                        ) : (
+                          <span className={s.sitioCasaTexto}>{casaCorta(sitio.casa.texto)}</span>
+                        )}
+                      </span>
+                    </p>
                   )}
                   {sitio.estado !== 'vendido' && (
                     <a

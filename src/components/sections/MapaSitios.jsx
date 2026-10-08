@@ -2,7 +2,6 @@ import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useStat
 import { Icono } from '../ui';
 import { FichaSitio } from './FichaSitio';
 import { FOTOS } from '../../data/proyecto';
-import { porSlug } from '../../data/modelos';
 import { PLANO } from '../../data/sitios';
 import { m2 } from '../../utils/formato';
 import { useMovimientoReducido } from '../../hooks';
@@ -60,13 +59,9 @@ const UMBRAL_ARRASTRE = 5; // px antes de decidir que un clic es en realidad un 
 const acotar = (v, min, max) => Math.min(Math.max(v, min), max);
 
 /** Nombre accesible completo: el lector de pantalla recibe todo sin abrir la ficha. */
-const nombreAccesible = (sitio) => {
-  const modelo = sitio.modelo ? porSlug(sitio.modelo) : null;
-  return (
-    `Sitio ${sitio.id}, ${sitio.estado}, ${m2(sitio.m2)}` +
-    (modelo ? `, con casa modelo ${modelo.nombre}` : '')
-  );
-};
+const nombreAccesible = (sitio) =>
+  `Sitio ${sitio.id}, ${sitio.estado}, ${m2(sitio.m2)}` +
+  (sitio.casa ? `, con casa construida: ${sitio.casa.texto}` : '');
 
 /** Orden de lectura: por franjas de 60 px del plano y, dentro de cada una, de izquierda a derecha. */
 const ordenLectura = (a, b) =>
@@ -114,6 +109,12 @@ const Marcador = memo(function Marcador({ sitio, activo, enFoco, atenuado, regis
       <span className={s.numero} aria-hidden="true">
         {sitio.id}
       </span>
+      {/* Se vende con casa: una insignia con forma de casa, no solo otro color. */}
+      {sitio.casa && (
+        <span className={s.casa} aria-hidden="true">
+          <Icono nombre="casa" strokeWidth={2.6} />
+        </span>
+      )}
     </button>
   );
 });

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Etiqueta, Icono } from '../ui';
 import { porSlug } from '../../data/modelos';
 import { ESTADOS } from '../../data/sitios';
-import { m2 } from '../../utils/formato';
+import { casaCorta, m2 } from '../../utils/formato';
 import { enlaceWhatsApp } from '../../utils/contacto';
 import s from './FichaSitio.module.css';
 
@@ -22,7 +22,9 @@ export const FichaSitio = forwardRef(function FichaSitio(
   { sitio, fijado, posicion, alCerrar, ...resto },
   ref,
 ) {
-  const modelo = sitio.modelo ? porSlug(sitio.modelo) : null;
+  const { casa } = sitio;
+  const modelo = casa?.slugModelo ? porSlug(casa.slugModelo) : null;
+  const rotuloCasa = sitio.estado === 'vendido' ? 'Casa construida' : 'Se vende con casa';
 
   return (
     <div
@@ -52,24 +54,37 @@ export const FichaSitio = forwardRef(function FichaSitio(
         <dd className={`${s.valor} tabular`}>{m2(sitio.m2)}</dd>
       </dl>
 
-      {modelo && (
-        <Link to={`/modelos/${modelo.slug}`} className={s.modelo}>
-          <img
-            src={modelo.hero}
-            srcSet={modelo.heroSrcSet}
-            sizes="64px"
-            alt=""
-            className={s.miniatura}
-            loading="lazy"
-            decoding="async"
-          />
-          <span className={s.modeloTexto}>
-            <span className={s.modeloRotulo}>Casa modelo</span>
-            <span className={s.modeloNombre}>{modelo.nombre}</span>
-          </span>
-          <Icono nombre="flecha" tamano={16} className={s.modeloFlecha} />
-        </Link>
-      )}
+      {/* El texto de la casa es el del listado; el enlace, solo si el modelo es inequívoco. */}
+      {casa &&
+        (modelo ? (
+          <Link to={`/modelos/${modelo.slug}`} className={s.modelo}>
+            <img
+              src={modelo.hero}
+              srcSet={modelo.heroSrcSet}
+              sizes="64px"
+              alt=""
+              className={s.miniatura}
+              loading="lazy"
+              decoding="async"
+            />
+            <span className={s.modeloTexto}>
+              <span className={s.modeloRotulo}>{rotuloCasa}</span>
+              <span className={s.modeloNombre}>{casaCorta(casa.texto)}</span>
+              <span className={s.modeloRotulo}>Ver el modelo {modelo.nombre}</span>
+            </span>
+            <Icono nombre="flecha" tamano={16} className={s.modeloFlecha} />
+          </Link>
+        ) : (
+          <div className={s.modelo}>
+            <span className={`${s.miniatura} ${s.iconoCasa}`}>
+              <Icono nombre="casa" tamano={22} />
+            </span>
+            <span className={s.modeloTexto}>
+              <span className={s.modeloRotulo}>{rotuloCasa}</span>
+              <span className={s.modeloNombre}>{casaCorta(casa.texto)}</span>
+            </span>
+          </div>
+        ))}
 
       {sitio.estado === 'vendido' ? (
         <p className={s.nota}>Este sitio ya fue vendido.</p>

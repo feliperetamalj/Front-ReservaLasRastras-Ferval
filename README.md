@@ -59,6 +59,12 @@ Criterios que quedaron aplicados en octubre (detalle en la cabecera de
   (B5 sigue `vendido`). No se borran: su círculo sigue impreso en el plano.
 - D26 y H1 son **macrolotes** (`MACROLOTES`): solo aparecen en la vista de
   lista y no entran en el rango de superficies ni en los recuentos de sitios.
+- `casa` guarda la casa construida con la que se vende el sitio (39 sitios),
+  con el texto tal como lo publica el listado. Enlaza a la ficha del modelo
+  solo cuando la equivalencia es inequívoca: Mediterránea 308 → 310, 182 y
+  179 de 2 pisos. Chilena 140/150/190 y Mediterránea 140/176/180 no tienen
+  modelo en el catálogo y van sin enlace. Reemplaza al antiguo campo `modelo`,
+  que asociaba 14 sitios por la foto que mostraba el sitio anterior.
 
 Los totales, los rangos de superficie, los recuentos por sector y la cantidad
 de sectores que aparece en los textos se recalculan solos (`RESUMEN` y
@@ -92,6 +98,10 @@ Los estados se distinguen por luminosidad y forma, no solo por color: oro
 lleno (disponible), papel con borde discontinuo (reservado) y tinta
 (vendido). Verde y rojo tenían casi la misma luminancia —el par que más
 confunde la visión del color— y el verde se perdía sobre el pasto del plano.
+
+Los sitios que se venden con casa llevan una insignia con forma de casa en el
+marcador (papel con la casa en tinta, legible sobre los tres estados) y se
+pueden filtrar con "Con casa construida".
 
 ### Reprocesar imágenes
 

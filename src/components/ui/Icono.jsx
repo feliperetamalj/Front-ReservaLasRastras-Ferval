@@ -21,6 +21,13 @@ const TRAZOS = {
       <path d="M3 11h8V4M11 11v9M11 15h10" />
     </>
   ),
+  casa: (
+    <>
+      <path d="M3.5 11.5 12 4.5l8.5 7" />
+      <path d="M6 9.5v10h12v-10" />
+      <path d="M10.25 19.5v-5h3.5v5" />
+    </>
+  ),
   rayo: <path d="M13 2 5 13h6l-2 9 8-11h-6l2-9Z" />,
   sitio: (
     <>
