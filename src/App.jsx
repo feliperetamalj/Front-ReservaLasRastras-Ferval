@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { IrArriba } from './components/layout/IrArriba';
+import { Metadatos } from './components/layout/Metadatos';
 import { WhatsAppFlotante } from './components/layout/WhatsAppFlotante';
 import { Inicio } from './pages/Inicio';
 import { Modelos } from './pages/Modelos';
@@ -23,6 +24,7 @@ export default function App() {
       </a>
 
       <IrArriba />
+      <Metadatos />
       <Header />
 
       <main id="contenido">

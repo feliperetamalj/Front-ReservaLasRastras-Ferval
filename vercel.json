@@ -6,10 +6,73 @@
   "regions": [
     "gru1"
   ],
-  "rewrites": [
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
     {
-      "source": "/((?!api/|assets/|favicon\\.svg|apple-touch-icon\\.png|icon-512\\.png|og-image\\.jpg|robots\\.txt|sitemap\\.xml).*)",
-      "destination": "/index.html"
+      "source": "/index.html",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/master-plan.html",
+      "destination": "/master-plan",
+      "statusCode": 301
+    },
+    {
+      "source": "/agendar.html",
+      "destination": "/agendar",
+      "statusCode": 301
+    },
+    {
+      "source": "/partners.html",
+      "destination": "/partners",
+      "statusCode": 301
+    },
+    {
+      "source": "/modelos/mediterranea-179-2pisos.html",
+      "destination": "/modelos/mediterranea-179",
+      "statusCode": 301
+    },
+    {
+      "source": "/modelos/mediterranea-179-2pisos",
+      "destination": "/modelos/mediterranea-179",
+      "statusCode": 301
+    },
+    {
+      "source": "/modelos/:slug.html",
+      "destination": "/modelos/:slug",
+      "statusCode": 301
+    },
+    {
+      "source": "/reserva",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/reserva/",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/visitasaladeventa",
+      "destination": "/agendar",
+      "statusCode": 301
+    },
+    {
+      "source": "/visitasaladeventa/",
+      "destination": "/agendar",
+      "statusCode": 301
+    },
+    {
+      "source": "/partners/",
+      "destination": "/partners",
+      "statusCode": 301
+    },
+    {
+      "source": "/assets/docs/brochure-reserva-las-rastras-2026.pdf",
+      "destination": "/docs/brochure-reserva-las-rastras-2026.pdf",
+      "statusCode": 301
     }
   ],
   "headers": [

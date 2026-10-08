@@ -20,7 +20,7 @@ export PATH="$HOME/.local/node/bin:$PATH" && npm install && npm run dev
 | Comando | Qué hace |
 |---|---|
 | `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Compila a `dist/` |
+| `npm run build` | Compila a `dist/` y prerenderiza un HTML por ruta |
 | `npm run preview` | Sirve `dist/` como en producción |
 | `npm test` | Pruebas de la agenda (`node --test`, sin dependencias) |
 
@@ -40,6 +40,7 @@ dentro de un componente.**
 | `src/data/modelos.js` | Los seis modelos de casa |
 | `src/data/sitios.js` | Los 184 sitios del plano (superficie, estado, posición) y los macrolotes |
 | `src/data/partners.js` | Arquitectos y constructoras autorizados |
+| `src/data/seo.js` | Título, descripción, canonical y Open Graph de cada ruta |
 | `src/data/privacidad.js` | Política de privacidad (versión, fecha y secciones) |
 | `src/data/medidas.js` | Generado — medidas de cada imagen. No editar a mano |
 
@@ -216,10 +217,34 @@ Puesta en marcha, operación diaria y cómo atender pedidos de borrado:
 comentario:** JSON no admite comentarios y Vercel rechaza cualquier propiedad
 que no reconozca, con un error que solo aparece al desplegar.
 
-La reescritura de rutas manda todo a `index.html` salvo los archivos reales
-(`assets/`, favicon, `og-image.jpg`, `robots.txt`, `sitemap.xml`) y las
-funciones de `api/`; sin ella, recargar `/modelos/colonial-150` devuelve 404.
-Las funciones corren en São Paulo (`gru1`), junto a la base de datos.
+### Prerender
+
+`npm run build` hace tres cosas: la compilación normal (`dist/`), una de
+servidor (`dist-server/`, temporal) y `scripts/prerender.mjs`, que renderiza
+cada ruta de `src/data/seo.js` con React y escribe `dist/<ruta>.html` con el
+contenido real y su propio `<head>`, más `dist/404.html` y `dist/sitemap.xml`.
+El navegador hidrata ese HTML (`hydrateRoot` en `main.jsx`). Google, WhatsApp
+y Facebook reciben textos, cifras y metadatos sin ejecutar JavaScript.
+
+Para que la hidratación calce, el primer render no puede depender del
+navegador: lo que lee la fecha, la URL o `matchMedia` lo hace en un efecto
+(ver `useMediaQuery` y `/agendar`). Los bloques con `Reveal` solo se ocultan
+cuando `<html>` tiene la clase `js`, así que sin JavaScript se ve todo.
+
+Una ruta nueva va en `App.jsx` **y** en `src/data/seo.js`; si no, no se
+prerenderiza y en producción responde 404.
+
+### Vercel
+
+`cleanUrls` sirve `dist/master-plan.html` en `/master-plan`; no hay
+reescritura a `index.html`, así que una ruta inexistente responde **404 de
+verdad** con nuestra página. Las URLs `.html` del sitio de Ferval y las del
+WordPress antiguo redirigen con 301 a sus equivalentes (`redirects` en
+`vercel.json`). Las funciones de `api/` corren en São Paulo (`gru1`), junto a
+la base de datos.
+
+El brochure 2026 se sirve desde `public/docs/` y se enlaza en el pie y en
+`/contacto` (`BROCHURE` en `src/data/proyecto.js`).
 
 Si conectas el repositorio a Vercel *después* del último push, no hay evento que
 dispare la construcción. Un commit vacío la despierta:

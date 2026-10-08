@@ -1,4 +1,8 @@
-.reveal {
+/*
+  Solo se oculta con JavaScript activo (clase `js` que pone index.html): el
+  HTML prerenderizado se ve completo aunque el script no llegue a correr.
+*/
+:global(.js) .reveal {
   opacity: 0;
   transform: translateY(18px);
   transition:
@@ -6,13 +10,13 @@
     transform var(--dur-revelado) var(--ease-salida);
 }
 
-.visible {
+:global(.js) .visible {
   opacity: 1;
   transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  :global(.js) .reveal {
     transform: none;
     transition: opacity var(--dur-medio) ease;
   }

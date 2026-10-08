@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Contenedor, Icono, Reveal, Seccion } from '../components/ui';
 import { Formulario } from '../components/sections';
 import { Encabezado } from './Encabezado';
-import { CONTACTO, CORPORATIVO, HORARIO } from '../data/proyecto';
+import { BROCHURE, CONTACTO, CORPORATIVO, HORARIO } from '../data/proyecto';
 import { whatsAppDirecto } from '../utils/contacto';
 import s from './Contacto.module.css';
 
@@ -112,6 +112,12 @@ export function Contacto() {
             <p className={s.notaHorario}>
               Desde la sala salen las visitas al loteo, de lunes a sábado. Domingo cerrado.
             </p>
+
+            <h3 className={`versalita ${s.versalita} ${s.versalitaExtra}`}>{BROCHURE.texto}</h3>
+            <a href={BROCHURE.href} className={s.mapa} download>
+              <Icono nombre="descargar" tamano={16} />
+              &nbsp;Descargar ({BROCHURE.detalle})
+            </a>
 
             <h3 className={`versalita ${s.versalita} ${s.versalitaExtra}`}>{CORPORATIVO.nombre}</h3>
             <p className={s.direccion}>

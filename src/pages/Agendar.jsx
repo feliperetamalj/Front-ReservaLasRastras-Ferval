@@ -66,8 +66,11 @@ const TODOS = Object.fromEntries(
  */
 export function Agendar() {
   const [params] = useSearchParams();
-  const [interesUrl] = useState(() => interesDesdeUrl(params));
-  const [datos, setDatos] = useState(() => ({ ...VACIO, interes: interesUrl }));
+  const [interesUrl, setInteresUrl] = useState('');
+  const [datos, setDatos] = useState(VACIO);
+  // La fecha de hoy y la URL se leen al montar: la página se prerenderiza en
+  // la compilación, otro día y sin parámetros.
+  const [ahora, setAhora] = useState(null);
   const [eleccion, setEleccion] = useState({ fecha: null, hora: null });
   const [ocupados, setOcupados] = useState(() => new Set());
   const [modo, setModo] = useState('cargando'); // cargando · agenda · whatsapp
@@ -79,7 +82,7 @@ export function Agendar() {
   const refResumen = useRef(null);
   const refConfirmacion = useRef(null);
 
-  const dias = useMemo(() => calendario(new Date(), ocupados), [ocupados]);
+  const dias = useMemo(() => (ahora ? calendario(ahora, ocupados) : []), [ahora, ocupados]);
   const dia = dias.find((d) => d.fecha === eleccion.fecha);
 
   const cargar = useCallback(async () => {
@@ -88,6 +91,7 @@ export function Agendar() {
       const j = await r.json();
       if (!r.ok) throw new Error(String(r.status));
       setOcupados(new Set(j.ocupados));
+      setAhora(new Date());
       setModo(j.configurada ? 'agenda' : 'whatsapp');
     } catch {
       setModo('whatsapp');
@@ -95,8 +99,16 @@ export function Agendar() {
   }, []);
 
   useEffect(() => {
+    setAhora(new Date());
+    const interes = interesDesdeUrl(params);
+    if (interes) {
+      setInteresUrl(interes);
+      setDatos((d) => ({ ...d, interes }));
+    }
     cargar();
-  }, [cargar]);
+    // Solo al montar: después, el interés lo elige la persona.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // El foco va al resumen de errores ya pintado (mismo motivo que en Formulario.jsx).
   useEffect(() => {
@@ -313,6 +325,7 @@ export function Agendar() {
               </span>
               Elige el día
             </legend>
+            {!dias.length && <p className={s.ayuda}>Cargando los días disponibles…</p>}
             <div className={s.dias}>
               {dias.map((d) => {
                 const p = partesDia(d.fecha);

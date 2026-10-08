@@ -118,6 +118,13 @@ export const CREDITOS = [
 
 export { CONTACTO, CORPORATIVO, ATENCION } from './contacto.js';
 
+/** Brochure 2026 del proyecto, el mismo que publica el sitio nuevo de Ferval, servido desde public/. */
+export const BROCHURE = {
+  href: '/docs/brochure-reserva-las-rastras-2026.pdf',
+  texto: 'Brochure 2026',
+  detalle: 'PDF, 2,1 MB',
+};
+
 const tramosEnTexto = ATENCION.tramos.map(([a, b]) => `${a} – ${b}`).join(' y ');
 
 export const HORARIO = [

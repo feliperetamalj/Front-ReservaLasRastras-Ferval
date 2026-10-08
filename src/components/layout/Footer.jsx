@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Anillos, Contenedor, Icono, Logo } from '../ui';
-import { CONTACTO, CORPORATIVO, CREDITOS, HORARIO, PROYECTO } from '../../data/proyecto';
+import { BROCHURE, CONTACTO, CORPORATIVO, CREDITOS, HORARIO, PROYECTO } from '../../data/proyecto';
 import { whatsAppDirecto } from '../../utils/contacto';
 import s from './Footer.module.css';
 
@@ -132,7 +132,8 @@ export function Footer() {
             {CREDITOS.map((titular, i) => (
               <Fragment key={titular}>
                 {i > 0 && <span aria-hidden="true"> - </span>}
-                <span className={s.credito}>
+                {/* El año se fija en la compilación; si ya cambió, el navegador lo corrige sin quejarse. */}
+                <span className={s.credito} suppressHydrationWarning>
                   ©&nbsp;{anio} {titular}
                 </span>
               </Fragment>
@@ -143,6 +144,10 @@ export function Footer() {
             <Link to="/privacidad" className={s.enlace}>
               Política de privacidad
             </Link>
+            <span aria-hidden="true"> · </span>
+            <a href={BROCHURE.href} className={s.enlace} download>
+              {BROCHURE.texto} ({BROCHURE.detalle})
+            </a>
           </p>
           <p className={s.aviso}>
             Las imágenes, planos y especificaciones técnicas de este sitio son
