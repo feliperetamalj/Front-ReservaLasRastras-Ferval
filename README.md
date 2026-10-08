@@ -98,7 +98,10 @@ datos y no el que quedó dibujado el día que se hizo el plano.
   fija la ficha, Escape la cierra, y `+` / `−` acercan y alejan.
 - Los filtros del buscador **atenúan** lo que no coincide, no lo ocultan.
 - La vista de lista muestra los mismos sitios con los mismos filtros; es
-  también el camino más cómodo con lector de pantalla.
+  también el camino más cómodo con lector de pantalla. Se ordena por sitio o
+  por superficie; tocar el orden activo lo invierte.
+- Las pastillas de sector muestran cuántos sitios quedan y el rango de
+  superficie de los disponibles (`POR_SECTOR`).
 
 Los estados se distinguen por luminosidad y forma, no solo por color: oro
 lleno (disponible), papel con borde discontinuo (reservado) y tinta

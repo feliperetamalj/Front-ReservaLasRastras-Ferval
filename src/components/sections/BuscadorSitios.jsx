@@ -32,6 +32,19 @@ const CUENTA_POR_ESTADO = {
   vendido: RESUMEN.vendidos,
 };
 
+/** Rango de superficie de los disponibles, o un aviso si no queda ninguno. */
+const rango = (min, max) => (min === null ? 'Sin disponibles' : `${m2Corto(min)}–${m2Corto(max)} m²`);
+
+/* La lista se ordena por sitio (sector y número, A2 antes que A10) o por superficie. */
+const ORDENES = {
+  sitio: (a, b) => a.sector.localeCompare(b.sector) || Number(a.id.slice(1)) - Number(b.id.slice(1)),
+  m2: (a, b) => a.m2 - b.m2,
+};
+const CAMPOS_ORDEN = [
+  { id: 'sitio', texto: 'Sitio' },
+  { id: 'm2', texto: 'Superficie' },
+];
+
 const VISTAS = [
   { id: 'plano', texto: 'Plano', icono: 'vistaPlano' },
   { id: 'lista', texto: 'Lista', icono: 'lista' },
@@ -40,6 +53,7 @@ const VISTAS = [
 export function BuscadorSitios() {
   const [filtros, setFiltros] = useState(INICIAL);
   const [vista, setVista] = useState('plano');
+  const [orden, setOrden] = useState({ campo: 'sitio', asc: true });
 
   /*
     Un solo criterio para las dos vistas. En la lista decide qué se muestra;
@@ -61,6 +75,10 @@ export function BuscadorSitios() {
   );
 
   const resultados = useMemo(() => SITIOS.filter(coincide), [coincide]);
+  const ordenados = useMemo(() => {
+    const lista = [...resultados].sort(ORDENES[orden.campo]);
+    return orden.asc ? lista : lista.reverse();
+  }, [resultados, orden]);
   // Los macrolotes no están en el plano: solo aparecen en la lista, con los mismos filtros.
   const macrolotes = useMemo(() => MACROLOTES.filter(coincide), [coincide]);
 
@@ -81,8 +99,11 @@ export function BuscadorSitios() {
               onClick={() => cambiar('sector', 'todos')}
               aria-pressed={filtros.sector === 'todos'}
             >
-              Todos
-              <span className={`${s.cuenta} tabular`}>{RESUMEN.disponibles}</span>
+              <span className={s.pastillaFila}>
+                Todos
+                <span className={`${s.cuenta} tabular`}>{RESUMEN.disponibles}</span>
+              </span>
+              <span className={`${s.rango} tabular`}>{rango(RESUMEN.m2Min, RESUMEN.m2Max)}</span>
             </button>
             {POR_SECTOR.map((sec) => (
               <button
@@ -93,10 +114,15 @@ export function BuscadorSitios() {
                 aria-pressed={filtros.sector === sec.sector}
                 aria-label={`Sector ${sec.sector}: ${sec.disponibles} ${
                   sec.disponibles === 1 ? 'sitio disponible' : 'sitios disponibles'
-                } de ${sec.total}`}
+                } de ${sec.total}${
+                  sec.m2Min === null ? '' : `, de ${m2Corto(sec.m2Min)} a ${m2Corto(sec.m2Max)} m²`
+                }`}
               >
-                Sector {sec.sector}
-                <span className={`${s.cuenta} tabular`}>{sec.disponibles}</span>
+                <span className={s.pastillaFila}>
+                  Sector {sec.sector}
+                  <span className={`${s.cuenta} tabular`}>{sec.disponibles}</span>
+                </span>
+                <span className={`${s.rango} tabular`}>{rango(sec.m2Min, sec.m2Max)}</span>
               </button>
             ))}
           </div>
@@ -205,8 +231,37 @@ export function BuscadorSitios() {
         </>
       ) : resultados.length + macrolotes.length > 0 ? (
         <>
+          {resultados.length > 1 && (
+            <div className={s.ordenar}>
+              <span className={s.ordenarRotulo} aria-hidden="true">
+                Ordenar por
+              </span>
+              <div className={s.vistas} role="group" aria-label="Ordenar la lista">
+                {CAMPOS_ORDEN.map((c) => {
+                  const activo = orden.campo === c.id;
+                  const sentido = orden.asc ? 'de menor a mayor' : 'de mayor a menor';
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      className={`${s.vista} ${activo ? s.vistaActiva : ''}`}
+                      aria-pressed={activo}
+                      aria-label={`${c.texto}${activo ? `, ${sentido}` : ''}`}
+                      // Tocar el orden activo lo invierte; tocar el otro lo activa de menor a mayor.
+                      onClick={() => setOrden((o) => ({ campo: c.id, asc: o.campo === c.id ? !o.asc : true }))}
+                    >
+                      {c.texto}
+                      {activo && (
+                        <Icono nombre="abajo" tamano={14} className={orden.asc ? s.ascendente : undefined} />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
           <ul className={s.grilla}>
-            {resultados.map((sitio) => {
+            {ordenados.map((sitio) => {
               const modelo = sitio.casa?.slugModelo ? porSlug(sitio.casa.slugModelo) : null;
               return (
                 <li key={sitio.id} className={`${s.sitio} ${s[sitio.estado]}`}>
@@ -306,10 +361,15 @@ export function BuscadorSitios() {
         </div>
       )}
 
-      <p className={s.aviso}>
-        Disponibilidad al {fechaLarga(FECHA_DISPONIBILIDAD)}, según el listado publicado por el
-        proyecto. Confírmala con la sala de ventas antes de reservar.
-      </p>
+      <div className={s.cierre}>
+        <p className={s.aviso}>
+          Disponibilidad al {fechaLarga(FECHA_DISPONIBILIDAD)}, según el listado publicado por el
+          proyecto. La disponibilidad cambia: un ejecutivo la confirma en la visita.
+        </p>
+        <Boton a="/agendar" variante="primario" icono="calendario" iconoAlInicio>
+          Agendar visita
+        </Boton>
+      </div>
     </div>
   );
 }
