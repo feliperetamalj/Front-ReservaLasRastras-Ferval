@@ -10,7 +10,8 @@
  * publicados. Revisar a fin de año si una ley especial agrega días (por
  * ejemplo, un 17 de septiembre) o si hay elecciones.
  *
- * Agregar cada año los del siguiente: la agenda mira 21 días hacia adelante.
+ * Agregar cada año los del siguiente: la agenda mira hasta cuatro meses
+ * hacia adelante (desde septiembre ya ofrece enero).
  */
 export const FERIADOS = {
   '2026-10-12': 'Encuentro de Dos Mundos',

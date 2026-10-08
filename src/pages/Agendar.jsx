@@ -36,12 +36,6 @@ function interesDesdeUrl(params) {
   return modelo ? `Modelo ${modelo.nombre}` : '';
 }
 
-const semana = new Intl.DateTimeFormat('es-CL', { weekday: 'short', timeZone: 'UTC' });
-const mes = new Intl.DateTimeFormat('es-CL', { month: 'short', timeZone: 'UTC' });
-const partesDia = (iso) => {
-  const d = new Date(`${iso}T12:00:00Z`);
-  return { semana: semana.format(d).replace('.', ''), numero: d.getUTCDate(), mes: mes.format(d).replace('.', '') };
-};
 const LETRAS = [
   ['L', 'lunes'],
   ['M', 'martes'],
@@ -52,26 +46,30 @@ const LETRAS = [
   ['D', 'domingo'],
 ];
 
-/** Semanas completas, de lunes a domingo, que cubren los días de la agenda. */
-function semanasDe(dias) {
+/** Los meses que muestra el calendario: "AAAA-MM", desde el de hoy hasta el último con días. */
+function mesesDe(dias) {
   if (!dias.length) return [];
-  const porFecha = new Map(dias.map((d) => [d.fecha, d]));
-  const desde = sumarDias(dias[0].fecha, -((diaSemana(dias[0].fecha) + 6) % 7));
-  const hasta = sumarDias(dias.at(-1).fecha, (7 - diaSemana(dias.at(-1).fecha)) % 7);
-  const celdas = [];
-  for (let f = desde; f <= hasta; f = sumarDias(f, 1)) celdas.push({ fecha: f, dia: porFecha.get(f) });
+  const meses = [];
+  for (let m = dias[0].fecha.slice(0, 7); m <= dias.at(-1).fecha.slice(0, 7); ) {
+    meses.push(m);
+    const [a, n] = m.split('-').map(Number);
+    m = n === 12 ? `${a + 1}-01` : `${a}-${String(n + 1).padStart(2, '0')}`;
+  }
+  return meses;
+}
+
+/** Las celdas de un mes, de lunes a domingo: null antes del 1 y después del último día. */
+function celdasDelMes(mes) {
+  const primero = `${mes}-01`;
+  const celdas = Array((diaSemana(primero) + 6) % 7).fill(null);
+  for (let f = primero; f.startsWith(mes); f = sumarDias(f, 1)) celdas.push(f);
+  while (celdas.length % 7) celdas.push(null);
   return celdas;
 }
 
 const mesLargo = new Intl.DateTimeFormat('es-CL', { month: 'long', year: 'numeric', timeZone: 'UTC' });
-/** "octubre de 2026" o "octubre – noviembre de 2026". */
-function tituloMeses(dias) {
-  if (!dias.length) return '';
-  const [a, b] = [dias[0].fecha, dias.at(-1).fecha].map((f) => mesLargo.format(new Date(`${f}T12:00:00Z`)));
-  return a === b ? a : `${a.replace(/ de \d{4}$/, '')} – ${b}`;
-}
-
-const MOTIVO_CORTO = { 'Domingo cerrado': 'Cerrado', Cerrado: 'Cerrado', Feriado: 'Feriado', 'Sin horas disponibles': 'Completo' };
+/** "2026-10" -> "octubre de 2026" */
+const nombreMes = (mes) => (mes ? mesLargo.format(new Date(`${mes}-15T12:00:00Z`)) : '');
 
 function validar(datos, eleccion) {
   const errores = validarDatos(datos);
@@ -108,12 +106,14 @@ export function Agendar() {
   const [tocado, setTocado] = useState({});
   const [intentos, setIntentos] = useState(0);
   const [aviso, setAviso] = useState('');
-  const [verCalendario, setVerCalendario] = useState(false);
+  const [mes, setMes] = useState(0); // índice en `meses`: 0 es el mes de hoy
   const refResumen = useRef(null);
   const refConfirmacion = useRef(null);
 
   const dias = useMemo(() => (ahora ? calendario(ahora, ocupados) : []), [ahora, ocupados]);
   const dia = dias.find((d) => d.fecha === eleccion.fecha);
+  const meses = useMemo(() => mesesDe(dias), [dias]);
+  const porFecha = useMemo(() => new Map(dias.map((d) => [d.fecha, d])), [dias]);
 
   const cargar = useCallback(async () => {
     try {
@@ -369,32 +369,48 @@ export function Agendar() {
               </span>
               Elige el día
             </legend>
-            <button
-              type="button"
-              className={s.cambioVista}
-              aria-pressed={verCalendario}
-              onClick={() => setVerCalendario((v) => !v)}
-            >
-              <Icono nombre={verCalendario ? 'lista' : 'calendario'} tamano={16} />
-              {verCalendario ? 'Ver como lista' : 'Ver calendario'}
-            </button>
-            {!dias.length && <p className={s.ayuda}>Cargando los días disponibles…</p>}
-            {verCalendario ? (
+            {!dias.length ? (
+              <p className={s.ayuda}>Cargando los días disponibles…</p>
+            ) : (
               <div className={s.calendario}>
-                <p className={s.calendarioMes}>{tituloMeses(dias)}</p>
+                <div className={s.calendarioBarra}>
+                  <button
+                    type="button"
+                    className={s.flechaMes}
+                    onClick={() => setMes((m) => m - 1)}
+                    disabled={mes === 0}
+                    aria-label="Mes anterior"
+                  >
+                    <Icono nombre="flechaIzq" tamano={18} />
+                  </button>
+                  <p className={s.calendarioMes} aria-live="polite">
+                    {nombreMes(meses[mes])}
+                  </p>
+                  <button
+                    type="button"
+                    className={s.flechaMes}
+                    onClick={() => setMes((m) => m + 1)}
+                    disabled={mes === meses.length - 1}
+                    aria-label="Mes siguiente"
+                  >
+                    <Icono nombre="flecha" tamano={18} />
+                  </button>
+                </div>
                 <div className={s.calendarioGrilla}>
                   {LETRAS.map(([letra, nombre]) => (
                     <abbr key={nombre} title={nombre} className={s.calendarioCabecera}>
                       {letra}
                     </abbr>
                   ))}
-                  {semanasDe(dias).map(({ fecha, dia: d }) => {
-                    const p = partesDia(fecha);
+                  {celdasDelMes(meses[mes]).map((fecha, i) => {
+                    if (!fecha) return <span key={`v${i}`} className={s.vacia} aria-hidden="true" />;
+                    const numero = Number(fecha.slice(8));
+                    const d = porFecha.get(fecha);
                     if (!d) {
-                      // Fuera de la ventana de 21 días: solo completa la semana.
+                      // Días que ya pasaron este mes.
                       return (
                         <span key={fecha} className={`${s.celda} ${s.fuera} tabular`} aria-hidden="true">
-                          {p.numero}
+                          {numero}
                         </span>
                       );
                     }
@@ -405,39 +421,13 @@ export function Agendar() {
                         className={`${s.celda} ${d.motivo ? s.cerrado : ''} ${elegido ? s.elegido : ''}`}
                       >
                         {radioDia(d, elegido)}
-                        {p.numero === 1 && (
-                          <span className={s.celdaMes} aria-hidden="true">
-                            {p.mes}
-                          </span>
-                        )}
                         <span className={`${s.diaNumero} tabular`} aria-hidden="true">
-                          {p.numero}
+                          {numero}
                         </span>
                       </label>
                     );
                   })}
                 </div>
-              </div>
-            ) : (
-              <div className={s.dias}>
-                {dias.map((d) => {
-                  const p = partesDia(d.fecha);
-                  const elegido = eleccion.fecha === d.fecha;
-                  return (
-                    <label key={d.fecha} className={`${s.dia} ${d.motivo ? s.cerrado : ''} ${elegido ? s.elegido : ''}`}>
-                      {radioDia(d, elegido)}
-                      <span className={s.diaSemana} aria-hidden="true">
-                        {p.semana}
-                      </span>
-                      <span className={`${s.diaNumero} tabular`} aria-hidden="true">
-                        {p.numero}
-                      </span>
-                      <span className={s.diaMes} aria-hidden="true">
-                        {d.motivo ? MOTIVO_CORTO[d.motivo] : p.mes}
-                      </span>
-                    </label>
-                  );
-                })}
               </div>
             )}
             {errores.fecha && tocado.fecha && <MensajeError>{errores.fecha}</MensajeError>}

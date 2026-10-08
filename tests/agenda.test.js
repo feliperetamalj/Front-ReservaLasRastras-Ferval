@@ -45,11 +45,11 @@ test('domingos y feriados no se atienden; los sábados sí', () => {
   assert.equal(motivoCierre('2026-10-17'), null);
 });
 
-test('el calendario ofrece 21 días desde hoy y respeta la anticipación de 2 horas', () => {
+test('el calendario va de hoy al fin del cuarto mes siguiente y respeta la anticipación de 2 horas', () => {
   const dias = calendario(JUEVES_MEDIODIA);
-  assert.equal(dias.length, 21);
   assert.equal(dias[0].fecha, '2026-10-08');
-  assert.equal(dias.at(-1).fecha, '2026-10-28');
+  assert.equal(dias.at(-1).fecha, '2027-02-28');
+  assert.equal(dias.length, 144);
   const hoy = Object.fromEntries(dias[0].bloques.map((b) => [b.hora, b.libre]));
   assert.deepEqual(hoy, {
     '10:00': false,
@@ -86,7 +86,9 @@ test('se rechazan domingos, feriados, horas fuera de horario, pasadas y fuera de
   assert.ok(con({ hora: '10:30' }).hora, 'fuera de bloque');
   assert.ok(con({ fecha: '2026-10-08', hora: '13:00' }).hora, 'hoy, con menos de 2 h');
   assert.ok(con({ fecha: '2026-10-07' }).hora, 'ayer');
-  assert.ok(con({ fecha: '2026-10-29' }).hora, 'fuera de los 21 días');
+  assert.ok(con({ fecha: '2027-03-01' }).hora, 'después del cuarto mes');
+  assert.deepEqual(con({ fecha: '2027-02-26' }), {}, 'el último viernes de la ventana sí se puede');
+  assert.ok(con({ fecha: '2026-12-25' }).hora, 'Navidad');
   assert.ok(con({ fecha: 'mañana' }).hora, 'fecha mal escrita');
 });
 

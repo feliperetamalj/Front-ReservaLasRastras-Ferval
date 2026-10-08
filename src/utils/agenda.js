@@ -63,8 +63,15 @@ export function motivoCierre(iso) {
   return null;
 }
 
+/** Último día del mes que está `meses` meses después del de `iso`. */
+export const finDeMes = (iso, meses = 0) => {
+  const [a, m] = iso.split('-').map(Number);
+  return new Date(Date.UTC(a, m + meses, 0)).toISOString().slice(0, 10);
+};
+
 /**
- * Los días que ofrece la agenda, desde hoy, con sus bloques.
+ * Los días que ofrece la agenda, desde hoy hasta el fin del cuarto mes
+ * siguiente (`AGENDA.mesesVentana`), con sus bloques.
  *
  * `ocupados` es un Set de "AAAA-MM-DD HH:MM". Un bloque está libre si nadie
  * lo pidió y si falta al menos la anticipación mínima para que empiece.
@@ -77,8 +84,9 @@ export function calendario(ahora = new Date(), ocupados = new Set()) {
   const { fecha: hoy, minutos } = relojSantiago(ahora);
   const limite = minutos + AGENDA.anticipacionMinutos;
 
-  return Array.from({ length: AGENDA.diasVentana }, (_, i) => {
-    const fecha = sumarDias(hoy, i);
+  const hasta = finDeMes(hoy, AGENDA.mesesVentana);
+  const dias = [];
+  for (let i = 0, fecha = hoy; fecha <= hasta; i += 1, fecha = sumarDias(hoy, i)) {
     const cierre = motivoCierre(fecha);
     const bloques = cierre
       ? []
@@ -87,8 +95,9 @@ export function calendario(ahora = new Date(), ocupados = new Set()) {
           libre: i * 1440 + aMinutos(hora) >= limite && !ocupados.has(`${fecha} ${hora}`),
         }));
     const libres = bloques.filter((b) => b.libre).length;
-    return { fecha, motivo: cierre ?? (libres ? null : 'Sin horas disponibles'), bloques };
-  });
+    dias.push({ fecha, motivo: cierre ?? (libres ? null : 'Sin horas disponibles'), bloques });
+  }
+  return dias;
 }
 
 /** Si ese bloque se puede pedir ahora (sin mirar si alguien ya lo tomó). */

@@ -12,8 +12,8 @@ import { CONTACTO, CORPORATIVO } from './contacto.js';
 
 export const AGENDA = {
   zona: 'America/Santiago',
-  /** Cuántos días hacia adelante se ofrecen, contando hoy. */
-  diasVentana: 21,
+  /** Se ofrece desde hoy hasta el último día del mes que está esta cantidad de meses más adelante. */
+  mesesVentana: 4,
   /** Una visita no se puede pedir con menos anticipación que esta. */
   anticipacionMinutos: 120,
   /** Lo que dura una visita: también es el largo de cada bloque. */
