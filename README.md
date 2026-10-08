@@ -211,7 +211,8 @@ blanco cumpla 3:1.
 
 ## Agenda de visitas
 
-`/agendar` ofrece los próximos 21 días en bloques de una hora, según el
+`/agendar` ofrece los próximos 21 días (en una tira o, con "Ver calendario",
+en un calendario mensual de lunes a domingo) en bloques de una hora, según el
 horario de `ATENCION` y los feriados de `src/data/feriados.js`, con 2 horas de
 anticipación mínima. Todo se calcula en la hora de Santiago.
 

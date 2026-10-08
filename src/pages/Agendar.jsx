@@ -6,7 +6,7 @@ import { EVENTO, TEXTOS, mensajeRespaldo } from '../data/agenda';
 import { CONTACTO, HORARIO } from '../data/proyecto';
 import { SITIOS } from '../data/sitios';
 import { modelos } from '../data/modelos';
-import { calendario, crearIcs, fechaLegible, validarDatos } from '../utils/agenda';
+import { calendario, crearIcs, diaSemana, fechaLegible, sumarDias, validarDatos } from '../utils/agenda';
 import { enlaceWhatsApp, whatsAppDirecto } from '../utils/contacto';
 import f from '../components/sections/Formulario.module.css';
 import s from './Agendar.module.css';
@@ -42,6 +42,35 @@ const partesDia = (iso) => {
   const d = new Date(`${iso}T12:00:00Z`);
   return { semana: semana.format(d).replace('.', ''), numero: d.getUTCDate(), mes: mes.format(d).replace('.', '') };
 };
+const LETRAS = [
+  ['L', 'lunes'],
+  ['M', 'martes'],
+  ['X', 'miércoles'],
+  ['J', 'jueves'],
+  ['V', 'viernes'],
+  ['S', 'sábado'],
+  ['D', 'domingo'],
+];
+
+/** Semanas completas, de lunes a domingo, que cubren los días de la agenda. */
+function semanasDe(dias) {
+  if (!dias.length) return [];
+  const porFecha = new Map(dias.map((d) => [d.fecha, d]));
+  const desde = sumarDias(dias[0].fecha, -((diaSemana(dias[0].fecha) + 6) % 7));
+  const hasta = sumarDias(dias.at(-1).fecha, (7 - diaSemana(dias.at(-1).fecha)) % 7);
+  const celdas = [];
+  for (let f = desde; f <= hasta; f = sumarDias(f, 1)) celdas.push({ fecha: f, dia: porFecha.get(f) });
+  return celdas;
+}
+
+const mesLargo = new Intl.DateTimeFormat('es-CL', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+/** "octubre de 2026" o "octubre – noviembre de 2026". */
+function tituloMeses(dias) {
+  if (!dias.length) return '';
+  const [a, b] = [dias[0].fecha, dias.at(-1).fecha].map((f) => mesLargo.format(new Date(`${f}T12:00:00Z`)));
+  return a === b ? a : `${a.replace(/ de \d{4}$/, '')} – ${b}`;
+}
+
 const MOTIVO_CORTO = { 'Domingo cerrado': 'Cerrado', Cerrado: 'Cerrado', Feriado: 'Feriado', 'Sin horas disponibles': 'Completo' };
 
 function validar(datos, eleccion) {
@@ -79,6 +108,7 @@ export function Agendar() {
   const [tocado, setTocado] = useState({});
   const [intentos, setIntentos] = useState(0);
   const [aviso, setAviso] = useState('');
+  const [verCalendario, setVerCalendario] = useState(false);
   const refResumen = useRef(null);
   const refConfirmacion = useRef(null);
 
@@ -193,6 +223,20 @@ export function Agendar() {
       setEstado('fallo');
     }
   };
+
+  /** La radio de un día: la misma en la tira y en el calendario. */
+  const radioDia = (d, elegido) => (
+    <input
+      type="radio"
+      name="fecha"
+      value={d.fecha}
+      className={s.radio}
+      checked={elegido}
+      disabled={Boolean(d.motivo)}
+      onChange={() => elegir({ fecha: d.fecha, hora: null })}
+      aria-label={`${fechaLegible(d.fecha)}${d.motivo ? `: ${d.motivo.toLowerCase()}` : ''}`}
+    />
+  );
 
   const campo = (nombre, etiqueta, props = {}) => {
     const conError = Boolean(errores[nombre] && tocado[nombre]);
@@ -325,36 +369,77 @@ export function Agendar() {
               </span>
               Elige el día
             </legend>
+            <button
+              type="button"
+              className={s.cambioVista}
+              aria-pressed={verCalendario}
+              onClick={() => setVerCalendario((v) => !v)}
+            >
+              <Icono nombre={verCalendario ? 'lista' : 'calendario'} tamano={16} />
+              {verCalendario ? 'Ver como lista' : 'Ver calendario'}
+            </button>
             {!dias.length && <p className={s.ayuda}>Cargando los días disponibles…</p>}
-            <div className={s.dias}>
-              {dias.map((d) => {
-                const p = partesDia(d.fecha);
-                const elegido = eleccion.fecha === d.fecha;
-                return (
-                  <label key={d.fecha} className={`${s.dia} ${d.motivo ? s.cerrado : ''} ${elegido ? s.elegido : ''}`}>
-                    <input
-                      type="radio"
-                      name="fecha"
-                      value={d.fecha}
-                      className={s.radio}
-                      checked={elegido}
-                      disabled={Boolean(d.motivo)}
-                      onChange={() => elegir({ fecha: d.fecha, hora: null })}
-                      aria-label={`${fechaLegible(d.fecha)}${d.motivo ? `: ${d.motivo.toLowerCase()}` : ''}`}
-                    />
-                    <span className={s.diaSemana} aria-hidden="true">
-                      {p.semana}
-                    </span>
-                    <span className={`${s.diaNumero} tabular`} aria-hidden="true">
-                      {p.numero}
-                    </span>
-                    <span className={s.diaMes} aria-hidden="true">
-                      {d.motivo ? MOTIVO_CORTO[d.motivo] : p.mes}
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
+            {verCalendario ? (
+              <div className={s.calendario}>
+                <p className={s.calendarioMes}>{tituloMeses(dias)}</p>
+                <div className={s.calendarioGrilla}>
+                  {LETRAS.map(([letra, nombre]) => (
+                    <abbr key={nombre} title={nombre} className={s.calendarioCabecera}>
+                      {letra}
+                    </abbr>
+                  ))}
+                  {semanasDe(dias).map(({ fecha, dia: d }) => {
+                    const p = partesDia(fecha);
+                    if (!d) {
+                      // Fuera de la ventana de 21 días: solo completa la semana.
+                      return (
+                        <span key={fecha} className={`${s.celda} ${s.fuera} tabular`} aria-hidden="true">
+                          {p.numero}
+                        </span>
+                      );
+                    }
+                    const elegido = eleccion.fecha === d.fecha;
+                    return (
+                      <label
+                        key={fecha}
+                        className={`${s.celda} ${d.motivo ? s.cerrado : ''} ${elegido ? s.elegido : ''}`}
+                      >
+                        {radioDia(d, elegido)}
+                        {p.numero === 1 && (
+                          <span className={s.celdaMes} aria-hidden="true">
+                            {p.mes}
+                          </span>
+                        )}
+                        <span className={`${s.diaNumero} tabular`} aria-hidden="true">
+                          {p.numero}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div className={s.dias}>
+                {dias.map((d) => {
+                  const p = partesDia(d.fecha);
+                  const elegido = eleccion.fecha === d.fecha;
+                  return (
+                    <label key={d.fecha} className={`${s.dia} ${d.motivo ? s.cerrado : ''} ${elegido ? s.elegido : ''}`}>
+                      {radioDia(d, elegido)}
+                      <span className={s.diaSemana} aria-hidden="true">
+                        {p.semana}
+                      </span>
+                      <span className={`${s.diaNumero} tabular`} aria-hidden="true">
+                        {p.numero}
+                      </span>
+                      <span className={s.diaMes} aria-hidden="true">
+                        {d.motivo ? MOTIVO_CORTO[d.motivo] : p.mes}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
             {errores.fecha && tocado.fecha && <MensajeError>{errores.fecha}</MensajeError>}
           </fieldset>
 
