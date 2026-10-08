@@ -123,6 +123,8 @@ test('agenda, avisa a la sala y confirma al visitante con el .ics', async () => 
   assert.equal(correos[1].attachments[0].filename, 'visita-reserva-las-rastras.ics');
   assert.match(correos[1].attachments[0].content, /^BEGIN:VCALENDAR/);
   assert.match(correos[1].html, /\/agendar\/gestionar#token=11111111-/);
+  assert.match(correos[1].html, /\/email\/logo\.png/, 'el logo va con URL absoluta del sitio');
+  assert.match(correos[1].text, /Un ejecutivo te confirmará por WhatsApp/, 'trae versión en texto plano');
 });
 
 test('sin correo del visitante solo se avisa a la sala', async () => {

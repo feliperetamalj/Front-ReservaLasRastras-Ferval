@@ -209,6 +209,10 @@ anticipación mínima. Todo se calcula en la hora de Santiago.
   SMTP de Gmail con `nodemailer`, la única dependencia del servidor. Las claves
   solo existen como variables de entorno en Vercel (ver `.env.example`); sin
   ellas, la página envía la solicitud por WhatsApp.
+- Los correos (`src/data/correos.js`) siguen la marca del sitio con tablas y
+  estilos en línea, lo único que respetan Gmail y Outlook. El logo y la foto
+  van en `public/email/` y se cargan desde el sitio publicado: no se renombran
+  ni se borran, o los correos ya enviados quedan sin imágenes.
 - El enlace para cancelar o borrar datos lleva el token en el fragmento
   (`#token=…`), que el navegador no manda al servidor.
 

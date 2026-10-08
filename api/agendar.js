@@ -6,7 +6,8 @@
  * intentos · 502/503 la agenda no responde (la página ofrece WhatsApp).
  */
 import { POLITICA } from '../src/data/privacidad.js';
-import { EVENTO, TEXTOS, correoSala, correoVisitante, mensajeConfirmacion } from '../src/data/agenda.js';
+import { EVENTO, TEXTOS, mensajeConfirmacion } from '../src/data/agenda.js';
+import { correoSala, correoVisitante } from '../src/data/correos.js';
 import { crearIcs, fechaCorta, fechaLegible, limpiar, validarSolicitud } from '../src/utils/agenda.js';
 import { configurada, db, enviarCorreo, escapar, huella, leerCuerpo, responder, sitio } from './_servidor.js';
 
@@ -60,6 +61,7 @@ export default async function agendar(req, res) {
   const fecha = fechaLegible(visita.fecha);
   const telefonoWa = visita.telefono.replace(/\D/g, '');
   const sala = correoSala({
+    sitio: sitio(),
     nombre: escapar(visita.nombre),
     telefono: escapar(visita.telefono),
     email: escapar(visita.email ?? ''),
@@ -89,6 +91,7 @@ export default async function agendar(req, res) {
       ...EVENTO,
     });
     const correo = correoVisitante({
+      sitio: sitio(),
       nombre: escapar(visita.nombre),
       fecha,
       hora: visita.hora,

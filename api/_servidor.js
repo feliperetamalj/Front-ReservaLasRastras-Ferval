@@ -78,7 +78,7 @@ export const cartero = {
 };
 
 /** Envía un correo. Devuelve true si Gmail lo aceptó. */
-export async function enviarCorreo({ para, asunto, html, adjuntos }) {
+export async function enviarCorreo({ para, asunto, html, texto, adjuntos }) {
   try {
     await cartero.enviar({
       // Gmail siempre envía desde la cuenta autenticada: solo se elige el nombre visible.
@@ -86,6 +86,7 @@ export async function enviarCorreo({ para, asunto, html, adjuntos }) {
       to: para,
       subject: asunto,
       html,
+      text: texto,
       attachments: adjuntos,
     });
     return true;

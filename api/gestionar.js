@@ -6,9 +6,9 @@
  * en el cuerpo. Así no queda en ningún registro. Las acciones piden un clic: los antivirus del correo
  * abren los enlaces solos y no deben cancelar nada.
  */
-import { correoCancelacion } from '../src/data/agenda.js';
+import { correoCancelacion } from '../src/data/correos.js';
 import { fechaLegible } from '../src/utils/agenda.js';
-import { configurada, db, enviarCorreo, horaCorta, leerCuerpo, responder } from './_servidor.js';
+import { configurada, db, enviarCorreo, horaCorta, leerCuerpo, responder, sitio } from './_servidor.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const ACTIVA = 'estado=in.(solicitada,confirmada)';
@@ -55,6 +55,7 @@ export default async function gestionar(req, res) {
     await enviarCorreo({
       para: process.env.AGENDA_CORREO_SALA,
       ...correoCancelacion({
+        sitio: sitio(),
         fecha: fechaLegible(visita.fecha),
         hora: horaCorta(visita.hora),
         borrado: accion === 'borrar',
